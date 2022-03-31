@@ -1,9 +1,9 @@
 FROM python:3.9
 
-RUN mkdir -p /var/trustcalc
+RUN mkdir -p /var/TrustCalculation
 
-WORKDIR /var/trustcalc
+WORKDIR /var/TrustCalculation
 
-COPY ./ /var/trustcalc
+COPY ./ /var/TrustCalculation
 
-ENTRYPOINT python /var/trustcalc/main.py
+ENTRYPOINT python /var/TrustCalculation/main.py
