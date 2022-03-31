@@ -6,4 +6,6 @@ WORKDIR /var/TrustCalculation
 
 COPY ./ /var/TrustCalculation
 
-ENTRYPOINT python /var/TrustCalculation/main.py
+RUN pip install -r requirements.txt
+
+ENTRYPOINT python /var/TrustCalculation/src/main.py
