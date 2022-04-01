@@ -8,4 +8,4 @@ COPY ./ /var/TrustCalculation
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT python /var/TrustCalculation/src/main.py
+ENTRYPOINT python -u /var/TrustCalculation/src/main.py
