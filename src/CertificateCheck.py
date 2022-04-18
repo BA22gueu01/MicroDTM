@@ -1,7 +1,5 @@
 import datetime
 import http.client
-import smtplib
-import sys
 from urllib.parse import urlparse
 from urllib.request import ssl, socket
 

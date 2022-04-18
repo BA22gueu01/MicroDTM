@@ -5,8 +5,8 @@ class ApparmorCheck:
 
     def checkApparmor(self):
 
-        # output = subprocess.check_output(["cat", "/sys/module/apparmor/parameters/enabled"])
-        output = "Y"
+        output = subprocess.check_output(["cat", "/sys/module/apparmor/parameters/enabled"])
+        #output = "Y"
         if output == "Y":
             return 5
         else:

@@ -1,9 +1,4 @@
-import OpenSSL
-import logging
 import requests
-import socket
-import ssl
-import subprocess
 import time
 import CertificateCheck
 import LogLevelCheck
