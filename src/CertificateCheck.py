@@ -37,7 +37,7 @@ class CertificateCheck:
         context = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_2_METHOD)
         print('Connecting to {0} to get certificate...'.format(host))
         conn = OpenSSL.SSL.Connection(context, s)
-        cert_file_pathname = "C:\\Users\\Valeria\\Documents\\ZHAW\\8.Semester\\BA\\."
+        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '\\'
         certs = []
 
         try:
@@ -59,7 +59,7 @@ class CertificateCheck:
                 print('Certificate {0} - CN: {1}'.format(index, cn))
 
                 try:
-                    temp_certname = '{0}_{1}.crt'.format(cert_file_pathname, index)
+                    temp_certname = '{0}_{1}.crt'.format(directory, index)
                     with open(temp_certname, 'w+') as output_file:
                         if sys.version_info[0] >= 3:
                             output_file.write((crypto.dump_certificate
@@ -75,7 +75,7 @@ class CertificateCheck:
 
     # https://github.com/wbond/certvalidator/blob/master/docs/usage.md
     def validateEndEntitiyCertificate(self):
-        with open('C:\\Users\\Valeria\\Documents\\ZHAW\\8.Semester\\BA\\._0.crt', 'rb') as f:
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '\\_0.crt', 'rb') as f:
             end_entity_cert = f.read()
 
         try:
@@ -92,8 +92,9 @@ class CertificateCheck:
 
     def validateIntermediateCertificate(self):
         # find and validate intermediate certificate
-        # directory iteration: https://stackoverflow.com/questions/10377998/how-can-i-iterate-over-files-in-a-given-directory
-        directory = 'C:\\Users\\Valeria\\Documents\\ZHAW\\8.Semester\\BA\\'
+        # directory iteration:
+        # https://stackoverflow.com/questions/10377998/how-can-i-iterate-over-files-in-a-given-directory
+        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '\\'
         fsdirectory = os.fsencode(directory)
         counter = 0
 
@@ -117,7 +118,7 @@ class CertificateCheck:
                 continue
 
         # merge intermediate files to one pem file
-        with open('C:\\Users\\Valeria\\Documents\\ZHAW\\8.Semester\\BA\\intermediate.pem', 'w') as outfile:
+        with open(directory + 'intermediate.pem', 'w') as outfile:
             for intermediate in intermediateCertificates:
                 with open(intermediate, 'r') as infile:
                     outfile.write(infile.read())
@@ -126,7 +127,7 @@ class CertificateCheck:
         end_entity_cert = None
         intermediates = []
 
-        with open('C:\\Users\\Valeria\\Documents\\ZHAW\\8.Semester\\BA\\intermediate.pem', 'rb') as f:
+        with open(directory + 'intermediate.pem', 'rb') as f:
             for type_name, headers, der_bytes in pem.unarmor(f.read(), multiple=True):
                 if end_entity_cert is None:
                     end_entity_cert = der_bytes
