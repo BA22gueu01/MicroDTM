@@ -85,7 +85,7 @@ class CertificateCheck:
             validator.validate_usage(set(['digital_signature']))
             print("The end certificate is valid.")
             return True
-        except errors.PathValidationError as e:
+        except (errors.PathValidationError, errors.PathBuildingError) as e:
             print("The end certificate could not be validated.")
             print('Error: {0}'.format(str(e)))
             return False
@@ -94,7 +94,7 @@ class CertificateCheck:
         # find and validate intermediate certificate
         # directory iteration:
         # https://stackoverflow.com/questions/10377998/how-can-i-iterate-over-files-in-a-given-directory
-        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '\\'
+        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '/'
         fsdirectory = os.fsencode(directory)
         counter = 0
 
@@ -184,6 +184,8 @@ class CertificateCheck:
                     return 0
                 elif daysToExpiration > 0 and intermediate_cert_validation and end_entity_cert_validation:
                     return 5
+                else:
+                    return -5
             else:
                 return -5
         else:
