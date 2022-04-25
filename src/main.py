@@ -101,7 +101,7 @@ def securityGradeCalculation(apparmorGrade, certificateGrade):
     secureChannelWeight = 0.7
     apparmorWeight = 0.1
     certificateWeight = 0.2
-    checkCVE = CheckCVE()
+    checkCVE = CheckCVE.CheckCVE()
     checkCVE.checkCVE()
 
     return (apparmorWeight * apparmorGrade) + (certificateWeight * certificateGrade)
