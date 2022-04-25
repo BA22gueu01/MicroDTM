@@ -8,7 +8,7 @@ class ApparmorCheck:
         output = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop queue-master-6bf76bbfc-4hcwf", "--", "cat", "/sys/module/apparmor/parameters/enabled"])
         print(output)
         #output = "Y"
-        if output == "Y":
+        if "Y" in output:
             return 5
         else:
             return -5
