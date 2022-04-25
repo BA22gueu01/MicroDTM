@@ -5,10 +5,10 @@ class ApparmorCheck:
 
     def checkApparmor(self):
 
-        #output = subprocess.check_output(["cat", "/sys/module/apparmor/parameters/enabled"])
-        print(subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "cat", "/sys/module/apparmor/parameters/enabled"]))
-        output = "Y"
-        if output == "Y":
+        output = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "cat", "/sys/module/apparmor/parameters/enabled"])
+        print(output)
+        #output = "Y"
+        if "Y" in output:
             return 5
         else:
             return -5
