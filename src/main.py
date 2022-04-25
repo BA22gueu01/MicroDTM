@@ -3,6 +3,7 @@ import time
 import CertificateCheck
 import LogLevelCheck
 import ApparmorCheck
+import CheckCVE
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 PARAMETERWEIGHT = 0.2
@@ -100,6 +101,8 @@ def securityGradeCalculation(apparmorGrade, certificateGrade):
     secureChannelWeight = 0.7
     apparmorWeight = 0.1
     certificateWeight = 0.2
+    checkCVE = CheckCVE()
+    checkCVE.checkCVE()
 
     return (apparmorWeight * apparmorGrade) + (certificateWeight * certificateGrade)
 #    return (secureChannelWeight * secureChannelWeightGrade) + (apparmorWeight * apparmorGrade) + (

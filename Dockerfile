@@ -9,6 +9,8 @@ COPY ./ /var/TrustCalculation
 # Install kubectl from Docker Hub.
 COPY --from=lachlanevenson/k8s-kubectl:v1.10.3 /usr/local/bin/kubectl /usr/local/bin/kubectl
 
+COPY --from=aquasec/trivy:0.27.0 /usr/local/bin/trivy /usr/local/bin/trivy
+
 RUN pip install -r requirements.txt
 
 ENTRYPOINT python -u /var/TrustCalculation/src/main.py
