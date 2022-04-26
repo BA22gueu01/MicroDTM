@@ -15,6 +15,9 @@ class LogLevelCheck:
                     counter += 1
                     print(counter)
                 #subprocess.check_output(["grep", "-i", "-E", "'(warning|error|fatal)'", "|", "wc", "-l"
+        except Exception as e:
+            counter = 25
+            print(e)
 
         # to be updated
         if counter > 25:
