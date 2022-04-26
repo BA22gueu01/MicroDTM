@@ -4,6 +4,7 @@ import CertificateCheck
 import LogLevelCheck
 import ApparmorCheck
 import CheckCVE
+import CheckPatchLevel
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 PARAMETERWEIGHT = 0.2
@@ -44,9 +45,10 @@ def availabilityGradeCalculation(uptimeValues):
     return uptimeWeight * (sum(uptimeGrade) / len(uptimeGrade))
 
 
-def reliabilityGradeCalculation(responseErrorsGrade200, responseErrorsGrade500, logLevelGrade):
+def reliabilityGradeCalculation(responseErrorsGrade200, responseErrorsGrade500, logLevelGrade, patchLevelGrade):
     responseErrorsWeight = 0.4
-    logLevelWeight = 0.6
+    logLevelWeight = 0.3
+    patchLevelWeight = 0.3
 
     responseErrorsGrade = int(responseErrorsGrade500) / int(responseErrorsGrade200)
     if 0 == responseErrorsGrade < 0.25:
@@ -56,7 +58,7 @@ def reliabilityGradeCalculation(responseErrorsGrade200, responseErrorsGrade500, 
     else:
         responseErrorsGrade = -5
 
-    return (responseErrorsWeight * responseErrorsGrade) + (logLevelWeight * logLevelGrade)
+    return (responseErrorsWeight * responseErrorsGrade) + (logLevelWeight * logLevelGrade) + (patchLevelWeight * patchLevelGrade)
 
 
 #def performanceGradeCalculation(responseTimeGrade, throughputGrade, cpuUsageGrade):
@@ -144,12 +146,14 @@ def prometheusRequest():
     print(parameterQueriesToValues)
     availabilityGrade = availabilityGradeCalculation(parameterQueriesToValues.get('uptime'))
 
+    patchLevelCheck = CheckPatchLevel.CheckPatchLevel()
     logLevelCheck = LogLevelCheck.LogLevelCheck()
     reliabilityGrade = reliabilityGradeCalculation(parameterQueriesToValues.get('counter_status_200_carts_customerId_items')[1],
                                                    parameterQueriesToValues.get('counter_status_500_carts_customerId_items')[1],
     #reliabilityGrade = reliabilityGradeCalculation(parameterQueriesToValues.get('counter_status_200_carts_customerId_items'),
     #                                               parameterQueriesToValues.get('counter_status_500_carts_customerId_items'),
-                                                   logLevelCheck.checkLoglevel())
+                                                   logLevelCheck.checkLoglevel(),
+                                                   patchLevelCheck.checkPatchLevel())
 
     performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics')[1],
                                                    #throughputGrade,
