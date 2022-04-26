@@ -1,7 +1,6 @@
 import subprocess
 
 class LogLevelCheck:
-    print('Check log level for: warning, error and fatal messages')
 
     def checkLoglevel(self):
 

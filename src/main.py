@@ -126,12 +126,19 @@ def prometheusRequest():
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': x})
         prometheusResponseJson = prometheusResponse.json()
         data = prometheusResponseJson["data"]
-        result = data["result"][0]
-        # uptime: [0] carts, [1] shipping, [2] orders, container_spec_cpu_quota: [0] carts-77b9db4898-27w9m
-        if x == "uptime":
-            parameterQueriesToValues[x] = result["values"]
+
+        # Check if Prometheus result is empty
+        if len(data["result"]) == 0:
+            result = [0, 0]
+            parameterQueriesToValues[x] = result
         else:
-            parameterQueriesToValues[x] = result["value"]
+            result = data["result"][0]
+            if x == "uptime":
+                parameterQueriesToValues[x] = result["values"]
+            else:
+                parameterQueriesToValues[x] = result["value"]
+
+        # uptime: [0] carts, [1] shipping, [2] orders, container_spec_cpu_quota: [0] carts-77b9db4898-27w9m
         # print("At time", parameterQueriesToValues[x][0], "the result of", x, "was", parameterQueriesToValues[x][1])
 
     print(parameterQueriesToValues)
