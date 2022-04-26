@@ -6,16 +6,20 @@ class LogLevelCheck:
 
         try:
             output = subprocess.check_output(["kubectl", "logs", "queue-master-6bf76bbfc-4hcwf", "--container=queue-master", "--namespace=sock-shop", "--v=1",])
-            #subprocess.check_output(["grep", "-i", "-E", "'(warning|error|fatal)'", "|", "wc", "-l"
-            print(output)
-        except Exception as e:
-            print(e)
-            output = 20
+            logLevels = ['warning', 'error', 'fatal']
+            counter = 0
+
+            # https://pencilprogrammer.com/check-multiple-substrings-python/
+            for x in logLevels:
+                if x in output:
+                    counter += 1
+                    print(counter)
+                #subprocess.check_output(["grep", "-i", "-E", "'(warning|error|fatal)'", "|", "wc", "-l"
 
         # to be updated
-        if output > 25:
+        if counter > 25:
             return -5
-        elif 25 == output > 10:
+        elif 25 == counter > 10:
             return 0
         else:
             return 5
