@@ -12,12 +12,10 @@ class LogLevelCheck:
             counter = 0
 
             # https://pencilprogrammer.com/check-multiple-substrings-python/
-            print("output: ", output)
             for x in logLevels:
                 if x.lower() in output.lower():
                     counter += 1
                     print(counter)
-                #subprocess.check_output(["grep", "-i", "-E", "'(warning|error|fatal)'", "|", "wc", "-l"
         except Exception as e:
             counter = 25
             print(e)
