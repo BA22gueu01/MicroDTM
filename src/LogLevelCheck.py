@@ -9,7 +9,7 @@ class LogLevelCheck:
         try:
             output = subprocess.check_output(["kubectl", "logs", "queue-master-6bf76bbfc-4hcwf", "--namespace=sock-shop", "--v=1", "|", "grep", "-E", "'(warning|error|fatal)'", "|", "wc", "-l"])
             print(output)
-        except Error as e:
+        except Exception as e:
             print(e)
             output = 20
 
