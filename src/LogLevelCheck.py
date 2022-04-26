@@ -5,7 +5,7 @@ class LogLevelCheck:
     def checkLoglevel(self):
 
         try:
-            output = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "kubectl", "logs", "queue-master-6bf76bbfc-4hcwf", "--container=queue-master", "--namespace=sock-shop", "--v=1", "|", "grep", "-i", "-E", "'(warning|error|fatal)'", "|", "wc", "-l"])
+            output = subprocess.check_output(["kubectl", "logs", "queue-master-6bf76bbfc-4hcwf", "--container=queue-master", "--namespace=sock-shop", "--v=1", "|", "grep", "-i", "-E", "'(warning|error|fatal)'", "|", "wc", "-l"])
             print(output)
         except Exception as e:
             print(e)
