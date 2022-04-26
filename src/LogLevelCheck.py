@@ -1,18 +1,19 @@
 import subprocess
+import sys
 
 class LogLevelCheck:
 
     def checkLoglevel(self):
 
         try:
-            output = subprocess.check_output(["kubectl", "logs", "queue-master-6bf76bbfc-4hcwf", "--container=queue-master", "--namespace=sock-shop", "--v=1",])
+            output = subprocess.check_output(["kubectl", "logs", "queue-master-6bf76bbfc-4hcwf", "--container=queue-master", "--namespace=sock-shop", "--v=1",]).decode(sys.stdout.encoding).strip()
             logLevels = ['warning', 'error', 'fatal']
             counter = 0
 
             # https://pencilprogrammer.com/check-multiple-substrings-python/
             print("output: ", output)
             for x in logLevels:
-                if x in output:
+                if x.lower() in output.lower():
                     counter += 1
                     print(counter)
                 #subprocess.check_output(["grep", "-i", "-E", "'(warning|error|fatal)'", "|", "wc", "-l"
