@@ -10,6 +10,7 @@ class LogLevelCheck:
             counter = 0
 
             # https://pencilprogrammer.com/check-multiple-substrings-python/
+            print("output: ", output)
             for x in logLevels:
                 if x in output:
                     counter += 1
