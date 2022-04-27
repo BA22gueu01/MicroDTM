@@ -54,13 +54,13 @@ class CheckPatchLevel:
             # Check last time since the system was updated
             lastUpdateFile = subprocess.check_output(
                 ["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "ls", "-l",
-                 "/var/lib/" + packageManager[0 - 2] + "/"])
+                 "/var/lib/" + packageManager[0:2] + "/"])
             lastUpdateFile = lastUpdateFile.decode()
 
             if 'update-success-stamp' in lastUpdateFile.lower():
                 lastUpdate = subprocess.check_output(
                     ["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "ls", "-l",
-                     "/var/lib/" + packageManager[0 - 2] + "/update-success-stamp"])
+                     "/var/lib/" + packageManager[0:2] + "/update-success-stamp"])
                 lastUpdate = lastUpdate.decode()
 
                 # To Do: "awk", "'{print $6" "$7" "$8}'"
