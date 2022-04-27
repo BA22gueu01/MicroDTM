@@ -31,12 +31,12 @@ class CheckPatchLevel:
 
             # Run the equivalent of apt-get update - fetch the latest list of available packages from the repositories
             subprocess.check_output(
-                ["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", packageManager, "update"])
+                ["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", packageManager, "update"])
 
             # Check number of pending updates. -s = No action; perform a simulation of events that would occur based
             # on the current system state but do not actually change the system
             pendingUpdates = subprocess.check_output(
-                ["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", packageManager, "-s",
+                ["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", packageManager, "-s",
                  "upgrade"])
 
             pendingUpdates = pendingUpdates.decode()
@@ -57,13 +57,13 @@ class CheckPatchLevel:
 
             # Check last time since the system was updated
             lastUpdateFile = subprocess.check_output(
-                ["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "ls", "-l",
+                ["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", "ls", "-l",
                  "/var/lib/" + packageManager[0:3] + "/"])
             lastUpdateFile = lastUpdateFile.decode()
 
             if 'update-success-stamp' in lastUpdateFile.lower():
                 lastUpdate = subprocess.check_output(
-                    ["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "ls", "-l",
+                    ["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", "ls", "-l",
                      "/var/lib/" + packageManager[0:3] + "/periodic/update-success-stamp"])
                 lastUpdate = lastUpdate.decode()
 
