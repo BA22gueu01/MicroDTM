@@ -1,5 +1,6 @@
 import subprocess
 import re
+import sys
 from datetime import timedelta, datetime
 
 
@@ -22,7 +23,7 @@ class CheckPatchLevel:
                     currentVersion = True
                 packageManager = "apt-get"
             elif 'alpine' in version.lower():
-                if "20" in version or "18" in version:
+                if "3.12" in version or "3.13" in version or "3.14" in version or "3.15" in version:
                     currentVersion = True
                 packageManager = "apk"
             else:
@@ -47,6 +48,7 @@ class CheckPatchLevel:
                     counterSec += 1
             elif 'alpine' in version.lower():
                 try:
+                    # Search for total number of pending updates
                     counterInst = re.search(r"/(\b\d+\b)", pendingUpdates).group(1)
                 except AttributeError:
                     counterInst = 9999
@@ -60,10 +62,13 @@ class CheckPatchLevel:
             if 'update-success-stamp' in lastUpdateFile.lower():
                 lastUpdate = subprocess.check_output(
                     ["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "ls", "-l",
-                     "/var/lib/" + packageManager[0:3] + "/update-success-stamp"])
+                     "/var/lib/" + packageManager[0:3] + "/periodic/update-success-stamp"])
                 lastUpdate = lastUpdate.decode()
 
-                # To Do: "awk", "'{print $6" "$7" "$8}'"
+                #for line in lastUpdate:
+                columns = lastUpdate.strip().split()
+                lastUpdate = columns[6] + " " + columns[7] + " " + columns[8]
+                print(lastUpdate)
 
                 currentDate = datetime.datetime.now()
 
@@ -72,7 +77,8 @@ class CheckPatchLevel:
             else:
                 lastUpdate = 0
 
-            print("Version: ", version)
+            print(version)
+            print("Is os version up-to-date? ", currentVersion)
             print("Number of pending updates: ", counterInst)
             print("Number of pending security updates: ", counterSec)
             print("Last time the system was updated: ", lastUpdate)
