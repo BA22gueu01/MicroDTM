@@ -1,5 +1,4 @@
 import subprocess
-import platform
 import re
 from datetime import timedelta, datetime
 
@@ -11,7 +10,6 @@ class CheckPatchLevel:
             counterInst = 0
             counterSec = 0
 
-            print("Platform: ", platform.linux_distribution())
             # Get the os version of the pod
             version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf",
                                                "--", "cat", "/etc/os-release"])
