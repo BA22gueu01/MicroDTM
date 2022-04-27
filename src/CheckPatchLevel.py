@@ -47,7 +47,7 @@ class CheckPatchLevel:
                     counterSec += 1
             elif 'alpine' in version.lower():
                 try:
-                    counterInst = re.search(r"/([0-9]|[1-9][0-9]|[1-9][0-9][0-9])", pendingUpdates).group(1)
+                    counterInst = re.search(r"/(\b\d+\b)", pendingUpdates).group(1)
                 except AttributeError:
                     counterInst = 9999
 
