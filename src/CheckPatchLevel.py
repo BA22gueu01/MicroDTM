@@ -80,10 +80,10 @@ class CheckPatchLevel:
             print(version)
             print("Is os version up-to-date? ", currentVersion)
             print("Number of pending updates: ", counterInst)
-            print("never updated" if 9999 in counterInst else counterInst)
+            print("never updated" if counterInst == 9999 else counterInst)
             print("Number of pending security updates: ", counterSec)
             print("Last time the system was updated: ")
-            print("never" if 9999 in lastUpdate else lastUpdate)
+            print("never" if lastUpdate == 9999 else lastUpdate)
 
         except Exception as e:
             print(e)
