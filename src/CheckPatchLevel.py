@@ -12,7 +12,7 @@ class CheckPatchLevel:
             counterSec = 0
 
             # Get the os version of the pod
-            version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf",
+            version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2",
                                                "--", "cat", "/etc/os-release"])
             version = version.decode()
             currentVersion = False

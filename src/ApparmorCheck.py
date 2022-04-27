@@ -6,7 +6,7 @@ class ApparmorCheck:
     def checkApparmor(self):
 
         try:
-            output = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-6bf76bbfc-4hcwf", "--", "cat", "/sys/module/apparmor/parameters/enabled"])
+            output = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", "cat", "/sys/module/apparmor/parameters/enabled"])
             output = output.decode()
             print(output)
         except Exception as e:

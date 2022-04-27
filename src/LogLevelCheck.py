@@ -6,7 +6,7 @@ class LogLevelCheck:
     def checkLoglevel(self):
 
         try:
-            output = subprocess.check_output(["kubectl", "logs", "queue-master-6bf76bbfc-4hcwf", "--container=queue-master", "--namespace=sock-shop", "--v=1"])#.decode(sys.stdout.encoding).strip()
+            output = subprocess.check_output(["kubectl", "logs", "queue-master-fc75dcdd6-jd7h2", "--container=queue-master", "--namespace=sock-shop", "--v=1"])#.decode(sys.stdout.encoding).strip()
             output = output.decode()
             logLevels = ['warning', 'error', 'fatal']
             counter = 0
