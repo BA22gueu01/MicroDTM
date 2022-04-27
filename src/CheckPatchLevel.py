@@ -50,8 +50,10 @@ class CheckPatchLevel:
                 try:
                     # Search for total number of pending updates
                     counterInst = re.search(r"/(\b\d+\b)", pendingUpdates).group(1)
+                    if counterInst is None:
+                        counterInst = 0
                 except AttributeError:
-                    counterInst = 9999
+                    return 0
 
             # Check last time since the system was updated
             lastUpdateFile = subprocess.check_output(
@@ -80,9 +82,8 @@ class CheckPatchLevel:
             print(version)
             print("Is os version up-to-date? ", currentVersion)
             print("Number of pending updates: ", counterInst)
-            print("never updated" if counterInst == 9999 else counterInst)
             print("Number of pending security updates: ", counterSec)
-            print("Last time the system was updated: ")
+            print("Last time the system was updated:")
             print("never" if lastUpdate == 9999 else lastUpdate)
 
         except Exception as e:
