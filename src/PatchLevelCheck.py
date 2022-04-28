@@ -33,6 +33,7 @@ class PatchLevelCheck:
         try:
             counterInst = 0
             counterSec = 0
+            currentDate = datetime.now()
 
             # Get the os version of the pod
             version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
@@ -92,8 +93,6 @@ class PatchLevelCheck:
                 columns = lastUpdate.strip().split()
                 lastUpdate = columns[6] + " " + columns[7] + " " + columns[8]
                 print(lastUpdate)
-
-                currentDate = datetime.now()
 
                 lastUpdate = currentDate.date().strftime("%Y") + " " + lastUpdate
                 lastUpdate = datetime.strptime(lastUpdate, "%Y %b %d %H:%M")
