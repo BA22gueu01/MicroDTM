@@ -12,7 +12,7 @@ class GetPods:
         print("Decoded")
         print(output)
 
-        output = subprocess.check_output(["kubectl", "get", "pods", "-o", "custom-columns=\"metadata.name\""
+        output = subprocess.check_output(["kubectl", "get", "pods", "-o", "custom-columns=\":metadata.name\""
                                           "-n", "sock-shop"])
         print("o changed\n")
         print(output)
