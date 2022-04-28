@@ -5,6 +5,7 @@ import LogLevelCheck
 import ApparmorCheck
 import CheckCVE
 import CheckPatchLevel
+import GetPods
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 PARAMETERWEIGHT = 0.2
@@ -113,6 +114,10 @@ def securityGradeCalculation(apparmorGrade, certificateGrade):
 
 def prometheusRequest():
     print("Start Loop")
+    getPods = GetPods.GetPods()
+    pods = getPods.getPods()
+    for pod in pods:
+        print(pod)
 
     for x in parameterQueriesToValues:
         if x == "uptime":
