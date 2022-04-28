@@ -8,10 +8,9 @@ class GetPods:
                                           "--field-selector=status.phase=Running", "-o",
                                           "custom-columns=:metadata.name"])
         output = output.decode()
-        for line in output:
-            print(line)
+        print(output)
 
-        output = subprocess.popen(["kubectl", "get", "pods", "-n", "sock-shop", "--no-headers",
+        output = subprocess.Popen(["kubectl", "get", "pods", "-n", "sock-shop", "--no-headers",
                                           "--field-selector=status.phase=Running", "-o",
                                            "custom-columns=:metadata.name"])
         print ("POPEN")
