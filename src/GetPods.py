@@ -4,15 +4,11 @@ class GetPods:
 
     def getPods(self):
         pods = []
-        command = subprocess.Popen(["kubectl", "get", "pods", "-o", "custom-columns=\":metadata.name\"", "--no-headers",
-                                   "--field-selector=status.phase=Running", "-n", "sock-shop"], stdout=subprocess.PIPE)
-        output = command.communicate()
+        output = subprocess.check_output(["kubectl", "get", "pods", "-o", "custom-columns=\":metadata.name\"",
+                                          "--no-headers", "--field-selector=status.phase=Running", "-n", "sock-shop"])
         print(output)
-        print(output.stdout)
-        for line in output.stdout.readlines():
-            print(line)
-            print(line.decode())
-            pods.append(line)
+        for line in output.decode():
+            print(line + "\n")
 
         return pods
 
