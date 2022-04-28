@@ -26,6 +26,8 @@ class LogLevelCheck:
 
     def checkLoglevel(self, podName, containerName):
 
+        print("LogLevelCheck for Pod: " + podName + " & container: " + containerName)
+
         try:
             output = subprocess.check_output(["kubectl", "logs", podName, "--container", containerName,
                                               "--namespace=sock-shop", "--v=1"])
@@ -37,7 +39,6 @@ class LogLevelCheck:
             for x in logLevels:
                 if x.lower() in output.lower():
                     counter += 1
-                    print(counter)
         except Exception as e:
             counter = 25
             print(e)

@@ -27,6 +27,9 @@ class PatchLevelCheck:
         return grade/countPods
 
     def checkPatchLevel(self, podName, containerName):
+
+        print("PatchLevelCheck for Pod: " + podName + " & container: " + containerName)
+
         try:
             counterInst = 0
             counterSec = 0
