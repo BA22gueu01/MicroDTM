@@ -29,11 +29,13 @@ class PatchLevelCheck:
     def checkPatchLevel(self, podName, containerName):
 
         print("PatchLevelCheck for Pod: " + podName + " & container: " + containerName)
+        counterInst = 0
+        counterSec = 0
+        currentDate = datetime.now()
+        neverUpdated = False
 
         try:
-            counterInst = 0
-            counterSec = 0
-            currentDate = datetime.now()
+
 
             # Get the os version of the pod
             version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
@@ -97,18 +99,18 @@ class PatchLevelCheck:
                 lastUpdate = currentDate.date().strftime("%Y") + " " + lastUpdate
                 lastUpdate = datetime.strptime(lastUpdate, "%Y %b %d %H:%M")
             else:
-                lastUpdate = 9999
+                neverUpdated = True
 
             print(version)
             print("Is os version up-to-date? ", currentVersion)
             print("Number of pending updates: ", counterInst)
             print("Number of pending security updates: ", counterSec)
             print("Last time the system was updated:")
-            print("never" if lastUpdate == 9999 else lastUpdate)
+            print("never" if neverUpdated else lastUpdate)
 
         except Exception as e:
             print(e)
-            lastUpdate = 9999
+            neverUpdated = True
             currentVersion = False
             counterInst = 0
             counterSec = 0
@@ -116,7 +118,7 @@ class PatchLevelCheck:
 
         if currentVersion:
             if counterInst < 50 and counterSec < 20:
-                if lastUpdate > (currentDate - timedelta(days=90)):
+                if not neverUpdated and (lastUpdate > (currentDate - timedelta(days=90))):
                     return 5
                 else:
                     return 2.5
