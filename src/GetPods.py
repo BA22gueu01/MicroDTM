@@ -12,11 +12,6 @@ class GetPods:
         print("Decoded")
         print(output)
 
-        output = subprocess.check_output(["kubectl", "get", "pods", "-o", "custom-columns=\":metadata.name\""
-                                          "-n", "sock-shop"])
-        print("o changed\n")
-        print(output)
-
         output = subprocess.check_output(["kubectl", "get", "pods", "-o=wide",
                                           "-n", "sock-shop", "--no-headers"])
         print("No Header\n")
@@ -25,6 +20,11 @@ class GetPods:
         output = subprocess.check_output(["kubectl", "get", "pods", "-o=wide",
                                           "-n", "sock-shop", "--field-selector=status.phase=Running"])
         print("Field Selector\n")
+        print(output)
+
+        output = subprocess.check_output(["kubectl", "get", "pods", "-o", "custom-columns=\":metadata.name\"",
+                                          "-n", "sock-shop"])
+        print("o changed\n")
         print(output)
 
 
