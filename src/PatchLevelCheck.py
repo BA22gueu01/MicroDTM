@@ -1,10 +1,9 @@
 import subprocess
 import re
-import sys
 from datetime import timedelta, datetime
 
 
-class CheckPatchLevel:
+class PatchLevelCheck:
 
     def checkPatchLevel(self):
         try:

@@ -1,10 +1,9 @@
 import requests
 import time
 import CertificateCheck
-import LogLevelCheck
+import ReliabilityGradeCalculation
 import ApparmorCheck
 import CheckCVE
-import CheckPatchLevel
 import GetPods
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
@@ -19,6 +18,8 @@ parameterQueriesToValues = {"uptime" : [[20, 10],[10, 50]], "counter_status_200_
                             "counter_status_500_carts_customerId_items" :  6, "gauge_response_metrics" : 5,
                             "container_spec_cpu_quota" : 0.88}
 """
+
+reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
 
 def trustCalculation(parameterGradeList):
     trustScore = 0
@@ -44,22 +45,6 @@ def availabilityGradeCalculation(uptimeValues):
 
     # return uptimeWeight multiplicated with the average value of the uptimeGrade list
     return uptimeWeight * (sum(uptimeGrade) / len(uptimeGrade))
-
-
-def reliabilityGradeCalculation(responseErrorsGrade200, responseErrorsGrade500, logLevelGrade, patchLevelGrade):
-    responseErrorsWeight = 0.4
-    logLevelWeight = 0.3
-    patchLevelWeight = 0.3
-
-    responseErrorsGrade = int(responseErrorsGrade500) / int(responseErrorsGrade200)
-    if 0 == responseErrorsGrade < 0.25:
-        responseErrorsGrade = 5
-    elif 0.25 == responseErrorsGrade < 0.5:
-        responseErrorsGrade = 0
-    else:
-        responseErrorsGrade = -5
-
-    return (responseErrorsWeight * responseErrorsGrade) + (logLevelWeight * logLevelGrade) + (patchLevelWeight * patchLevelGrade)
 
 
 #def performanceGradeCalculation(responseTimeGrade, throughputGrade, cpuUsageGrade):
@@ -152,14 +137,7 @@ def prometheusRequest():
     print(parameterQueriesToValues)
     availabilityGrade = availabilityGradeCalculation(parameterQueriesToValues.get('uptime'))
 
-    patchLevelCheck = CheckPatchLevel.CheckPatchLevel()
-    logLevelCheck = LogLevelCheck.LogLevelCheck()
-    reliabilityGrade = reliabilityGradeCalculation(parameterQueriesToValues.get('counter_status_200_carts_customerId_items')[1],
-                                                   parameterQueriesToValues.get('counter_status_500_carts_customerId_items')[1],
-    #reliabilityGrade = reliabilityGradeCalculation(parameterQueriesToValues.get('counter_status_200_carts_customerId_items'),
-    #                                               parameterQueriesToValues.get('counter_status_500_carts_customerId_items'),
-                                                   logLevelCheck.checkLoglevel(),
-                                                   patchLevelCheck.checkPatchLevel())
+    reliabilityGrade = reliabilityGradeCalculation.calculate()
 
     performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics')[1],
                                                    #throughputGrade,
