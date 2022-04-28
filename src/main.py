@@ -116,6 +116,7 @@ def prometheusRequest():
     print("Start Loop")
     getPods = GetPods.GetPods()
     pods = getPods.getPods()
+    getPods.getContainers(pods[0])
 
     for x in parameterQueriesToValues:
         if x == "uptime":
