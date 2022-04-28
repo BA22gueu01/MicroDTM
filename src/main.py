@@ -116,6 +116,8 @@ def prometheusRequest():
     print("Start Loop")
     getPods = GetPods.GetPods()
     pods = getPods.getPods()
+    print(pods)
+    print(pods[0])
     getPods.getContainers(pods[0])
 
     for x in parameterQueriesToValues:
