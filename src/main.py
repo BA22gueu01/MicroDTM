@@ -114,13 +114,6 @@ def securityGradeCalculation(apparmorGrade, certificateGrade):
 
 def prometheusRequest():
     print("Start Loop")
-    getPods = GetPods.GetPods()
-    pods = getPods.getPods()
-    for pod in pods:
-        print(pod)
-    containers = getPods.getContainers(pods[0])
-    for container in containers:
-        print(container)
 
     for x in parameterQueriesToValues:
         if x == "uptime":
