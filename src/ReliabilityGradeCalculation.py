@@ -17,9 +17,8 @@ class ReliabilityGradeCalculation:
         logLevelWeight = 0.3
         patchLevelWeight = 0.3
 
-
-        logLevelGrade = self.logLevelCheck.checkLoglevel()
-        patchLevelGrade = self.patchLevelCheck.checkPatchLevel()
+        logLevelGrade = self.logLevelCheck.getLoglevelGrade()
+        patchLevelGrade = self.patchLevelCheck.getPatchLevelGrade()
 
         responseErrorsGrade200 = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items')[1]
         responseErrorsGrade500 = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items')[1]

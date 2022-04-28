@@ -1,18 +1,39 @@
 import subprocess
 import re
+import GetPods
 from datetime import timedelta, datetime
 
 
 class PatchLevelCheck:
 
-    def checkPatchLevel(self):
+    def getPatchLevelGrade(self):
+        getPods = GetPods.GetPods()
+        pods = getPods.getPods()
+        grade = 0
+        countPods = 0
+
+        for pod in pods:
+            countContainers = 0
+            podGrade = 0
+            containers = getPods.getContainers(pod)
+
+            for container in containers:
+                podGrade = podGrade + self.checkPatchLevel(pod, container)
+                countContainers = countContainers + 1
+
+            grade = grade + podGrade/countContainers
+            countPods = countPods + 1
+
+        return grade/countPods
+
+    def checkPatchLevel(self, podName, containerName):
         try:
             counterInst = 0
             counterSec = 0
 
             # Get the os version of the pod
-            version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2",
-                                               "--", "cat", "/etc/os-release"])
+            version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
+                                               containerName, "--", "cat", "/etc/os-release"])
             version = version.decode()
             currentVersion = False
 
@@ -29,15 +50,13 @@ class PatchLevelCheck:
                 return 0
 
             # Run the equivalent of apt-get update - fetch the latest list of available packages from the repositories
-            subprocess.check_output(
-                ["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", packageManager, "update"])
+            subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName,
+                                     "--", packageManager, "update"])
 
             # Check number of pending updates. -s = No action; perform a simulation of events that would occur based
             # on the current system state but do not actually change the system
-            pendingUpdates = subprocess.check_output(
-                ["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", packageManager, "-s",
-                 "upgrade"])
-
+            pendingUpdates = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
+                                                      containerName, "--", packageManager, "-s", "upgrade"])
             pendingUpdates = pendingUpdates.decode()
 
             if 'ubuntu' in version.lower() or 'debian' in version.lower():
@@ -56,13 +75,13 @@ class PatchLevelCheck:
 
             # Check last time since the system was updated
             lastUpdateFile = subprocess.check_output(
-                ["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", "ls", "-l",
+                ["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName, "--", "ls", "-l",
                  "/var/lib/" + packageManager[0:3] + "/"])
             lastUpdateFile = lastUpdateFile.decode()
 
             if 'update-success-stamp' in lastUpdateFile.lower():
                 lastUpdate = subprocess.check_output(
-                    ["kubectl", "exec", "-n", "sock-shop", "queue-master-fc75dcdd6-jd7h2", "--", "ls", "-l",
+                    ["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName, "--", "ls", "-l",
                      "/var/lib/" + packageManager[0:3] + "/periodic/update-success-stamp"])
                 lastUpdate = lastUpdate.decode()
 
