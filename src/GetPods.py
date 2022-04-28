@@ -14,6 +14,7 @@ class GetPods:
                                           "--field-selector=status.phase=Running", "-o",
                                            "custom-columns=:metadata.name"])
         print ("POPEN")
+        print(output.stdout)
         for line in output.stdout:
             print(line)
 
