@@ -109,6 +109,11 @@ class PatchLevelCheck:
 
         except Exception as e:
             print(e)
+            lastUpdate = 9999
+            currentVersion = False
+            counterInst = 0
+            counterSec = 0
+            currentDate = datetime.datetime.now()
 
         if currentVersion:
             if counterInst < 50 and counterSec < 20:
