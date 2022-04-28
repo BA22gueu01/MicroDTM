@@ -18,10 +18,10 @@ class GetPods:
     def getContainers(self, podName):
         containers = []
 
-        output = subprocess.Popen(["kubectl", "get", "pods", podName, "-o", "jsonpath=\"{.spec.containers[*].name}\"",
-                                   "-n", "sock-shop"], stdout=subprocess.PIPE)
-        for line in output.stdout.readlines():
-            line = line.decode().strip('\n')
+        output = subprocess.check_output(["kubectl", "get", "pods", podName, "-o", "jsonpath=\"{.spec.containers[*].name}\"",
+                                   "-n", "sock-shop"])
+
+        for line in output.decode().split():
             print(line)
             containers.append(line)
 
