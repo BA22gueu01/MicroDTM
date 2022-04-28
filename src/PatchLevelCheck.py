@@ -93,10 +93,10 @@ class PatchLevelCheck:
                 lastUpdate = columns[6] + " " + columns[7] + " " + columns[8]
                 print(lastUpdate)
 
-                currentDate = datetime.datetime.now()
+                currentDate = datetime.now()
 
                 lastUpdate = currentDate.date().strftime("%Y") + " " + lastUpdate
-                lastUpdate = datetime.datetime.strptime(lastUpdate, "%Y %b %d %H:%M")
+                lastUpdate = datetime.strptime(lastUpdate, "%Y %b %d %H:%M")
             else:
                 lastUpdate = 9999
 
@@ -113,7 +113,7 @@ class PatchLevelCheck:
             currentVersion = False
             counterInst = 0
             counterSec = 0
-            currentDate = datetime.datetime.now()
+            currentDate = datetime.now()
 
         if currentVersion:
             if counterInst < 50 and counterSec < 20:
