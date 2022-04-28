@@ -1,12 +1,34 @@
 import subprocess
-import sys
+import GetPods
 
 class LogLevelCheck:
 
-    def checkLoglevel(self):
+    def getLogLevelGrade(self):
+        getPods = GetPods.GetPods()
+        pods = getPods.getPods()
+        grade = 0
+        countPods = 0
+
+        for pod in pods:
+            countContainers = 0
+            podGrade = 0
+            containers = getPods.getContainers(pod)
+
+            for container in containers:
+                podGrade = podGrade + self.checkLoglevel(pod, container)
+                countContainers = countContainers + 1
+
+            grade = grade + podGrade/countContainers
+            countPods = countPods + 1
+
+        return grade/countPods
+
+
+    def checkLoglevel(self, podName, containerName):
 
         try:
-            output = subprocess.check_output(["kubectl", "logs", "queue-master-fc75dcdd6-jd7h2", "--container=queue-master", "--namespace=sock-shop", "--v=1"])#.decode(sys.stdout.encoding).strip()
+            output = subprocess.check_output(["kubectl", "logs", podName, "--container", containerName,
+                                              "--namespace=sock-shop", "--v=1"])
             output = output.decode()
             logLevels = ['warning', 'error', 'fatal']
             counter = 0
