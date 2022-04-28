@@ -6,6 +6,7 @@ class GetPods:
         pods = []
         output = subprocess.check_output(["kubectl", "get", "pods", "-o", "custom-columns=\":metadata.name\"",
                                           "--no-headers", "--field-selector=status.phase=Running", "-n", "sock-shop"])
+        output = output.decode()
         print(output)
         for line in output.decode():
             print(line + "\n")
