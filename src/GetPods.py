@@ -22,7 +22,6 @@ class GetPods:
                                    "-n", "sock-shop"])
 
         for line in output.decode().split():
-            print(line)
-            containers.append(line)
+            containers.append(line.trim('"'))
 
         return containers
