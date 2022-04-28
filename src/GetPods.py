@@ -12,7 +12,7 @@ class GetPods:
         # output.wait()
         print("POPEN")
         for line in output.stdout.readlines():
-            line = line.decode()
+            line = line.decode().strip('\n')
             print(line)
             pods.append(line)
 
