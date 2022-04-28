@@ -4,29 +4,25 @@ class GetPods:
 
     def getPods(self):
         pods = []
-        output = subprocess.check_output(["kubectl", "get", "pods", "-o=wide",
-                                          "-n", "sock-shop"])
+        output = subprocess.check_output(["kubectl", "get", "pods", "-n", "sock-shop", "--no-headers",
+                                          "--field-selector=status.phase=Running",  "-o=wide"])
         print("Simple Call\n")
         print(output)
         output = output.decode()
         print("Decoded")
         print(output)
 
-        output = subprocess.check_output(["kubectl", "get", "pods", "-o=wide",
-                                          "-n", "sock-shop", "--no-headers"])
-        print("No Header\n")
+        output = subprocess.check_output(["kubectl", "get", "pods", "-n", "sock-shop", "--no-headers",
+                                          "--field-selector=status.phase=Running",  "-o", "custom-columns=:metadata.name"])
+
+        print("Custom\n")
         print(output)
 
-        output = subprocess.check_output(["kubectl", "get", "pods", "-o=wide",
-                                          "-n", "sock-shop", "--field-selector=status.phase=Running"])
-        print("Field Selector\n")
-        print(output)
+        output = subprocess.check_output(["kubectl", "get", "pods", "-n", "sock-shop", "--no-headers",
+                                          "--field-selector=status.phase=Running",  "-o=name"])
 
-        output = subprocess.check_output(["kubectl", "get", "pods", "-o", "custom-columns=\":metadata.name\"",
-                                          "-n", "sock-shop"])
-        print("o changed\n")
+        print("Name\n")
         print(output)
-
 
 
         return pods
