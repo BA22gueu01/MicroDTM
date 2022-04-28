@@ -12,9 +12,9 @@ class GetPods:
 
         output = subprocess.Popen(["kubectl", "get", "pods", "-n", "sock-shop", "--no-headers",
                                           "--field-selector=status.phase=Running", "-o",
-                                           "custom-columns=:metadata.name"])
+                                           "custom-columns=:metadata.name"], stdout=subprocess.PIPE)
         output.wait()
-        print ("POPEN")
+        print("POPEN")
         print(output.stdout)
         for line in output.stdout:
             print(line)
