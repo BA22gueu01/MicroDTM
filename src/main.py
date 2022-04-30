@@ -122,11 +122,9 @@ def prometheusRequest():
         elif x == "disk_read":
             diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="' + instance + '",job="' + job + '"}[5m]) / rate(node_disk_reads_completed_total{instance="' + instance + '",job="' + job + '"}[5m])'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
-            print("disk read: ", diskReadCalculation)
         elif x == "disk_write":
             diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="' + instance + '",job="' + job + '"}[5m]) / rate(node_disk_writes_completed_total{instance="' + instance + '",job="' + job + '"}[5m])'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
-            print("disk write: ", prometheusResponse.json())
         else:
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': x})
         prometheusResponseJson = prometheusResponse.json()
@@ -154,8 +152,8 @@ def prometheusRequest():
     performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics')[1],
                                                    # throughputGrade,
                                                    parameterQueriesToValues.get('container_spec_cpu_quota')[1],
-                                                   parameterQueriesToValues.get('disk_read'),
-                                                   parameterQueriesToValues.get('disk_write'))
+                                                   parameterQueriesToValues.get('disk_read')[1],
+                                                   parameterQueriesToValues.get('disk_write')[1])
     # performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics'),
     # throughputGrade,
     #                                               parameterQueriesToValues.get('container_spec_cpu_quota'))
