@@ -32,7 +32,7 @@ class PatchLevelCheck:
         counterInst = 0
         counterSec = 0
         currentDate = datetime.now()
-        neverUpdated = False
+        neverUpdated = True
 
         try:
             # Get the os version of the pod
@@ -85,6 +85,7 @@ class PatchLevelCheck:
                 lastUpdateFile = lastUpdateFile.decode()
 
                 if 'update-success-stamp' in lastUpdateFile.lower():
+                    neverUpdated = False
                     lastUpdate = subprocess.check_output(
                         ["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName, "--", "ls", "-l",
                          "/var/lib/" + packageManager[0:3] + "/periodic/update-success-stamp"])
@@ -97,23 +98,20 @@ class PatchLevelCheck:
 
                     lastUpdate = currentDate.date().strftime("%Y") + " " + lastUpdate
                     lastUpdate = datetime.strptime(lastUpdate, "%Y %b %d %H:%M")
-                else:
-                    neverUpdated = True
 
             except Exception as e:
                 print("Read-only filesystem or permission denied")
                 print(e)
 
-            print(version)
             print("Is os version up-to-date? ", currentVersion)
             print("Number of pending updates: ", counterInst)
             print("Number of pending security updates: ", counterSec)
             print("Last time the system was updated:")
             print("never" if neverUpdated else lastUpdate)
+            print("-----------------------------------------------------------")
 
         except Exception as e:
             print(e)
-            neverUpdated = True
             currentVersion = False
             counterInst = 0
             counterSec = 0
