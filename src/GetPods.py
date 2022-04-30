@@ -22,6 +22,7 @@ class GetPods:
                                    "-n", "sock-shop"])
 
         for line in output.decode().split():
-            containers.append(line.strip('"'))
+            if "istio" not in line.lower():
+                containers.append(line.strip('"'))
 
         return containers

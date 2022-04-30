@@ -35,8 +35,6 @@ class PatchLevelCheck:
         neverUpdated = False
 
         try:
-
-
             # Get the os version of the pod
             version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
                                                containerName, "--", "cat", "/etc/os-release"])

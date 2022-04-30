@@ -134,7 +134,7 @@ def prometheusRequest():
         # uptime: [0] carts, [1] shipping, [2] orders, container_spec_cpu_quota: [0] carts-77b9db4898-27w9m
         # print("At time", parameterQueriesToValues[x][0], "the result of", x, "was", parameterQueriesToValues[x][1])
 
-    print(parameterQueriesToValues)
+    #print(parameterQueriesToValues)
     availabilityGrade = availabilityGradeCalculation(parameterQueriesToValues.get('uptime'))
 
     reliabilityGrade = reliabilityGradeCalculation.calculate()
