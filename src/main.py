@@ -5,15 +5,33 @@ import ReliabilityGradeCalculation
 import ApparmorCheck
 import CheckCVE
 import GetPods
+import schedule
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
+
+availabilityGrade = 0
+availabilityWeight = 0.2
+
+reliabilityGrade = 0
+reliabilityWeight = 0.2
+
+performanceGrade = 0
+performanceWeight = 0.2
+
+correctnessGrade = 0
+correctnessWeight = 0.2
+
+securityGrade = 0
+securityWeight = 0.2
+
+reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
 PARAMETERWEIGHT = 0.2
 
 KEYS = ["uptime", "counter_status_200_carts_customerId_items", "counter_status_500_carts_customerId_items",
         "gauge_response_metrics", "container_spec_cpu_quota", "disk_read", "disk_write", "memory_usage"]
 parameterQueriesToValues = {k: None for k in KEYS}
 
-reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
+
 
 
 def trustCalculation(parameterGradeList):
@@ -180,12 +198,37 @@ def prometheusRequest():
     trustCalculation(parameterGradeList)
 
 
+def initialCalculation():
+    reliabilityGradeCalculation.initialCalculation()
+    trustCalculation()
+
+
+def update():
+    reliabilityGradeCalculation.update()
+    trustCalculation()
+
+
+def hourlyUpdate():
+    trustCalculation()
+
+
+def dailyUpdate():
+    reliabilityGradeCalculation.dailyUpdate()
+    trustCalculation()
+
+
 def main():
     print("Main Call!")
+    initialCalculation()
+    schedule.every(30).seconds.do(update)
+    schedule.every().hour.do(hourlyUpdate)
+    schedule.every().day.do(dailyUpdate)
+
     while True:
-        prometheusRequest()
-        time.sleep(30)
+        schedule.run_pending()
+        time.sleep(10)
 
 
 if __name__ == "__main__":
     main()
+
