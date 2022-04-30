@@ -72,11 +72,11 @@ def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade, diskReadGrade,
     diskWriteGrade = float(diskWriteGrade)
 
     if diskReadGrade or diskWriteGrade > 0.04:
-        diskReadGrade, diskWriteGrade = -5
+        diskReadGrade, diskWriteGrade = -5, -5
     elif diskReadGrade or diskWriteGrade > 0.025:
-        diskReadGrade, diskWriteGrade = 0
+        diskReadGrade, diskWriteGrade = 0, 0
     else:
-        diskReadGrade, diskWriteGrade = 5
+        diskReadGrade, diskWriteGrade = 5, 5
 
     return (responseTimeWeight * responseTimeGrade) + (cpuUsageWeight * cpuUsageGrade) + (
                 diskWeight * diskReadGrade) + (diskWeight * diskWriteGrade)
