@@ -118,11 +118,12 @@ def prometheusRequest():
                                   'container_name!="POD"}/container_spec_cpu_period{name!~".*prometheus.*", ' \
                                   'image!="", container_name!="POD"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
+        # https://brian-candler.medium.com/interpreting-prometheus-metrics-for-linux-disk-i-o-utilization-4db53dfedcfc
         elif x == "disk_read":
-            diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="', instance, 'job="', job, '"}[5m]) / rate(node_disk_reads_completed_total{instance="', instance, '",job="', job, '"}[5m])'
+            diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="', instance, ',job="', job, '"}[5m]) / rate(node_disk_reads_completed_total{instance="', instance, '",job="', job, '"}[5m])'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
         elif x == "disk_write":
-            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="', instance, 'job="', job, '"}[5m]) / rate(node_disk_writes_completed_total{instance="', instance, '",job="', job, '"}[5m])'
+            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="', instance, ',job="', job, '"}[5m]) / rate(node_disk_writes_completed_total{instance="', instance, '",job="', job, '"}[5m])'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
         else:
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': x})
