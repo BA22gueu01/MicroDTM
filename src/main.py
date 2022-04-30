@@ -122,7 +122,7 @@ def prometheusRequest():
         elif x == "disk_read":
             diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="', instance, '",job="', job, '"}[5m]) / rate(node_disk_reads_completed_total{instance="', instance, '",job="', job, '"}[5m])'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
-            print("disk read: ", prometheusResponse.json())
+            print("disk read: ", diskReadCalculation)
         elif x == "disk_write":
             diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="', instance, '",job="', job, '"}[5m]) / rate(node_disk_writes_completed_total{instance="', instance, '",job="', job, '"}[5m])'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
