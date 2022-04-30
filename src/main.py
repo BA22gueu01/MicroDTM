@@ -71,8 +71,8 @@ def main():
     print("Main Call!")
     initialCalculation()
     schedule.every(30).seconds.do(update)
-    schedule.every().hour.do(hourlyUpdate)
-    schedule.every().day.do(dailyUpdate)
+    schedule.every(1).minutes.do(hourlyUpdate)
+    schedule.every(2).minutes.do(dailyUpdate)
 
     while True:
         schedule.run_pending()
