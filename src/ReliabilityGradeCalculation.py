@@ -11,9 +11,9 @@ class ReliabilityGradeCalculation:
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
 
     def calculate(self):
-        responseErrorsWeight = 0.3
+        responseErrorsWeight = 0.4
         logLevelWeight = 0.2
-        patchLevelWeight = 0.2
+        patchLevelWeight = 0.4
 
         logLevelGrade = self.logLevelCheck.getLogLevelGrade()
         patchLevelGrade = self.patchLevelCheck.getPatchLevelGrade()

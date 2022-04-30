@@ -44,7 +44,6 @@ def availabilityGradeCalculation(uptimeValues):
 
 def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade, diskReadGrade, diskWriteGrade, memoryUsageGrade):
     responseTimeWeight = 0.4
-    throughputWeight = 0.2
     cpuUsageWeight = 0.2
     diskWeight = 0.1
     memoryUsageWeight = 0.2
@@ -100,8 +99,8 @@ def correctnessGradeCalculation(numberOfCorrectCallsGrade):
 
 
 def securityGradeCalculation(apparmorGrade, certificateGrade):
-    apparmorWeight = 0.1
-    certificateWeight = 0.2
+    apparmorWeight = 0.4
+    certificateWeight = 0.6
     checkCVE = CheckCVE.CheckCVE()
     checkCVE.checkCVE()
 
