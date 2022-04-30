@@ -22,7 +22,7 @@ class ApparmorCheck:
             grade = grade + podGrade/countContainers
             countPods = countPods + 1
 
-        return grade
+        return grade/countPods
 
     def checkApparmor(self, podName, containerName):
 
