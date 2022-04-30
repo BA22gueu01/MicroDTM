@@ -12,8 +12,8 @@ class ReliabilityGradeCalculation:
 
     def calculate(self):
         responseErrorsWeight = 0.4
-        logLevelWeight = 0.3
-        patchLevelWeight = 0.3
+        logLevelWeight = 0.2
+        patchLevelWeight = 0.4
 
         logLevelGrade = self.logLevelCheck.getLogLevelGrade()
         patchLevelGrade = self.patchLevelCheck.getPatchLevelGrade()
@@ -31,4 +31,4 @@ class ReliabilityGradeCalculation:
             responseErrorsGrade = -5
 
         return (responseErrorsWeight * responseErrorsGrade) + (logLevelWeight * logLevelGrade) + (
-                    patchLevelWeight * patchLevelGrade)
+                patchLevelWeight * patchLevelGrade)

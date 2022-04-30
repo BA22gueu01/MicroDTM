@@ -44,9 +44,9 @@ class LogLevelCheck:
             print(e)
 
         # to be updated
-        if counter > 25:
+        if counter > 3000:
             return -5
-        elif 25 == counter > 10:
+        elif 3000 == counter > 1000:
             return 0
         else:
             return 5

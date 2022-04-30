@@ -36,7 +36,6 @@ class PatchLevelCheck:
         currentVersion = False
 
         try:
-
             # Get the os version of the pod
             version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
                                                containerName, "--", "cat", "/etc/os-release"])
@@ -54,60 +53,69 @@ class PatchLevelCheck:
             else:
                 return 0
 
-            # Run the equivalent of apt-get update - fetch the latest list of available packages from the repositories
-            subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName,
-                                     "--", packageManager, "update"])
+            try:
+                # Run the equivalent of apt-get update - fetch the latest list of available packages from the repositories
+                subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName,
+                                         "--", packageManager, "update"])
 
-            # Check number of pending updates. -s = No action; perform a simulation of events that would occur based
-            # on the current system state but do not actually change the system
-            pendingUpdates = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
-                                                      containerName, "--", packageManager, "-s", "upgrade"])
-            pendingUpdates = pendingUpdates.decode()
+                # Check number of pending updates. -s = No action; perform a simulation of events that would occur based
+                # on the current system state but do not actually change the system
+                pendingUpdates = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
+                                                          containerName, "--", packageManager, "-s", "upgrade"])
+                pendingUpdates = pendingUpdates.decode()
 
-            if 'ubuntu' in version.lower() or 'debian' in version.lower():
-                if 'inst' in pendingUpdates.lower():
-                    counterInst += 1
-                if 'security' in pendingUpdates.lower():
-                    counterSec += 1
-            elif 'alpine' in version.lower():
-                try:
-                    # Search for total number of pending updates
-                    counterInst = re.search(r"/(\b\d+\b)", pendingUpdates).group(1)
-                    if counterInst is None:
-                        counterInst = 0
-                except AttributeError:
-                    return 0
+                if 'ubuntu' in version.lower() or 'debian' in version.lower():
+                    if 'inst' in pendingUpdates.lower():
+                        counterInst += 1
+                    if 'security' in pendingUpdates.lower():
+                        counterSec += 1
+                elif 'alpine' in version.lower():
+                    try:
+                        # Search for total number of pending updates
+                        counterInst = re.search(r"/(\b\d+\b)", pendingUpdates).group(1)
+                        if counterInst is None:
+                            counterInst = 0
+                    except AttributeError:
+                        return 0
 
-            # Check last time since the system was updated
-            lastUpdateFile = subprocess.check_output(
-                ["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName, "--", "ls", "-l",
-                 "/var/lib/" + packageManager[0:3] + "/"])
-            lastUpdateFile = lastUpdateFile.decode()
-
-            if 'update-success-stamp' in lastUpdateFile.lower():
-                neverUpdated = False
-                lastUpdate = subprocess.check_output(
+                # Check last time since the system was updated
+                lastUpdateFile = subprocess.check_output(
                     ["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName, "--", "ls", "-l",
-                     "/var/lib/" + packageManager[0:3] + "/periodic/update-success-stamp"])
-                lastUpdate = lastUpdate.decode()
+                     "/var/lib/" + packageManager[0:3] + "/"])
+                lastUpdateFile = lastUpdateFile.decode()
 
-                # for line in lastUpdate:
-                columns = lastUpdate.strip().split()
-                lastUpdate = columns[6] + " " + columns[7] + " " + columns[8]
-                print(lastUpdate)
+                if 'update-success-stamp' in lastUpdateFile.lower():
+                    neverUpdated = False
+                    lastUpdate = subprocess.check_output(
+                        ["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName, "--", "ls", "-l",
+                         "/var/lib/" + packageManager[0:3] + "/periodic/update-success-stamp"])
+                    lastUpdate = lastUpdate.decode()
 
-                lastUpdate = currentDate.date().strftime("%Y") + " " + lastUpdate
-                lastUpdate = datetime.strptime(lastUpdate, "%Y %b %d %H:%M")
+                    #for line in lastUpdate:
+                    columns = lastUpdate.strip().split()
+                    lastUpdate = columns[6] + " " + columns[7] + " " + columns[8]
+                    print(lastUpdate)
 
-            print(version)
+                    lastUpdate = currentDate.date().strftime("%Y") + " " + lastUpdate
+                    lastUpdate = datetime.strptime(lastUpdate, "%Y %b %d %H:%M")
+
+            except Exception as e:
+                print("Read-only filesystem or permission denied")
+                print(e)
+
             print("Is os version up-to-date? ", currentVersion)
             print("Number of pending updates: ", counterInst)
             print("Number of pending security updates: ", counterSec)
             print("Last time the system was updated:")
             print("never" if neverUpdated else lastUpdate)
+            print("-----------------------------------------------------------")
 
         except Exception as e:
             print(e)
+            currentVersion = False
+            counterInst = 0
+            counterSec = 0
+            currentDate = datetime.now()
 
         if currentVersion:
             if counterInst < 50 and counterSec < 20:
