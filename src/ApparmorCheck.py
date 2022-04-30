@@ -22,13 +22,15 @@ class ApparmorCheck:
             grade = grade + podGrade/countContainers
             countPods = countPods + 1
 
+        return grade
+
     def checkApparmor(self, podName, containerName):
 
         try:
             output = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
                                               containerName, "--", "cat", "/sys/module/apparmor/parameters/enabled"])
             output = output.decode()
-            print(output)
+
         except Exception as e:
             print(e)
             output = "N"
