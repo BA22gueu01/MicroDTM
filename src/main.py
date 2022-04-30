@@ -131,7 +131,7 @@ def prometheusRequest():
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
         # https://brian-candler.medium.com/interpreting-prometheus-metrics-for-linux-disk-i-o-utilization-4db53dfedcfc
         elif x == "disk_read":
-            diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="' + instance + '",job="' + job + '"}[5m]) / rate(node_disk_reads_completed_total{instance="' + instance + '",job="' + job + '"}[5m])'
+            diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="' + instance + '",job="' + job + '"}[5m]) / rate(node_disk_reads_completed_total{instance="' + instance + '",job="' + job + '"}[5m]) '
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
         elif x == "disk_write":
             diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="' + instance + '",job="' + job + '"}[5m]) / rate(node_disk_writes_completed_total{instance="' + instance + '",job="' + job + '"}[5m])'
@@ -159,7 +159,6 @@ def prometheusRequest():
         # uptime: [0] carts, [1] shipping, [2] orders, container_spec_cpu_quota: [0] carts-77b9db4898-27w9m
         # print("At time", parameterQueriesToValues[x][0], "the result of", x, "was", parameterQueriesToValues[x][1])
 
-    # print(parameterQueriesToValues)
     availabilityGrade = availabilityGradeCalculation(parameterQueriesToValues.get('uptime'))
 
     reliabilityGrade = reliabilityGradeCalculation.calculate()
@@ -170,9 +169,6 @@ def prometheusRequest():
                                                    parameterQueriesToValues.get('disk_read')[1],
                                                    parameterQueriesToValues.get('disk_write')[1],
                                                    parameterQueriesToValues.get('memory_usage')[1])
-    # performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics'),
-    # throughputGrade,
-    #                                               parameterQueriesToValues.get('container_spec_cpu_quota'))
 
     # correctnessGrade = correctnessGradeCalculation(numberOfCorrectCallsGrade)
 
@@ -181,7 +177,6 @@ def prometheusRequest():
     securityGrade = securityGradeCalculation(apparmorCheck.checkApparmor(),
                                              certificateCheck.checkCertificate())
 
-    # parameterGradeList = [availabilityGrade, reliabilityGrade, performanceGrade, correctnessGrade, securityGrade]
     parameterGradeList = [availabilityGrade, reliabilityGrade, performanceGrade, securityGrade]
     trustCalculation(parameterGradeList)
 
