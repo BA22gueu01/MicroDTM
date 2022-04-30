@@ -4,11 +4,11 @@ import CertificateCheck
 
 class SecurityGradeCalculation:
 
-    def __init__(self, prometheus):
+    def __init__(self):
         self.apparmorGrade = 0
         self.apparmorWeight = 0.4
         self.certificateGrade = 0
-        self. certificateWeight = 0.6
+        self.certificateWeight = 0.6
 
     def calculateGrade(self):
         return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade

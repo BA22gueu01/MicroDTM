@@ -12,7 +12,7 @@ class ReliabilityGradeCalculation:
         self.logLevelGrade = 0
         self.logLevelWeight = 0.2
         self.patchLevelGrade = 0
-        self. patchLevelWeight = 0.4
+        self.patchLevelWeight = 0.4
         self.responseErrorsGrade = 0
         self.responseErrorsWeight = 0.4
 
