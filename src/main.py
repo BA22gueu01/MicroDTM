@@ -2,6 +2,7 @@ import time
 import AvailabilityGradeCalculation
 import ReliabilityGradeCalculation
 import PerformanceGradeCalculation
+import CorrectnessGradeCalculation
 import SecurityGradeCalculation
 import schedule
 
@@ -10,6 +11,7 @@ PROMETHEUS = 'http://10.161.2.161:31090/'
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS)
+correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation()
 securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
 
 
@@ -20,13 +22,13 @@ def trustCalculation():
     reliabilityGrade = reliabilityGradeCalculation.calculateGrade()
     reliabilityWeight = 0.2
 
-    performanceGrade = 0
+    performanceGrade = performanceGradeCalculation.calculateGrade()
     performanceWeight = 0.2
 
-    correctnessGrade = 0
+    correctnessGrade = correctnessGradeCalculation.callCorrectnessGrade
     correctnessWeight = 0.2
 
-    securityGrade = 0
+    securityGrade = securityGradeCalculation.calculateGrade()
     securityWeight = 0.2
 
     trustScore = (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
@@ -35,16 +37,11 @@ def trustCalculation():
     print("Trustscore: ", trustScore)
 
 
-def correctnessGradeCalculation(numberOfCorrectCallsGrade):
-    numberOfCorrectCallsWeight = 1.0
-
-    return numberOfCorrectCallsWeight * numberOfCorrectCallsGrade
-
-
 def initialCalculation():
     availabilityGradeCalculation.initialCalculation()
     reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
+    correctnessGradeCalculation.initialCalculation()
     securityGradeCalculation.initialCalculation()
     trustCalculation()
 
@@ -57,13 +54,12 @@ def update():
 
 
 def hourlyUpdate():
-    trustCalculation()
+    correctnessGradeCalculation.hourlyUpdate()
 
 
 def dailyUpdate():
     reliabilityGradeCalculation.dailyUpdate()
     securityGradeCalculation.dailyUpdate()
-    trustCalculation()
 
 
 def main():
