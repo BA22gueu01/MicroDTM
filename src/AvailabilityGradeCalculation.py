@@ -26,6 +26,7 @@ class AvailabilityGradeCalculation:
             counter += 1
 
         self.uptimeGrade = sum(uptimeGrade) / len(uptimeGrade)
+        print("uptime Grade: ", self.uptimeGrade)
 
     def update(self):
         self.calculateUptimeGrade()

@@ -12,6 +12,7 @@ class CorrectnessGradeCalculation:
 
     def calculateCallCorrectnessGrade(self):
         self.callCorrectnessGrade = 0
+        print("callCorrectnessGrade: ", self.callCorrectnessGrade)
 
     def hourlyUpdate(self):
         self.calculateCallCorrectnessGrade()

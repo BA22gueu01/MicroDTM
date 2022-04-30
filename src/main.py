@@ -18,18 +18,23 @@ securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
 def trustCalculation():
     availabilityGrade = availabilityGradeCalculation.calculateGrade()
     availabilityWeight = 0.2
+    print("AvailabilityGrade: ", availabilityGrade)
 
     reliabilityGrade = reliabilityGradeCalculation.calculateGrade()
     reliabilityWeight = 0.2
+    print("ReliabilityGrade: ", reliabilityGrade)
 
     performanceGrade = performanceGradeCalculation.calculateGrade()
     performanceWeight = 0.2
+    print("PerformanceGrade: ", performanceGrade)
 
     correctnessGrade = correctnessGradeCalculation.callCorrectnessGrade
     correctnessWeight = 0.2
+    print("CorrectnessGrade: ", correctnessGrade)
 
     securityGrade = securityGradeCalculation.calculateGrade()
     securityWeight = 0.2
+    print("SecurityGrade: ", securityGrade)
 
     trustScore = (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
                   performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade)

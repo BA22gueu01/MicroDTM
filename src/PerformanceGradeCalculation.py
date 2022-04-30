@@ -33,6 +33,8 @@ class PerformanceGradeCalculation:
         else:
             self.responseTimeGrade = 5
 
+        print("ResponseTimeGrade: ", self.responseTimeGrade)
+
     def calculateMemoryUsageGrade(self):
         memoryUsage = self.prometheusRequest.makeRequest('memory_usage')[1]
 
@@ -45,6 +47,7 @@ class PerformanceGradeCalculation:
             self.memoryUsageGrade = 0
         else:
             self.memoryUsageGrade = 5
+        print("MemoryUsageGrade: ", self.memoryUsageGrade)
 
     def calculateDiskReadGrade(self):
         diskReadUsage = self.prometheusRequest.makeRequest('disk_read')[1]
@@ -56,6 +59,7 @@ class PerformanceGradeCalculation:
             self.diskReadGrade = 0
         else:
             self.diskReadGrade = 5
+        print("DiskReadGrade: ", self.diskReadGrade)
 
     def calculateDiskWriteGrade(self):
         diskWriteUsage = self.prometheusRequest.makeRequest('disk_write')[1]
@@ -67,6 +71,7 @@ class PerformanceGradeCalculation:
             self.diskWriteGrade = 0
         else:
             self.diskWriteGrade = 5
+        print("DiskWriteGrade: ", self.diskWriteGrade)
 
     def calculateCpuUsageGrade(self):
         cpuUsage = self.prometheusRequest.makeRequest('container_spec_cpu_quota')[1]
@@ -78,6 +83,7 @@ class PerformanceGradeCalculation:
             self.cpuUsageGrade = 0
         else:
             self.cpuUsageGrade = 5
+        print("CPU UsageGrade: ", self.cpuUsageGrade)
 
     def update(self):
         self.calculateResponseTimeGrade()

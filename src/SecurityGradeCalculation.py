@@ -16,10 +16,12 @@ class SecurityGradeCalculation:
     def calculateApparmorGrade(self):
         apparmorCheck = ApparmorCheck.ApparmorCheck()
         self.apparmorGrade = apparmorCheck.getApparmorGrade()
+        print("ApparmorGrade: ", self.apparmorGrade)
 
     def calculateCertificateGrade(self):
         certificateCheck = CertificateCheck.CertificateCheck("zhaw.ch", "443")
         self.certificateGrade = certificateCheck.checkCertificate()
+        print("CertificateGrade: ", self.certificateGrade)
 
     def dailyUpdate(self):
         self.calculateCertificateGrade()

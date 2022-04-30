@@ -23,9 +23,11 @@ class ReliabilityGradeCalculation:
 
     def calculateLogLevelGrade(self):
         self.logLevelGrade = self.logLevelCheck.getLogLevelGrade()
+        print("LogLevelGrade: ", self.logLevelGrade)
 
     def calculatePatchLevelGrade(self):
         self.patchLevelGrade = self.patchLevelCheck.getPatchLevelGrade()
+        print("PatchLevelGrade: ", self.patchLevelGrade)
 
     def calculateResponseErrorGrad(self):
 
@@ -40,6 +42,7 @@ class ReliabilityGradeCalculation:
             self.responseErrorsGrade = 0
         else:
             self.responseErrorsGrade = -5
+        print("ResponseErrorGrade: ", self.responseErrorsGrade)
 
     def dailyUpdate(self):
         self.calculatePatchLevelGrade()
