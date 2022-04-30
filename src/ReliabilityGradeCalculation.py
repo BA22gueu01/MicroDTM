@@ -3,8 +3,6 @@ import PatchLevelCheck
 import PrometheusRequest
 
 
-
-
 class ReliabilityGradeCalculation:
 
     def __init__(self, prometheus):
