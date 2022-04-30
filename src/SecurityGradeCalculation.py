@@ -15,7 +15,7 @@ class SecurityGradeCalculation:
 
     def calculateApparmorGrade(self):
         apparmorCheck = ApparmorCheck.ApparmorCheck()
-        self.apparmorGrade = apparmorCheck.checkApparmor()
+        self.apparmorGrade = apparmorCheck.getApparmorGrade()
 
     def calculateCertificateGrade(self):
         certificateCheck = CertificateCheck.CertificateCheck("zhaw.ch", "443")
