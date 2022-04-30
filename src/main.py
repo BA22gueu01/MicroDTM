@@ -10,16 +10,11 @@ PROMETHEUS = 'http://10.161.2.161:31090/'
 PARAMETERWEIGHT = 0.2
 
 KEYS = ["uptime", "counter_status_200_carts_customerId_items", "counter_status_500_carts_customerId_items",
-        "gauge_response_metrics", "container_spec_cpu_quota"]
+        "gauge_response_metrics", "container_spec_cpu_quota", "disk_read", "disk_write"]
 parameterQueriesToValues = {k: None for k in KEYS}
 
-"""
-parameterQueriesToValues = {"uptime" : [[20, 10],[10, 50]], "counter_status_200_carts_customerId_items" : 39999,
-                            "counter_status_500_carts_customerId_items" :  6, "gauge_response_metrics" : 5,
-                            "container_spec_cpu_quota" : 0.88}
-"""
-
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
+
 
 def trustCalculation(parameterGradeList):
     trustScore = 0
@@ -37,24 +32,24 @@ def availabilityGradeCalculation(uptimeValues):
 
     # time = seconds, uptime values = milliseconds
     # denominator to milliseconds so that actualTime and uptimeGrade have the same unit of time
-    for x in range(len(uptimeValues)-1):
+    for x in range(len(uptimeValues) - 1):
         # uptimeGrade = (uptimeGrade - pastUptimeGrade) / ((actualTime - pastTime)*1000)
         uptimeGrade.append((int(uptimeValues[counter][1]) - int(uptimeValues[counter - 1][1])) / (
-                    (uptimeValues[counter][0] - uptimeValues[counter - 1][0]) * 1000))
+                (uptimeValues[counter][0] - uptimeValues[counter - 1][0]) * 1000))
         counter += 1
 
     # return uptimeWeight multiplicated with the average value of the uptimeGrade list
     return uptimeWeight * (sum(uptimeGrade) / len(uptimeGrade))
 
 
-#def performanceGradeCalculation(responseTimeGrade, throughputGrade, cpuUsageGrade):
-def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade):
-    responseTimeWeight = 0.5
-    throughputWeight = 0.3
+def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade, diskReadGrade, diskWriteGrade):
+    responseTimeWeight = 0.4
+    throughputWeight = 0.2
     cpuUsageWeight = 0.2
+    diskWeight = 0.1
 
     responseTimeGrade = int(responseTimeGrade)
-    # to be updated
+
     if responseTimeGrade > 5:
         responseTimeGrade = -5
     elif responseTimeGrade > 2.5:
@@ -73,9 +68,18 @@ def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade):
     else:
         cpuUsageGrade = 5
 
-    return (responseTimeWeight * responseTimeGrade) + (cpuUsageWeight * cpuUsageGrade)
-    #return (responseTimeWeight * responseTimeGrade) + (throughputWeight * throughputGrade) + (
-    #        cpuUsageWeight * cpuUsageGrade)
+    diskReadGrade = float(diskReadGrade)
+    diskWriteGrade = float(diskWriteGrade)
+
+    if diskReadGrade or diskWriteGrade > 0.04:
+        diskReadGrade, diskWriteGrade = -5
+    elif diskReadGrade or diskWriteGrade > 0.025:
+        diskReadGrade, diskWriteGrade = 0
+    else:
+        diskReadGrade, diskWriteGrade = 5
+
+    return (responseTimeWeight * responseTimeGrade) + (cpuUsageWeight * cpuUsageGrade) + (
+                diskWeight * diskReadGrade) + (diskWeight * diskWriteGrade)
 
 
 def correctnessGradeCalculation(numberOfCorrectCallsGrade):
@@ -83,18 +87,14 @@ def correctnessGradeCalculation(numberOfCorrectCallsGrade):
 
     return numberOfCorrectCallsWeight * numberOfCorrectCallsGrade
 
-def securityGradeCalculation(apparmorGrade, certificateGrade):
-#def securityGradeCalculation(secureChannelWeightGrade, apparmorGrade, certificateGrade):
 
-    secureChannelWeight = 0.7
+def securityGradeCalculation(apparmorGrade, certificateGrade):
     apparmorWeight = 0.1
     certificateWeight = 0.2
     checkCVE = CheckCVE.CheckCVE()
     checkCVE.checkCVE()
 
     return (apparmorWeight * apparmorGrade) + (certificateWeight * certificateGrade)
-#    return (secureChannelWeight * secureChannelWeightGrade) + (apparmorWeight * apparmorGrade) + (
-#                certificateWeight * certificateGrade)
 
 
 def prometheusRequest():
@@ -104,6 +104,9 @@ def prometheusRequest():
     print(pods)
     print(pods[0])
     getPods.getContainers(pods[0])
+
+    instance = "10.161.2.161:9100"
+    job = "node-exporter"
 
     for x in parameterQueriesToValues:
         if x == "uptime":
@@ -115,6 +118,12 @@ def prometheusRequest():
                                   'container_name!="POD"}/container_spec_cpu_period{name!~".*prometheus.*", ' \
                                   'image!="", container_name!="POD"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
+        elif x == "disk_read":
+            diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="', instance, 'job="', job, '"}[5m]) / rate(node_disk_reads_completed_total{instance="', instance, '",job="', job, '"}[5m])'
+            prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
+        elif x == "disk_write":
+            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="', instance, 'job="', job, '"}[5m]) / rate(node_disk_writes_completed_total{instance="', instance, '",job="', job, '"}[5m])'
+            prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
         else:
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': x})
         prometheusResponseJson = prometheusResponse.json()
@@ -134,28 +143,28 @@ def prometheusRequest():
         # uptime: [0] carts, [1] shipping, [2] orders, container_spec_cpu_quota: [0] carts-77b9db4898-27w9m
         # print("At time", parameterQueriesToValues[x][0], "the result of", x, "was", parameterQueriesToValues[x][1])
 
-    #print(parameterQueriesToValues)
+    # print(parameterQueriesToValues)
     availabilityGrade = availabilityGradeCalculation(parameterQueriesToValues.get('uptime'))
 
     reliabilityGrade = reliabilityGradeCalculation.calculate()
 
     performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics')[1],
-                                                   #throughputGrade,
-                                                   parameterQueriesToValues.get('container_spec_cpu_quota')[1])
-    #performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics'),
-                                                   #throughputGrade,
+                                                   # throughputGrade,
+                                                   parameterQueriesToValues.get('container_spec_cpu_quota')[1],
+                                                   parameterQueriesToValues.get('disk_read'),
+                                                   parameterQueriesToValues.get('disk_write'))
+    # performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics'),
+    # throughputGrade,
     #                                               parameterQueriesToValues.get('container_spec_cpu_quota'))
 
-    #correctnessGrade = correctnessGradeCalculation(numberOfCorrectCallsGrade)
+    # correctnessGrade = correctnessGradeCalculation(numberOfCorrectCallsGrade)
 
-    #certificateCheck = CertificateCheck("10.161.2.161", "30001")
     certificateCheck = CertificateCheck.CertificateCheck("zhaw.ch", "443")
     apparmorCheck = ApparmorCheck.ApparmorCheck()
-    #securityGrade = securityGradeCalculation(secureChannelWeightGrade, apparmorCheck.checkApparmor(),
     securityGrade = securityGradeCalculation(apparmorCheck.checkApparmor(),
                                              certificateCheck.checkCertificate())
 
-    #parameterGradeList = [availabilityGrade, reliabilityGrade, performanceGrade, correctnessGrade, securityGrade]
+    # parameterGradeList = [availabilityGrade, reliabilityGrade, performanceGrade, correctnessGrade, securityGrade]
     parameterGradeList = [availabilityGrade, reliabilityGrade, performanceGrade, securityGrade]
     trustCalculation(parameterGradeList)
 
