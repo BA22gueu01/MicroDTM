@@ -138,7 +138,7 @@ def prometheusRequest():
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
         # https://www.tigera.io/learn/guides/prometheus-monitoring/prometheus-metrics/
         elif x == "memory_usage":
-            memoryCalculation = 'node_memory_Active_bytes{instance="' + instance + '", job="' + job + '"}/node_memory_MemTotal_bytes{instance="' + instance + '", job="' + job + '"}*100)'
+            memoryCalculation = 'node_memory_Active_bytes{instance="' + instance + '", job="' + job + '"}/node_memory_MemTotal_bytes{instance="' + instance + '", job="' + job + '"}'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
         else:
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': x})
