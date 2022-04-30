@@ -10,7 +10,7 @@ PROMETHEUS = 'http://10.161.2.161:31090/'
 PARAMETERWEIGHT = 0.2
 
 KEYS = ["uptime", "counter_status_200_carts_customerId_items", "counter_status_500_carts_customerId_items",
-        "gauge_response_metrics", "container_spec_cpu_quota", "disk_read", "disk_write"]
+        "gauge_response_metrics", "container_spec_cpu_quota", "disk_read", "disk_write", "memory_usage"]
 parameterQueriesToValues = {k: None for k in KEYS}
 
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
@@ -42,11 +42,12 @@ def availabilityGradeCalculation(uptimeValues):
     return uptimeWeight * (sum(uptimeGrade) / len(uptimeGrade))
 
 
-def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade, diskReadGrade, diskWriteGrade):
+def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade, diskReadGrade, diskWriteGrade, memoryUsageGrade):
     responseTimeWeight = 0.4
     throughputWeight = 0.2
     cpuUsageWeight = 0.2
     diskWeight = 0.1
+    memoryUsageWeight = 0.2
 
     responseTimeGrade = int(responseTimeGrade)
 
@@ -60,7 +61,7 @@ def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade, diskReadGrade,
     # https://github.com/google/cadvisor/issues/2026
     # Get result as percentage
     cpuUsageGrade = float(cpuUsageGrade) * 100
-    # to be updated
+
     if cpuUsageGrade > 0.8:
         cpuUsageGrade = -5
     elif cpuUsageGrade > 0.5:
@@ -78,8 +79,18 @@ def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade, diskReadGrade,
     else:
         diskReadGrade, diskWriteGrade = 5, 5
 
-    return (responseTimeWeight * responseTimeGrade) + (cpuUsageWeight * cpuUsageGrade) + (
-                diskWeight * diskReadGrade) + (diskWeight * diskWriteGrade)
+    # Get result as percentage
+    memoryUsageGrade = float(memoryUsageGrade) * 100
+
+    if memoryUsageGrade > 0.9:
+        memoryUsageGrade = -5
+    elif memoryUsageGrade > 0.85:
+        memoryUsageGrade = 0
+    else:
+        memoryUsageGrade = 5
+
+    return (responseTimeWeight * responseTimeGrade) + (cpuUsageWeight * cpuUsageGrade) + (diskWeight * diskReadGrade) \
+           + (diskWeight * diskWriteGrade) + (memoryUsageWeight * memoryUsageGrade)
 
 
 def correctnessGradeCalculation(numberOfCorrectCallsGrade):
@@ -125,6 +136,10 @@ def prometheusRequest():
         elif x == "disk_write":
             diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="' + instance + '",job="' + job + '"}[5m]) / rate(node_disk_writes_completed_total{instance="' + instance + '",job="' + job + '"}[5m])'
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
+        # https://www.tigera.io/learn/guides/prometheus-monitoring/prometheus-metrics/
+        elif x == "memory_usage":
+            memoryCalculation = 'node_memory_Active_bytes{instance="' + instance + '", job="' + job + '"}/node_memory_MemTotal_bytes{instance="' + instance + '", job="' + job + '"}*100)'
+            prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
         else:
             prometheusResponse = requests.get(PROMETHEUS + '/api/v1/query', params={'query': x})
         prometheusResponseJson = prometheusResponse.json()
@@ -153,7 +168,8 @@ def prometheusRequest():
                                                    # throughputGrade,
                                                    parameterQueriesToValues.get('container_spec_cpu_quota')[1],
                                                    parameterQueriesToValues.get('disk_read')[1],
-                                                   parameterQueriesToValues.get('disk_write')[1])
+                                                   parameterQueriesToValues.get('disk_write')[1],
+                                                   parameterQueriesToValues.get('memory_usage')[1])
     # performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics'),
     # throughputGrade,
     #                                               parameterQueriesToValues.get('container_spec_cpu_quota'))
