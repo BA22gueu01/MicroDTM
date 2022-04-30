@@ -1,8 +1,9 @@
 import requests
 import time
 import CertificateCheck
-import ReliabilityGradeCalculation
 import AvailabilityGradeCalculation
+import ReliabilityGradeCalculation
+import SecurityGradeCalculation
 import ApparmorCheck
 import CheckCVE
 import GetPods
@@ -10,8 +11,10 @@ import schedule
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 
-reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS)
+reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
+securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
+
 
 
 KEYS = ["uptime", "counter_status_200_carts_customerId_items", "counter_status_500_carts_customerId_items",
@@ -170,21 +173,19 @@ def prometheusRequest():
 
     # correctnessGrade = correctnessGradeCalculation(numberOfCorrectCallsGrade)
 
-    certificateCheck = CertificateCheck.CertificateCheck("zhaw.ch", "443")
-    apparmorCheck = ApparmorCheck.ApparmorCheck()
-    securityGrade = securityGradeCalculation(apparmorCheck.checkApparmor(),
-                                             certificateCheck.checkCertificate())
-
     parameterGradeList = [availabilityGrade, reliabilityGrade, performanceGrade, securityGrade]
     trustCalculation(parameterGradeList)
 
 
 def initialCalculation():
+    availabilityGradeCalculation.initialCalculation()
     reliabilityGradeCalculation.initialCalculation()
+    securityGradeCalculation.initialCalculation()
     trustCalculation()
 
 
 def update():
+    availabilityGradeCalculation.update()
     reliabilityGradeCalculation.update()
     trustCalculation()
 
@@ -195,6 +196,7 @@ def hourlyUpdate():
 
 def dailyUpdate():
     reliabilityGradeCalculation.dailyUpdate()
+    securityGradeCalculation.dailyUpdate()
     trustCalculation()
 
 

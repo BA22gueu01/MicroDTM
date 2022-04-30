@@ -1,13 +1,9 @@
-import LogLevelCheck
-import PatchLevelCheck
 import PrometheusRequest
 
 
 class AvailabilityGradeCalculation:
 
     def __init__(self, prometheus):
-        self.logLevelCheck = LogLevelCheck.LogLevelCheck()
-        self.patchLevelCheck = PatchLevelCheck.PatchLevelCheck()
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
         self.uptimeGrade = 0
         self.uptimeWeight = 1
