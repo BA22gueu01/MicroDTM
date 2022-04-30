@@ -2,6 +2,7 @@ import requests
 import time
 import CertificateCheck
 import ReliabilityGradeCalculation
+import AvailabilityGradeCalculation
 import ApparmorCheck
 import CheckCVE
 import GetPods
@@ -9,55 +10,35 @@ import schedule
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 
-availabilityGrade = 0
-availabilityWeight = 0.2
-
-reliabilityGrade = 0
-reliabilityWeight = 0.2
-
-performanceGrade = 0
-performanceWeight = 0.2
-
-correctnessGrade = 0
-correctnessWeight = 0.2
-
-securityGrade = 0
-securityWeight = 0.2
-
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
-PARAMETERWEIGHT = 0.2
+availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS)
+
 
 KEYS = ["uptime", "counter_status_200_carts_customerId_items", "counter_status_500_carts_customerId_items",
         "gauge_response_metrics", "container_spec_cpu_quota", "disk_read", "disk_write", "memory_usage"]
 parameterQueriesToValues = {k: None for k in KEYS}
 
 
+def trustCalculation():
+    availabilityGrade = availabilityGradeCalculation.calculateGrade()
+    availabilityWeight = 0.2
 
+    reliabilityGrade = reliabilityGradeCalculation.calculateGrade()
+    reliabilityWeight = 0.2
 
-def trustCalculation(parameterGradeList):
-    trustScore = 0
+    performanceGrade = 0
+    performanceWeight = 0.2
 
-    for x in range(len(parameterGradeList)):
-        trustScore = trustScore + (parameterGradeList[x] * PARAMETERWEIGHT)
+    correctnessGrade = 0
+    correctnessWeight = 0.2
+
+    securityGrade = 0
+    securityWeight = 0.2
+
+    trustScore = (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
+                  performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade)
 
     print("Trustscore: ", trustScore)
-
-
-def availabilityGradeCalculation(uptimeValues):
-    uptimeWeight = 1
-    counter = 1
-    uptimeGrade = []
-
-    # time = seconds, uptime values = milliseconds
-    # denominator to milliseconds so that actualTime and uptimeGrade have the same unit of time
-    for x in range(len(uptimeValues) - 1):
-        # uptimeGrade = (uptimeGrade - pastUptimeGrade) / ((actualTime - pastTime)*1000)
-        uptimeGrade.append((int(uptimeValues[counter][1]) - int(uptimeValues[counter - 1][1])) / (
-                (uptimeValues[counter][0] - uptimeValues[counter - 1][0]) * 1000))
-        counter += 1
-
-    # return uptimeWeight multiplicated with the average value of the uptimeGrade list
-    return uptimeWeight * (sum(uptimeGrade) / len(uptimeGrade))
 
 
 def performanceGradeCalculation(responseTimeGrade, cpuUsageGrade, diskReadGrade, diskWriteGrade, memoryUsageGrade):
@@ -178,7 +159,7 @@ def prometheusRequest():
 
     availabilityGrade = availabilityGradeCalculation(parameterQueriesToValues.get('uptime'))
 
-    reliabilityGrade = reliabilityGradeCalculation.calculate()
+    reliabilityGrade = reliabilityGradeCalculation.calculateGrade()
 
     performanceGrade = performanceGradeCalculation(parameterQueriesToValues.get('gauge_response_metrics')[1],
                                                    # throughputGrade,

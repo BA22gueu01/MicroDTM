@@ -7,7 +7,6 @@ class PrometheusRequest:
         self.PROMETHEUS = Prometheus
 
     def makeRequest(self, requestParam):
-        instance = "10.161.2.161:9100"
         job = "node-exporter"
 
         if requestParam == "uptime":
@@ -20,10 +19,10 @@ class PrometheusRequest:
                                   'image!="", container_name!="POD"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
         elif requestParam == "disk_read":
-            diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="', instance, 'job="', job, '"}[5m]) / rate(node_disk_reads_completed_total{instance="', instance, '",job="', job, '"}[5m])'
+            diskReadCalculation = 'rate(node_disk_read_time_seconds_total{instance="', self.PROMETHEUS, 'job="', job, '"}[5m]) / rate(node_disk_reads_completed_total{instance="', instance, '",job="', job, '"}[5m])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
         elif requestParam == "disk_write":
-            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="', instance, 'job="', job, '"}[5m]) / rate(node_disk_writes_completed_total{instance="', instance, '",job="', job, '"}[5m])'
+            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total{instance="', self.PROMETHEUS, 'job="', job, '"}[5m]) / rate(node_disk_writes_completed_total{instance="', instance, '",job="', job, '"}[5m])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
         else:
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
