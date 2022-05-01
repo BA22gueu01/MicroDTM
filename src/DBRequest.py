@@ -9,6 +9,8 @@ class DBRequest:
         print(request.read())
         request.sendline('mysql -u catalogue_user -p \n')
         print(request.read())
+        request.sendeof()
+        print(request.read())
         request.expect("Enter password:")
         request.sendline('default_password')
         print(request.read())
@@ -18,6 +20,8 @@ class DBRequest:
         print(request.read())
         request.sendline('exit')
         request.sendline('exit')
+
+
 
 
 
