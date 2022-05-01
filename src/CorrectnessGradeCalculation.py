@@ -36,10 +36,11 @@ class CorrectnessGradeCalculation:
             containerName = container
 
         dbAnswer = self.dbRequest.makeRequest(podName, containerName, "tag")
-        print(dbAnswer)
         apiAnswer = self.apiRequest.makeRequest("tags")
-        print(apiAnswer)
-        print(self.getCallGrade(apiAnswer, dbAnswer))
+        grade = self.getCallGrade(apiAnswer, dbAnswer)
+        dbAnswer = self.dbRequest.makeRequest(podName, containerName, "catalogue")
+        apiAnswer = self.apiRequest.makeRequest("catalogue")
+        grade = grade + self.getCallGrade(apiAnswer, dbAnswer)
 
     def getCallGrade(self, apiAnswer, dbAnswer):
         print(len(apiAnswer))
