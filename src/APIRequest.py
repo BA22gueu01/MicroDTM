@@ -9,6 +9,9 @@ class APIRequest:
     def makeRequest(self, requestParam):
         response = requests.get(self.sockshop + requestParam)
         responseJson = response.json()
-        tags = responseJson["tags"]
+        if requestParam == "tags":
+            answer = responseJson["tags"]
+        else:
+            answer = responseJson
 
-        return tags
+        return answer
