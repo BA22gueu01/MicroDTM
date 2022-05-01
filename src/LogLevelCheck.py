@@ -32,7 +32,7 @@ class LogLevelCheck:
             output = subprocess.check_output(["kubectl", "logs", podName, "--container", containerName,
                                               "--namespace=sock-shop", "--v=1"])
             output = output.decode()
-            logLevels = ['warning', 'error', 'fatal']
+            logLevels = ['warn', 'warning', 'error', 'critical', 'alert', 'fatal', 'emergency']
             counter = 0
 
             # https://pencilprogrammer.com/check-multiple-substrings-python/
