@@ -11,7 +11,7 @@ class APIRequest:
         responseJson = response.json()
         if requestParam == "tags":
             answer = responseJson["tags"]
-        elif requestParam == catalogue:
+        elif requestParam == "catalogue":
             answer = []
             for element in responseJson:
                 jsonLine = "id:" + element["id"] + ",name:" + element["name"] + ",description:" + element[description] + ",price:" + element["price"] + ",count:" + element["count"] + ","

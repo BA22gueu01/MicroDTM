@@ -27,12 +27,10 @@ class CorrectnessGradeCalculation:
         for pod in pods:
             if "catalogue-db" in pod and "db" in pod:
                 podName = pod
-                print(podName)
 
         containers = self.getPods.getContainers(podName)
 
         for container in containers:
-            print(container)
             containerName = container
 
         dbAnswer = self.dbRequest.makeRequest(podName, containerName, "tag")
