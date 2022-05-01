@@ -39,13 +39,11 @@ class PerformanceGradeCalculation:
     def calculateMemoryUsageGrade(self):
         memoryUsage = self.prometheusRequest.makeRequest('memory_usage')[1]
 
-        # Todo Check answer Call
         memoryUsage = float(memoryUsage) * 100
-        print("memoryUsage: ", memoryUsage)
 
-        if memoryUsage > 0.9:
+        if memoryUsage > 90:
             self.memoryUsageGrade = -5
-        elif memoryUsage > 0.85:
+        elif memoryUsage > 85:
             self.memoryUsageGrade = 0
         else:
             self.memoryUsageGrade = 5
@@ -53,12 +51,11 @@ class PerformanceGradeCalculation:
 
     def calculateDiskReadGrade(self):
         diskReadUsage = self.prometheusRequest.makeRequest('disk_read')[1]
-        diskReadUsage = float(diskReadUsage)
-        print("diskReadUsage: ", diskReadUsage)
+        diskReadUsage = float(diskReadUsage) * 100
 
-        if diskReadUsage > 0.04:
+        if diskReadUsage > 4:
             self.diskReadGrade = -5
-        elif diskReadUsage > 0.025:
+        elif diskReadUsage > 2.5:
             self.diskReadGrade = 0
         else:
             self.diskReadGrade = 5
@@ -66,11 +63,11 @@ class PerformanceGradeCalculation:
 
     def calculateDiskWriteGrade(self):
         diskWriteUsage = self.prometheusRequest.makeRequest('disk_write')[1]
-        diskWriteUsage = float(diskWriteUsage)
+        diskWriteUsage = float(diskWriteUsage) * 100
 
-        if diskWriteUsage > 0.04:
+        if diskWriteUsage > 4:
             self.diskWriteGrade = -5
-        elif diskWriteUsage > 0.025:
+        elif diskWriteUsage > 2.5:
             self.diskWriteGrade = 0
         else:
             self.diskWriteGrade = 5
