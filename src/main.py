@@ -7,11 +7,12 @@ import SecurityGradeCalculation
 import schedule
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
+SOCKSHOP = 'http://10.161.2.161:30001/'
 
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS)
-correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation()
+correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation(SOCKSHOP)
 securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
 
 
