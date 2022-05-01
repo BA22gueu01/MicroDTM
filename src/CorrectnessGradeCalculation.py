@@ -13,7 +13,7 @@ class CorrectnessGradeCalculation:
         return self.callCorrectnessWeight * self.callCorrectnessGrade
 
     def calculateCallCorrectnessGrade(self):
-        self.apiRequest.makeRequest("tags")
+        print(self.apiRequest.makeRequest("tags"))
         self.dbRequest.makeRequest("tag")
         self.callCorrectnessGrade = 0
         print("callCorrectnessGrade: ", self.callCorrectnessGrade)
