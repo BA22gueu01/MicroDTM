@@ -22,14 +22,14 @@ class DBRequest:
             header = header.decode().strip('\n')
             headers = header.split("\t")
             headers[0] = "id"
+            if tableName == sock:
+                headers.remove("image_url_1")
             for line in request.stdout.readlines():
                 line = line.decode().strip('\n')
                 cells = line.split("\t")
                 jsonLine = ""
-                for x in range(len(cells) - 1):
+                for x in range(len(headers) - 1):
                     jsonLine = jsonLine + headers[x] + ":" + cells[x] + ","
-
-                print(jsonLine)
                 answer.append(jsonLine)
 
         return answer
