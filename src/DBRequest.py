@@ -20,11 +20,11 @@ class DBRequest:
         else:
             header = request.stdout.readline()
             headers = header.split("\t")
-            for line in request.stdout.readlines()
+            for line in request.stdout.readlines():
                 line = line.decode().strip('\n')
                 cells = line.split("\t")
                 jsonLine = ""
-                for x in range(len(cells) -1):
+                for x in range(len(cells) - 1):
                     jsonLine = jsonLine + "," + headers[x] + ":" + cells[x]
 
                 print(jsonLine)
