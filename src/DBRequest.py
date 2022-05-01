@@ -13,6 +13,7 @@ class DBRequest:
         for line in request.stdout.readlines():
             line = line.decode().strip('\n')
             print(line)
+            print(line[1])
             answer.append(line)
 
         return answer
