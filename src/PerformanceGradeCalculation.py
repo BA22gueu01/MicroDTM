@@ -76,7 +76,6 @@ class PerformanceGradeCalculation:
     def calculateCpuUsageGrade(self):
         cpuUsage = self.prometheusRequest.makeRequest('container_spec_cpu_quota')[1]
         cpuUsage = float(cpuUsage) * 100
-        print("cpuUsage: ", cpuUsage)
 
         if cpuUsage > 90:
             self.cpuUsageGrade = -5
