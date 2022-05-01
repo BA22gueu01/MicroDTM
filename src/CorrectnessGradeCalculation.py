@@ -26,7 +26,7 @@ class CorrectnessGradeCalculation:
         containerName = ""
 
         for pod in pods:
-            if "catalogue" in pod and "db" in pod:
+            if "catalogue-db" in pod and "db" in pod:
                 podName = pod
                 print(podName)
 
@@ -34,6 +34,8 @@ class CorrectnessGradeCalculation:
 
         for container in containers:
             print(container)
+            containerName = container
+        self.dbRequest.makeRequest(podName, containerName, "tag")
 
     def hourlyUpdate(self):
         self.calculateCallCorrectnessGrade()
