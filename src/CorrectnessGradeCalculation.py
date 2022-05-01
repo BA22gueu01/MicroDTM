@@ -2,6 +2,7 @@ import APIRequest
 import DBRequest
 import GetPods
 
+
 class CorrectnessGradeCalculation:
 
     def __init__(self, sockshop):

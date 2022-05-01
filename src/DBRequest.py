@@ -21,12 +21,13 @@ class DBRequest:
             header = request.stdout.readline()
             header = header.decode().strip('\n')
             headers = header.split("\t")
+            headers[0] = "id"
             for line in request.stdout.readlines():
                 line = line.decode().strip('\n')
                 cells = line.split("\t")
                 jsonLine = ""
                 for x in range(len(cells) - 1):
-                    jsonLine = jsonLine + "," + headers[x] + ":" + cells[x]
+                    jsonLine = jsonLine + headers[x] + ":" + cells[x] + ","
 
                 print(jsonLine)
                 answer.append(jsonLine)

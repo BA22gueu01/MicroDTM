@@ -12,6 +12,8 @@ class APIRequest:
         if requestParam == "tags":
             answer = responseJson["tags"]
         else:
+            for element in responseJson:
+                print(element)
             answer = responseJson
 
         return answer
