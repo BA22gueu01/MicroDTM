@@ -1,5 +1,5 @@
 import subprocess
-import pexpect
+import mysql
 
 
 class DBRequest:
