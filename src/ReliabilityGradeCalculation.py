@@ -39,9 +39,9 @@ class ReliabilityGradeCalculation:
         print("responseErrorsGrade200: ", responseErrorsGrade200)
         print("responseErrorsGrade: ", responseErrorsGrade)
 
-        if 0 == responseErrorsGrade < 0.25:
+        if 0 <= responseErrorsGrade < 0.25:
             self.responseErrorsGrade = 5
-        elif 0.25 == responseErrorsGrade < 0.5:
+        elif 0.25 <= responseErrorsGrade < 0.5:
             self.responseErrorsGrade = 0
         else:
             self.responseErrorsGrade = -5
