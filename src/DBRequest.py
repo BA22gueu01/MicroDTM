@@ -15,6 +15,8 @@ class DBRequest:
         print(request.read())
         request.sendline('select * from ' + tableName + ';')
         print(request.read())
+        request.sendline('exit')
+        request.sendline('exit')
 
 
 
