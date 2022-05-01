@@ -10,6 +10,6 @@ class DBRequest:
                                    "\"mysql -u catalogue_user -pdefault_password socksdb\""], stdout=subprocess.PIPE,
                                    stdin=subprocess.PIPE)
         print("Opened")
-        request.communicate("select * from tag;")
+        request.communicate("select * from tag;".encode())
         print(request.stdout.readlines())
 
