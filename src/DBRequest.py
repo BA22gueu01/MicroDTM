@@ -22,7 +22,7 @@ class DBRequest:
             header = header.decode().strip('\n')
             headers = header.split("\t")
             headers[0] = "id"
-            if tableName == sock:
+            if tableName == "sock":
                 headers.remove("image_url_1")
             for line in request.stdout.readlines():
                 line = line.decode().strip('\n')

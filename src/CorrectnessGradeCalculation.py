@@ -16,8 +16,7 @@ class CorrectnessGradeCalculation:
         return self.callCorrectnessWeight * self.callCorrectnessGrade
 
     def calculateCallCorrectnessGrade(self):
-        self.calculateCatalogueCorrectness()
-        self.callCorrectnessGrade = 0
+        self.callCorrectnessGrade = self.calculateCatalogueCorrectness()
         print("callCorrectnessGrade: ", self.callCorrectnessGrade)
 
     def calculateCatalogueCorrectness(self):
@@ -42,10 +41,10 @@ class CorrectnessGradeCalculation:
         dbAnswer = self.dbRequest.makeRequest(podName, containerName, "sock")
         apiAnswer = self.apiRequest.makeRequest("catalogue")
         grade = grade + self.getCallGrade(apiAnswer, dbAnswer)
+        print(grade)
+        return grade/2
 
     def getCallGrade(self, apiAnswer, dbAnswer):
-        print(len(apiAnswer))
-        print(len(dbAnswer))
 
         if not len(apiAnswer) == len(dbAnswer):
             return -5
