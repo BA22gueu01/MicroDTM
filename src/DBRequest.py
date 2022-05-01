@@ -19,6 +19,7 @@ class DBRequest:
                 answer.append(cells[1])
         else:
             header = request.stdout.readline()
+            header = header.decode().strip('\n')
             headers = header.split("\t")
             for line in request.stdout.readlines():
                 line = line.decode().strip('\n')
