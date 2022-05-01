@@ -7,6 +7,8 @@ class APIRequest:
         self.sockshop = sockshop
 
     def makeRequest(self, requestParam):
-        answer = requests.get(self.sockshop + requestParam)
+        response = requests.get(self.sockshop + requestParam)
+        responseJson = response.json()
+        tags = responseJson["tags"]
 
-        return answer["result"][0]
+        return tags
