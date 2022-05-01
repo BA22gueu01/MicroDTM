@@ -81,9 +81,9 @@ class PerformanceGradeCalculation:
         cpuUsage = float(cpuUsage) * 100
         print("cpuUsage: ", cpuUsage)
 
-        if cpuUsage > 0.8:
+        if cpuUsage > 90:
             self.cpuUsageGrade = -5
-        elif cpuUsage > 0.5:
+        elif cpuUsage > 75:
             self.cpuUsageGrade = 0
         else:
             self.cpuUsageGrade = 5
