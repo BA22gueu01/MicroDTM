@@ -8,15 +8,27 @@ class DBRequest:
         request = subprocess.Popen(["kubectl", "exec", "-n", "sock-shop", podName,
                                    "--container", containerName, "--", "bash", "-c", mysqlCommand],
                                    stdout=subprocess.PIPE)
-        request.stdout.readline()
+
         answer = []
-        for line in request.stdout.readlines():
-            line = line.decode().strip('\n')
-            cells = line.split("\t")
-            print(cells[0])
-            print(cells[1])
-            print(line)
-            answer.append(line)
+
+        if tableName == "tag":
+            request.stdout.readline()
+            for line in request.stdout.readlines():
+                line = line.decode().strip('\n')
+                cells = line.split("\t")
+                answer.append(cells[1])
+        else:
+            header = request.stdout.readline()
+            headers = header.split("\t")
+            for line in request.stdout.readlines()
+                line = line.decode().strip('\n')
+                cells = line.split("\t")
+                jsonLine = ""
+                for x in range(len(cells) -1):
+                    jsonLine = jsonLine + "," + headers[x] + ":" + cells[x]
+
+                print(jsonLine)
+                answer.append(jsonLine)
 
         return answer
 
