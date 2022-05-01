@@ -8,6 +8,7 @@ class DBRequest:
         request = subprocess.Popen(["kubectl", "exec", "-n", "sock-shop", podName,
                                    "--container", containerName, "--", "bash", "-c", mysqlCommand],
                                    stdout=subprocess.PIPE)
+        request.stdout.readline()
         answer = []
         for line in request.stdout.readlines():
             line = line.decode().strip('\n')
