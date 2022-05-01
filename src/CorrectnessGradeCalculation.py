@@ -30,7 +30,7 @@ class CorrectnessGradeCalculation:
                 podName = pod
                 print(podName)
 
-        containers = self.getPods.getContainers()
+        containers = self.getPods.getContainers(podName)
 
         for container in containers:
             print(container)
