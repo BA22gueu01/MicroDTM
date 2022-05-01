@@ -35,9 +35,6 @@ class ReliabilityGradeCalculation:
         responseErrorsGrade500 = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items')[1]
 
         responseErrorsGrade = int(responseErrorsGrade500) / int(responseErrorsGrade200)
-        print("responseErrorsGrade500: ", responseErrorsGrade500)
-        print("responseErrorsGrade200: ", responseErrorsGrade200)
-        print("responseErrorsGrade: ", responseErrorsGrade)
 
         if 0 <= responseErrorsGrade < 0.25:
             self.responseErrorsGrade = 5
