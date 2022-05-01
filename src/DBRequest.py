@@ -5,7 +5,7 @@ import pexpect
 class DBRequest:
 
     def makeRequest(self, tableName):
-        request = pexpect.spawn('kubectl exec -n sock-shop catalogue-db-86c68f4757-4tvzt -- mysql -u catalogue_user -p')
+        request = pexpect.spawn('kubectl exec -n sock-shop catalogue-db-86c68f4757-4tvzt --container catalogue-db -- /bin/bash')
         print(request.read())
         request.sendline('mysql -u catalogue_user -p')
         request.expect("Enter password:")
