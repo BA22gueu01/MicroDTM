@@ -25,6 +25,7 @@ class PerformanceGradeCalculation:
     def calculateResponseTimeGrade(self):
         responseTime = self.prometheusRequest.makeRequest('gauge_response_metrics')[1]
         responseTime = int(responseTime)
+        print("responseTime: ", responseTime)
 
         if responseTime > 5:
             self.responseTimeGrade = -5
@@ -40,6 +41,7 @@ class PerformanceGradeCalculation:
 
         # Todo Check answer Call
         memoryUsage = float(memoryUsage) * 100
+        print("memoryUsage: ", memoryUsage)
 
         if memoryUsage > 0.9:
             self.memoryUsageGrade = -5
@@ -52,6 +54,7 @@ class PerformanceGradeCalculation:
     def calculateDiskReadGrade(self):
         diskReadUsage = self.prometheusRequest.makeRequest('disk_read')[1]
         diskReadUsage = float(diskReadUsage)
+        print("diskReadUsage: ", diskReadUsage)
 
         if diskReadUsage > 0.04:
             self.diskReadGrade = -5
@@ -76,6 +79,7 @@ class PerformanceGradeCalculation:
     def calculateCpuUsageGrade(self):
         cpuUsage = self.prometheusRequest.makeRequest('container_spec_cpu_quota')[1]
         cpuUsage = float(cpuUsage) * 100
+        print("cpuUsage: ", cpuUsage)
 
         if cpuUsage > 0.8:
             self.cpuUsageGrade = -5
