@@ -14,7 +14,7 @@ class APIRequest:
         elif requestParam == "catalogue":
             answer = []
             for element in responseJson:
-                jsonLine = "id:" + element["id"] + ",name:" + element["name"] + ",description:" + element[description] + ",price:" + element["price"] + ",count:" + element["count"] + ","
+                jsonLine = "id:" + element["id"] + ",name:" + element["name"] + ",description:" + element["description"] + ",price:" + element["price"] + ",count:" + element["count"] + ","
                 print(jsonLine)
                 answer.append(jsonLine)
         else:
