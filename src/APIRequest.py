@@ -7,4 +7,4 @@ class APIRequest:
         self.sockshop = sockshop
 
     def makeRequest(self, requestParam):
-        return requests.get(self.sockshop + requestParam)
+        return requests.get(self.sockshop + requestParam)[1]
