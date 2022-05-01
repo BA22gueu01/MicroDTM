@@ -9,6 +9,8 @@ class DBRequest:
         print(request.read())
         request.send('mysql -u catalogue_user -p')
         print(request.read())
+        request.send(chr(13))
+        print(request.read())
         i = request.expect([pexpect.TIMEOUT, "Enter password:"])
         if i == 0:
             print("Got unexpected output: %s %s" % (request.before, request.after))
