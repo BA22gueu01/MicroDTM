@@ -12,9 +12,9 @@ class DBRequest:
         answer = []
         for line in request.stdout.readlines():
             line = line.decode().strip('\n')
-            print(line)
-            print(line[1])
-            answer.append(line)
+            cells = line.split(" ")
+            print(cells[1])
+            answer.append(cells[1])
 
         return answer
 

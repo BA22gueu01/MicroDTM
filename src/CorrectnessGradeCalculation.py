@@ -15,7 +15,6 @@ class CorrectnessGradeCalculation:
         return self.callCorrectnessWeight * self.callCorrectnessGrade
 
     def calculateCallCorrectnessGrade(self):
-        print(self.apiRequest.makeRequest("tags"))
         self.calculateCatalogueCorrectness()
         self.callCorrectnessGrade = 0
         print("callCorrectnessGrade: ", self.callCorrectnessGrade)
@@ -35,7 +34,25 @@ class CorrectnessGradeCalculation:
         for container in containers:
             print(container)
             containerName = container
-        self.dbRequest.makeRequest(podName, containerName, "tag")
+
+        dbAnswer = self.dbRequest.makeRequest(podName, containerName, "tag")
+        print(dbAnswer)
+        apiAnswer = self.apiRequest.makeRequest("tags")
+        print(apiAnswer)
+        print(self.getCallGrade(apiAnswer, dbAnswer))
+
+    def getCallGrade(self, apiAnswer, dbAnswer):
+        print(len(apiAnswer))
+        print(len(dbAnswer))
+
+        if not len(apiAnswer) == len(dbAnswer):
+            return -5
+
+        for name in apiAnswer:
+            if name not in dbAnswer:
+                return -5
+
+        return 5
 
     def hourlyUpdate(self):
         self.calculateCallCorrectnessGrade()
