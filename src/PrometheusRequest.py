@@ -62,7 +62,8 @@ class PrometheusRequest:
         if len(data["result"]) == 0:
             result = [0, 0]
             return result
-        elif requestParam == "container_spec_cpu_quota" or len(data["result"]) == 1:
+        elif requestParam == "container_spec_cpu_quota":
+            print(data)
             print(data["result"])
             return data["result"]["values"]
         else:
