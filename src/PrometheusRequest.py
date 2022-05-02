@@ -69,7 +69,9 @@ class PrometheusRequest:
             print(result["values"])
             return result["values"]
         else:
+            print(data)
             for results in data["result"]:
+                print(results)
                 result.append(results["values"])
             return result
             #result = data["result"][0]
