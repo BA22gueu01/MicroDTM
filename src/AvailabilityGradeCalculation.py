@@ -6,7 +6,6 @@ class AvailabilityGradeCalculation:
 
     def __init__(self, prometheus):
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
-        self.uptimeGrade = 0
         self.uptimeWeight = 1
         self.uptimeGrades = numpy.zeros(24)
 
@@ -33,6 +32,7 @@ class AvailabilityGradeCalculation:
         return grade
 
     def addNewGrade(self, newGrade):
+        print("uptime Grade: ", newGrade)
         length = len(self.uptimeGrades) - 1
         for x in range(length):
             self.uptimeGrades[x] = self.uptimeGrades[x + 1]
@@ -42,13 +42,10 @@ class AvailabilityGradeCalculation:
         uptimeValues = self.prometheusRequest.makeRequest("uptime")
         grade = 0
         counter = 0
-        print(uptimeValues)
         for value in uptimeValues:
-            print(value)
             grade = grade + self.calculateUptimeGrade(value[0], value[1])
             counter = counter + 1
         grade = grade/counter
-        print("uptime Grade: ", grade)
         self.addNewGrade(grade)
 
     def initialCalculation(self):
@@ -62,5 +59,4 @@ class AvailabilityGradeCalculation:
                 grade = grade + self.calculateUptimeGrade(value[i - 1], value[i])
                 counter = counter + 1
             grade = grade / counter
-            print("uptime Grade: ", grade)
             self.addNewGrade(grade)

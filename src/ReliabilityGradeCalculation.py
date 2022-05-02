@@ -53,6 +53,10 @@ class ReliabilityGradeCalculation:
         self.calculateResponseErrorGrad()
 
     def initialCalculation(self):
-        self.calculateLogLevelGrade()
-        self.calculateResponseErrorGrad()
-        self.calculatePatchLevelGrade()
+        print(self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items'))
+        print(self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items_history'))
+        print(self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items'))
+        print(self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items_history'))
+        #self.calculateLogLevelGrade()
+        #self.calculateResponseErrorGrad()
+        #self.calculatePatchLevelGrade()

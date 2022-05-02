@@ -47,6 +47,9 @@ class PrometheusRequest:
             memoryCalculation = 'rate(node_memory_Active_bytes[1d:1h]) / rate(node_memory_MemTotal_bytes[1d:1h])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
 
+        elif "_history" in requestParam:
+            requestParam = requestParam.strip("_history") + '{kubernetes_namespace="sock-shop"}[1d:1h]'
+            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
         else:
             requestParam = requestParam + '{kubernetes_namespace="sock-shop"}[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
@@ -58,8 +61,8 @@ class PrometheusRequest:
         if len(data["result"]) == 0:
             result = [0, 0]
             return result
-        elif requestParam == "container_spec_cpu_quota" or len(result) == 1:
-            return result["value"]
+        elif requestParam == "container_spec_cpu_quota" or len(data["result"]) == 1:
+            return data["result"]["value"]
         else:
             for results in data["result"]:
                 result.append(results["values"])
