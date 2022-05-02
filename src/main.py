@@ -44,8 +44,8 @@ def trustCalculation():
 
 
 def initialCalculation():
-    availabilityGradeCalculation.initialCalculation()
-    reliabilityGradeCalculation.initialCalculation()
+    #availabilityGradeCalculation.initialCalculation()
+    #reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
     correctnessGradeCalculation.initialCalculation()
     securityGradeCalculation.initialCalculation()

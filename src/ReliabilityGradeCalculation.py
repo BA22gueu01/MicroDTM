@@ -45,7 +45,6 @@ class ReliabilityGradeCalculation:
         self.addNewGrade(grade, self.responseErrorsGrades)
 
     def addNewGrade(self, newGrade, grades):
-        print("uptime Grade: ", newGrade)
         length = len(grades) - 1
         for x in range(length):
             grades[x] = grades[x + 1]

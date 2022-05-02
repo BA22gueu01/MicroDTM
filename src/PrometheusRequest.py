@@ -56,6 +56,9 @@ class PrometheusRequest:
 
         prometheusResponseJson = prometheusResponse.json()
         data = prometheusResponseJson["data"]
+        print(requestParam)
+        print(data)
+        return [0,0]
 
         # Check if Prometheus result is empty
         result = []
@@ -71,8 +74,3 @@ class PrometheusRequest:
             for results in data["result"]:
                 result.append(results["values"])
             return result
-            #result = data["result"][0]
-            #if requestParam == "uptime":
-            #    return result["values"]
-            #else:
-            #    return result["value"]
