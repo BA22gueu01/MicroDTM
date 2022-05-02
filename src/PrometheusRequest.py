@@ -48,18 +48,14 @@ class PrometheusRequest:
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
 
         elif "_history" in requestParam:
-            print("history")
             requestParam = requestParam.replace("_history", "") + '{kubernetes_namespace="sock-shop"}[1d:1h]'
-            print(requestParam)
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
         else:
             requestParam = requestParam + '{kubernetes_namespace="sock-shop"}[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
 
         prometheusResponseJson = prometheusResponse.json()
-        print(prometheusResponseJson)
         data = prometheusResponseJson["data"]
-        print(data)
 
         # Check if Prometheus result is empty
         result = []

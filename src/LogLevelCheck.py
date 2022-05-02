@@ -23,10 +23,7 @@ class LogLevelCheck:
 
         return errorCount/countPods
 
-
     def checkLoglevel(self, podName, containerName):
-
-        print("LogLevelCheck for Pod: " + podName + " & container: " + containerName)
 
         try:
             output = subprocess.check_output(["kubectl", "logs", podName, "--container", containerName,

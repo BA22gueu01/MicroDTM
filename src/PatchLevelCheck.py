@@ -28,7 +28,6 @@ class PatchLevelCheck:
 
     def checkPatchLevel(self, podName, containerName):
 
-        print("PatchLevelCheck for Pod: " + podName + " & container: " + containerName)
         counterInst = 0
         counterSec = 0
         currentDate = datetime.now()
@@ -102,13 +101,6 @@ class PatchLevelCheck:
             except Exception as e:
                 print("Read-only filesystem or permission denied")
                 print(e)
-
-            print("Is os version up-to-date? ", currentVersion)
-            print("Number of pending updates: ", counterInst)
-            print("Number of pending security updates: ", counterSec)
-            print("Last time the system was updated:")
-            print("never" if neverUpdated else lastUpdate)
-            print("-----------------------------------------------------------")
 
         except Exception as e:
             print(e)

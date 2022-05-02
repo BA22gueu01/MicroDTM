@@ -29,7 +29,7 @@ class ReliabilityGradeCalculation:
         print("PatchLevelGrade: ", self.patchLevelGrade)
 
     def calculateResponseErrorGrade(self, status200Value, status500Value):
-
+        print("ResponseErrorGrade")
         if status200Value == 0:
             status200Value = 1
 
