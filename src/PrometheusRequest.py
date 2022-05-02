@@ -56,21 +56,26 @@ class PrometheusRequest:
 
         prometheusResponseJson = prometheusResponse.json()
         data = prometheusResponseJson["data"]
-        print(requestParam)
-        print(data)
-        return [0,0]
 
         # Check if Prometheus result is empty
         result = []
         if len(data["result"]) == 0:
             result = [0, 0]
             return result
-        elif requestParam == "container_spec_cpu_quota":
-            return result["values"]
-        elif len(data["result"]) == 1:
-            for results in data["result"]:
-                return results["values"]
+        elif "values" in data:
+            if len(data["result"]) == 1:
+                for results in data["result"]:
+                    return results["values"]
+            else:
+                for results in data["result"]:
+                    result.append(results["values"])
+                return result
         else:
-            for results in data["result"]:
-                result.append(results["values"])
-            return result
+            if len(data["result"]) == 1:
+                for results in data["result"]:
+                    return results["value"]
+            else:
+                for results in data["result"]:
+                    result.append(results["value"])
+                return result
+
