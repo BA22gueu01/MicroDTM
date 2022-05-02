@@ -19,22 +19,6 @@ class AvailabilityGradeCalculation:
 
         return (firstValue[0] - secondValue[0]) / ((firstValue[1] - secondValue[1]) * 1000)
 
-
-
-        counter = 1
-        uptimeGrade = []
-
-        # time = seconds, uptime values = milliseconds
-        # denominator to milliseconds so that actualTime and uptimeGrade have the same unit of time
-        for x in range(len(uptimeValues) - 1):
-            # uptimeGrade = (uptimeGrade - pastUptimeGrade) / ((actualTime - pastTime)*1000)
-            uptimeGrade.append((int(uptimeValues[counter][1]) - int(uptimeValues[counter - 1][1])) / (
-                    (uptimeValues[counter][0] - uptimeValues[counter - 1][0]) * 1000))
-            counter += 1
-
-        self.uptimeGrade = sum(uptimeGrade) / len(uptimeGrade)
-        print("uptime Grade: ", self.uptimeGrade)
-
     def addNewGrade(self, newGrade):
         length = len(self.uptimeGrades) - 1
         for x in range(length):
