@@ -15,6 +15,8 @@ class AvailabilityGradeCalculation:
         return self.uptimeWeight * numpy.average(self.uptimeGrades)
 
     def calculateUptimeGrade(self, firstValue, secondValue):
+        print(firstValue[0])
+        print(secondValue[0])
         uptime = ((float(firstValue[1]) - float(secondValue[1])) / ((float(firstValue[0]) - float(secondValue[0])) * 1000)) * 100
         if uptime >= 99.9:
             grade = 5
