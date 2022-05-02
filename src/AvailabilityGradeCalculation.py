@@ -17,7 +17,7 @@ class AvailabilityGradeCalculation:
 
     def calculateUptime(self, firstValue, secondValue):
 
-        return (firstValue[0] - secondValue[0]) / ((firstValue[1] - secondValue[1]) * 1000)
+        return (float(firstValue[0]) - float(secondValue[0])) / ((float(firstValue[1]) - float(secondValue[1])) * 1000)
 
     def addNewGrade(self, newGrade):
         length = len(self.uptimeGrades) - 1
