@@ -15,13 +15,22 @@ class AvailabilityGradeCalculation:
         print(numpy.average(self.uptimeGrades))
         return self.uptimeWeight * numpy.average(self.uptimeGrades)
 
-    def calculateUptime(self, firstValue, secondValue):
-        print(float(firstValue[0]))
-        print(float(secondValue[0]))
-        print(float(firstValue[1]))
-        print(float(secondValue[1]))
+    def calculateUptimeGrade(self, firstValue, secondValue):
+        uptime = ((float(firstValue[1]) - float(secondValue[1])) / ((float(firstValue[0]) - float(secondValue[0])) * 1000)) * 100
+        if uptime >= 99.9:
+            grade = 5
+        elif uptime >= 95:
+            grade = 4
+        elif uptime >= 90:
+            grade = 3
+        elif uptime >= 75:
+            grade = 0 + ((uptime - 75) / (90 - 75)) * 3
+        elif uptime <= 50:
+            grade = -5
+        else:
+            grade = -5 + ((uptime - 50) / (75 - 50)) * 5
 
-        return (float(firstValue[0]) - float(secondValue[0]) * 1000) / ((float(firstValue[1]) - float(secondValue[1])))
+        return grade
 
     def addNewGrade(self, newGrade):
         length = len(self.uptimeGrades) - 1
@@ -36,7 +45,7 @@ class AvailabilityGradeCalculation:
         print(uptimeValues)
         for value in uptimeValues:
             print(value)
-            grade = grade + self.calculateUptime(value[0], value[1])
+            grade = grade + self.calculateUptimeGrade(value[0], value[1])
             counter = counter + 1
         grade = grade/counter
         print("uptime Grade: ", grade)
@@ -50,7 +59,7 @@ class AvailabilityGradeCalculation:
             counter = 0
             i = length - x
             for value in uptimeValues:
-                grade = grade + self.calculateUptime(value[i - 1], value[i])
+                grade = grade + self.calculateUptimeGrade(value[i - 1], value[i])
                 counter = counter + 1
             grade = grade / counter
             print("uptime Grade: ", grade)
