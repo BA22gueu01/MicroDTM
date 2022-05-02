@@ -3,25 +3,25 @@ import GetPods
 
 class LogLevelCheck:
 
-    def getLogLevelGrade(self):
+    def getLogLevelCount(self):
         getPods = GetPods.GetPods()
         pods = getPods.getPods()
-        grade = 0
+        errorCount = 0
         countPods = 0
 
         for pod in pods:
             countContainers = 0
-            podGrade = 0
+            podErrors = 0
             containers = getPods.getContainers(pod)
 
             for container in containers:
-                podGrade = podGrade + self.checkLoglevel(pod, container)
+                podErrors = podErrors + self.checkLoglevel(pod, container)
                 countContainers = countContainers + 1
 
-            grade = grade + podGrade/countContainers
+            errorCount = errorCount + podErrors/countContainers
             countPods = countPods + 1
 
-        return grade/countPods
+        return errorCount/countPods
 
 
     def checkLoglevel(self, podName, containerName):
@@ -42,11 +42,5 @@ class LogLevelCheck:
         except Exception as e:
             counter = 25
             print(e)
+        return counter
 
-        # to be updated
-        if counter > 3000:
-            return -5
-        elif 3000 == counter > 1000:
-            return 0
-        else:
-            return 5

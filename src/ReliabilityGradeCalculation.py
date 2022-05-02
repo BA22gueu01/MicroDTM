@@ -1,6 +1,7 @@
 import LogLevelCheck
 import PatchLevelCheck
 import PrometheusRequest
+import numpy
 
 
 class ReliabilityGradeCalculation:
@@ -9,54 +10,87 @@ class ReliabilityGradeCalculation:
         self.logLevelCheck = LogLevelCheck.LogLevelCheck()
         self.patchLevelCheck = PatchLevelCheck.PatchLevelCheck()
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
-        self.logLevelGrade = 0
+        self.responseErrorsGrades = numpy.zeros(24)
+        self.responseErrorsWeight = 0.4
+        self.logLevelGrades = numpy.zeros(24)
         self.logLevelWeight = 0.2
         self.patchLevelGrade = 0
         self.patchLevelWeight = 0.4
-        self.responseErrorsGrade = 0
-        self.responseErrorsWeight = 0.4
+        self.lastLogErrorCount = 0
 
     def calculateGrade(self):
 
-        return (self.responseErrorsWeight * self.responseErrorsGrade) + (self.logLevelWeight * self.logLevelGrade) \
+        return (self.responseErrorsWeight * numpy.average(self.responseErrorsGrades)) \
+                    + (self.logLevelWeight * numpy.average(self.logLevelGrades)) \
                     + (self.patchLevelWeight * self.patchLevelGrade)
-
-    def calculateLogLevelGrade(self):
-        self.logLevelGrade = self.logLevelCheck.getLogLevelGrade()
-        print("LogLevelGrade: ", self.logLevelGrade)
 
     def calculatePatchLevelGrade(self):
         self.patchLevelGrade = self.patchLevelCheck.getPatchLevelGrade()
         print("PatchLevelGrade: ", self.patchLevelGrade)
 
-    def calculateResponseErrorGrad(self):
+    def calculateResponseErrorGrade(self, status200Value, status500Value):
 
-        responseErrorsGrade200 = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items')[1]
-        responseErrorsGrade500 = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items')[1]
+        if status200Value == 0:
+            status200Value = 1
 
-        responseErrorsGrade = int(responseErrorsGrade500) / int(responseErrorsGrade200)
+        responseErrorsGrade = status500Value / status200Value
 
         if 0 <= responseErrorsGrade < 0.25:
-            self.responseErrorsGrade = 5
+            grade = 5
         elif 0.25 <= responseErrorsGrade < 0.5:
-            self.responseErrorsGrade = 0
+            grade = 0
         else:
-            self.responseErrorsGrade = -5
+            grade = -5
 
-        print("ResponseErrorGrade: ", self.responseErrorsGrade)
+        print("ResponseErrorGrade: ", grade)
+        self.addNewGrade(grade, self.responseErrorsGrades)
+
+    def addNewGrade(self, newGrade, grades):
+        print("uptime Grade: ", newGrade)
+        length = len(grades) - 1
+        for x in range(length):
+            grades[x] = grades[x + 1]
+        grades[length] = newGrade
 
     def dailyUpdate(self):
         self.calculatePatchLevelGrade()
 
     def update(self):
+        status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items')
+        status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items')
+        self.calculateResponseErrorGrade(int(status200Values[1]) - int(status200Values[0]), int(status500Values[1]) - int(status500Values[0]))
         self.calculateLogLevelGrade()
-        self.calculateResponseErrorGrad()
+
+        logLevelErrorCount = self.logLevelCheck.getLogLevelCount()
+        newLogLevelErrorCount = logLevelErrorCount - self.lastLogErrorCount
+        self.lastLogErrorCount = logLevelErrorCount
+
+        if newLogLevelErrorCount > 40:
+            grade = -5
+        elif 40 == logLevelErrorCount > 10:
+            grade = 0
+        else:
+            grade = 5
+        self.addNewGrade(grade, self.logLevelGrades)
+        print("LogLevelGrade: ", grade)
 
     def initialCalculation(self):
-        print(self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items'))
-        print(self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items_history'))
-        print(self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items'))
-        print(self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items_history'))
-        #self.calculateLogLevelGrade()
-        #self.calculateResponseErrorGrad()
-        #self.calculatePatchLevelGrade()
+        status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items_history')
+        status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items_history')
+        length = len(status200Values) - 1
+        for x in range(length):
+            self.calculateResponseErrorGrade(int(status200Values[x + 1]) - int(status200Values[x]), int(status500Values[x + 1]) - int(status500Values[x]))
+        print(self.responseErrorsGrades)
+
+        logLevelErrorCount = self.logLevelCheck.getLogLevelCount()
+        if logLevelErrorCount > 3000:
+            grade = -5
+        elif 3000 == logLevelErrorCount > 1000:
+            grade = 0
+        else:
+            grade = 5
+        self.addNewGrade(grade, self.logLevelGrades)
+        self.lastLogErrorCount = logLevelErrorCount
+        print("LogLevelGrade: ", grade)
+
+        self.calculatePatchLevelGrade()
