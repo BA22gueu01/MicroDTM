@@ -59,7 +59,6 @@ class ReliabilityGradeCalculation:
         status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items')
         status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items')
         self.calculateResponseErrorGrade(int(status200Values[1]) - int(status200Values[0]), int(status500Values[1]) - int(status500Values[0]))
-        self.calculateLogLevelGrade()
 
         logLevelErrorCount = self.logLevelCheck.getLogLevelCount()
         newLogLevelErrorCount = logLevelErrorCount - self.lastLogErrorCount
@@ -76,8 +75,10 @@ class ReliabilityGradeCalculation:
 
     def initialCalculation(self):
         status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items_history')
+        print(status200Values)
         status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items_history')
         length = len(status200Values) - 1
+        print(length)
         for x in range(length):
             self.calculateResponseErrorGrade(int(status200Values[x + 1]) - int(status200Values[x]), int(status500Values[x + 1]) - int(status500Values[x]))
         print(self.responseErrorsGrades)
