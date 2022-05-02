@@ -53,6 +53,7 @@ class PrometheusRequest:
         else:
             requestParam = requestParam + '{kubernetes_namespace="sock-shop"}[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
+
         prometheusResponseJson = prometheusResponse.json()
         data = prometheusResponseJson["data"]
 
@@ -62,7 +63,8 @@ class PrometheusRequest:
             result = [0, 0]
             return result
         elif requestParam == "container_spec_cpu_quota" or len(data["result"]) == 1:
-            return data["result"]["value"]
+            print(data["result"])
+            return data["result"]
         else:
             for results in data["result"]:
                 result.append(results["values"])
