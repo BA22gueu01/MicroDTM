@@ -1,5 +1,5 @@
 import PrometheusRequest
-
+import numpy
 
 class PerformanceGradeCalculation:
 
@@ -7,24 +7,25 @@ class PerformanceGradeCalculation:
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
         self.responseTimeGrade = 0
         self.responseTimeWeight = 0.4
-        self.memoryUsageGrade = 0
+        self.memoryUsageGrades = numpy.zeros(24)
         self.memoryUsageWeight = 0.2
-        self.diskReadGrade = 0
+        self.diskReadGrades = numpy.zeros(24)
         self.diskReadWeight = 0.1
-        self.diskWriteGrade = 0
+        self.diskWriteGrades = numpy.zeros(24)
         self.diskWriteWeight = 0.1
-        self.cpuUsageGrade = 0
+        self.cpuUsageGrades = numpy.zeros(24)
         self.cpuUsageWeight = 0.2
 
     def calculateGrade(self):
 
-        return (self.responseTimeWeight * self.responseTimeGrade + self.memoryUsageWeight * self.memoryUsageGrade
-                + self.diskReadWeight * self.diskReadGrade + self.diskWriteWeight * self.diskWriteGrade
-                + self.cpuUsageWeight * self.cpuUsageGrade)
+        return (self.responseTimeWeight * self.responseTimeGrade + self.memoryUsageWeight * numpy.average(self.memoryUsageGrades)
+                + self.diskReadWeight * numpy.average(self.diskReadGrades) + self.diskWriteWeight * numpy.average(self.diskWriteGrades)
+                + self.cpuUsageWeight * numpy.average(self.cpuUsageGrades))
 
+    # Todo What does this metric means? Use historical data
     def calculateResponseTimeGrade(self):
         responseTime = self.prometheusRequest.makeRequest('gauge_response_metrics')[1]
-        responseTime = int(responseTime)
+        responseTime = int(responseTime[1])
         print("responseTime: ", responseTime)
 
         if responseTime > 5:
@@ -85,16 +86,49 @@ class PerformanceGradeCalculation:
             self.cpuUsageGrade = 5
         print("CPU UsageGrade: ", self.cpuUsageGrade)
 
+    def addNewGrade(self, newGrade, grades):
+        print("uptime Grade: ", newGrade)
+        length = len(grades) - 1
+        for x in range(length):
+            grades[x] = grades[x + 1]
+        grades[length] = newGrade
+
     def update(self):
         self.calculateResponseTimeGrade()
         self.calculateMemoryUsageGrade()
         self.calculateDiskReadGrade()
         self.calculateDiskWriteGrade()
         self.calculateCpuUsageGrade()
+        uptimeValues = self.prometheusRequest.makeRequest("uptime")
+        grade = 0
+        counter = 0
+        for value in uptimeValues:
+            grade = grade + self.calculateUptimeGrade(value[0], value[1])
+            counter = counter + 1
+        grade = grade/counter
+        self.addNewGrade(grade)
 
     def initialCalculation(self):
+        print(self.prometheusRequest.makeRequest('memory_usage'))
+        print(self.prometheusRequest.makeRequest('memory_usage_history'))
+        print(self.prometheusRequest.makeRequest('disk_read'))
+        print(self.prometheusRequest.makeRequest('disk_read_history'))
+        print(self.prometheusRequest.makeRequest('disk_write'))
+        print(self.prometheusRequest.makeRequest('disk_write_history'))
+        print(self.prometheusRequest.makeRequest('container_spec_cpu_quota'))
+        print(self.prometheusRequest.makeRequest('container_spec_cpu_quota_history'))
         self.calculateResponseTimeGrade()
         self.calculateMemoryUsageGrade()
         self.calculateDiskReadGrade()
         self.calculateDiskWriteGrade()
         self.calculateCpuUsageGrade()
+        uptimeValues = self.prometheusRequest.makeRequest("uptime_history")
+        length = len(uptimeValues[0]) - 1
+        for x in range(length):
+            grade = 0
+            counter = 0
+            for value in uptimeValues:
+                grade = grade + self.calculateUptimeGrade(value[x + 1], value[x])
+                counter = counter + 1
+            grade = grade / counter
+            self.addNewGrade(grade)
