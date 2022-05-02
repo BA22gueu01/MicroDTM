@@ -49,7 +49,7 @@ class PrometheusRequest:
 
         elif "_history" in requestParam:
             print("history")
-            requestParam = requestParam.strip("_history") + '{kubernetes_namespace="sock-shop"}[1d:1h]'
+            requestParam = requestParam.replace("_history", "") + '{kubernetes_namespace="sock-shop"}[1d:1h]'
             print(requestParam)
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
         else:
