@@ -52,5 +52,4 @@ class AvailabilityGradeCalculation:
             print("uptime Grade: ", grade)
             self.addNewGrade(grade)
 
-
         self.calculateUptimeGrade()
