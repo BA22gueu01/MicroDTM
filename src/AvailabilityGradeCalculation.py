@@ -10,8 +10,6 @@ class AvailabilityGradeCalculation:
         self.uptimeGrades = numpy.zeros(24)
 
     def calculateGrade(self):
-        print(self.uptimeGrades)
-        print(numpy.average(self.uptimeGrades))
         return self.uptimeWeight * numpy.average(self.uptimeGrades)
 
     def calculateUptimeGrade(self, firstValue, secondValue):

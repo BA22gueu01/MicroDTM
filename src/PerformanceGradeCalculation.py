@@ -61,7 +61,6 @@ class PerformanceGradeCalculation:
         return grade
 
     def calculateCpuUsageGrade(self, cpuUsage):
-        print(cpuUsage)
         cpuUsage = float(cpuUsage) * 100
 
         if cpuUsage > 90:
