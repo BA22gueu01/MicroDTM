@@ -9,17 +9,17 @@ class PrometheusRequest:
     def makeRequest(self, requestParam):
 
         if requestParam == "uptime":
-            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query?query=uptime{kubernetes_namespace="sock-shop"}[2h:1h]')
+            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query?query=uptime{container!~"istio-proxy", kubernetes_namespace="sock-shop"}[2h:1h]')
         elif requestParam == "uptime_history":
-            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query?query=uptime{kubernetes_namespace="sock-shop"}[25h:1h]')
+            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query?query=uptime{container!~"istio-proxy", kubernetes_namespace="sock-shop"}[25h:1h]')
 
         elif requestParam == "container_spec_cpu_quota":
             # https://github.com/google/cadvisor/issues/2026
-            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/sum(container_spec_cpu_quota{namespace="sock-shop"})/sum(container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
+            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{container!~"istio-proxy", namespace="sock-shop"}[2h:1h])) by (pod_name, container_name)/sum(container_spec_cpu_quota{container!~"istio-proxy", namespace="sock-shop"}/container_spec_cpu_period{container!~"istio-proxy", namespace="sock-shop"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
         elif requestParam == "container_spec_cpu_quota_history":
             # https://github.com/google/cadvisor/issues/2026
-            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/sum(container_spec_cpu_quota{namespace="sock-shop"})/sum(container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
+            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{container!~"istio-proxy", namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/sum(container_spec_cpu_quota{container!~"istio-proxy", namespace="sock-shop"}/container_spec_cpu_period{container!~"istio-proxy", namespace="sock-shop"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
 
         # https://brian-candler.medium.com/interpreting-prometheus-metrics-for-linux-disk-i-o-utilization-4db53dfedcfc
@@ -27,14 +27,14 @@ class PrometheusRequest:
             diskReadCalculation = '(node_disk_read_time_seconds_total / node_disk_reads_completed_total)[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
         elif requestParam == "disk_read_history":
-            diskReadCalculation = '(node_disk_read_time_seconds_total / node_disk_reads_completed_total)[25h:1h]'
+            diskReadCalculation = '(node_disk_read_time_seconds_total / node_disk_reads_completed_total)[1d:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
 
         elif requestParam == "disk_write":
             diskWriteCalculation = '(node_disk_write_time_seconds_total / node_disk_writes_completed_total)[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
         elif requestParam == "disk_write_history":
-            diskWriteCalculation = '(node_disk_write_time_seconds_total / node_disk_writes_completed_total)[25h:1h]'
+            diskWriteCalculation = '(node_disk_write_time_seconds_total / node_disk_writes_completed_total)[1d:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
 
         # https://www.tigera.io/learn/guides/prometheus-monitoring/prometheus-metrics/
@@ -46,19 +46,19 @@ class PrometheusRequest:
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
 
         elif requestParam == "response_time":
-            responseCalculation = '(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"} / ' \
-                    'http_request_duration_seconds_count{kubernetes_namespace="sock-shop"})[2h:1h]'
+            responseCalculation = '(http_request_duration_seconds_sum{container!~"istio-proxy", kubernetes_namespace="sock-shop"} / ' \
+                    'http_request_duration_seconds_count{container!~"istio-proxy", kubernetes_namespace="sock-shop"})[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': responseCalculation})
         elif requestParam == "response_time_history":
-            responseCalculation = '(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"} / ' \
-                    'http_request_duration_seconds_count{kubernetes_namespace="sock-shop"})[1d:1h]'
+            responseCalculation = '(http_request_duration_seconds_sum{container!~"istio-proxy", kubernetes_namespace="sock-shop"} / ' \
+                    'http_request_duration_seconds_count{container!~"istio-proxy", kubernetes_namespace="sock-shop"})[1d:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': responseCalculation})
 
         elif "_history" in requestParam:
-            requestParam = requestParam.replace("_history", "") + '{kubernetes_namespace="sock-shop"}[25h:1h]'
+            requestParam = requestParam.replace("_history", "") + '{container!~"istio-proxy", kubernetes_namespace="sock-shop"}[25h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
         else:
-            requestParam = requestParam + '{kubernetes_namespace="sock-shop"}[2h:1h]'
+            requestParam = requestParam + '{container!~"istio-proxy", kubernetes_namespace="sock-shop"}[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
 
         prometheusResponseJson = prometheusResponse.json()
