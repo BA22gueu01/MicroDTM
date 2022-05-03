@@ -30,7 +30,7 @@ class PerformanceGradeCalculation:
 
         if responseTime > 1:
             self.responseTimeGrade = -5
-        elif responseTime > 2.5:
+        elif responseTime >= 0.5:
             self.responseTimeGrade = 0
         else:
             self.responseTimeGrade = 5
