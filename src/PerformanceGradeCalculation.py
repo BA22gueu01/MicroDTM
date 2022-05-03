@@ -34,8 +34,7 @@ class PerformanceGradeCalculation:
         else:
             grade = 5
 
-        print("ResponseTimeGrade: ", grade)
-        self.addNewGrade(grade, self.responseTimeGrades)
+        return grade
 
     def calculateMemoryUsageGrade(self, value):
         memoryUsage = value[1]
@@ -84,8 +83,16 @@ class PerformanceGradeCalculation:
         grades[length] = newGrade
 
     def update(self):
-        responseTimeValues = self.prometheusRequest.makeRequest('response_time')[0]
-        self.calculateResponseTimeGrade(responseTimeValues[1])
+        responseTimeValues = self.prometheusRequest.makeRequest('response_time')
+        grade = 0
+        counter = 0
+        for x in range(len(responseTimeValues)):
+            grade = grade + self.calculateResponseTimeGrade(responseTimeValues[x][1])
+            counter = counter + 1
+        grade = grade / counter
+        self.addNewGrade(grade, self.responseTimeGrades)
+        print("Response Time Grade: ", grade)
+
 
         memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage')[0]
         self.calculateMemoryUsageGrade(memoryUsageValues[1])
@@ -104,13 +111,21 @@ class PerformanceGradeCalculation:
         self.calculateCpuUsageGrade(cpuUsageValues[1])
 
     def initialCalculation(self):
-        responseTimeValues = self.prometheusRequest.makeRequest('response_time_history')[0]
+        responseTimeValues = self.prometheusRequest.makeRequest('response_time_history')
         print(responseTimeValues)
-        for value in responseTimeValues:
-            print(value)
-            self.calculateResponseTimeGrade(value)
+        for x in range(len(responseTimeValues[0])):
+            print(x)
+            grade = 0
+            counter = 0
+            for y in range(len(responseTimeValues)):
+                print(y)
+                grade = grade + self.calculateResponseTimeGrade(responseTimeValues[y][x])
+                counter = counter + 1
+            grade = grade / counter
+            self.addNewGrade(grade, self.responseTimeGrades)
+            print("Response Time Grade: ", grade)
 
-        memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage_history')[0]
+        memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage_history')
         for value in memoryUsageValues:
             self.calculateMemoryUsageGrade(value)
 
