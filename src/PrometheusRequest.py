@@ -41,10 +41,10 @@ class PrometheusRequest:
 
         # https://www.tigera.io/learn/guides/prometheus-monitoring/prometheus-metrics/
         elif requestParam == "memory_usage":
-            memoryCalculation = 'rate(node_memory_Active_bytes[2h:1h]) / rate(node_memory_MemTotal_bytes[2h:1h])'
+            memoryCalculation = '(node_memory_Active_bytes/ node_memory_MemTotal_bytes)[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
         elif requestParam == "memory_usage_history":
-            memoryCalculation = 'rate(node_memory_Active_bytes[1d:1h]) / rate(node_memory_MemTotal_bytes[1d:1h])'
+            memoryCalculation = '(node_memory_Active_bytes/ node_memory_MemTotal_bytes)[1d:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
 
         elif requestParam == "response_time":
