@@ -24,7 +24,7 @@ class PerformanceGradeCalculation:
 
     # Todo What does this metric mean? Use historical data
     def calculateResponseTimeGrade(self):
-        responseTime = self.prometheusRequest.makeRequest('response_time')[1]
+        responseTime = self.prometheusRequest.makeRequest('response_time')
         responseTime = int(responseTime[1])
         print("responseTime: ", responseTime)
 
