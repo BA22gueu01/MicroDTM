@@ -50,7 +50,6 @@ class PerformanceGradeCalculation:
 
     def calculateDiskGrade(self, value):
         diskUsage = value[1]
-        print("Disk Usage: ", diskUsage)
         diskUsage = float(diskUsage) * 100
 
         if diskUsage > 4:
@@ -168,5 +167,4 @@ class PerformanceGradeCalculation:
             print("Disk Write Grade: ", grade)
 
         cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota_history')
-        for value in cpuUsageValues:
-            self.calculateCpuUsageGrade(value)
+        self.calculateCpuUsageGrade(cpuUsageValues[1])

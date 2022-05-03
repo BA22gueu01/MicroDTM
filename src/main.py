@@ -44,8 +44,9 @@ def trustCalculation():
 
 
 def initialCalculation():
-    #availabilityGradeCalculation.initialCalculation()
-    #reliabilityGradeCalculation.initialCalculation()
+    print("Initial Calculation")
+    availabilityGradeCalculation.initialCalculation()
+    reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
     correctnessGradeCalculation.initialCalculation()
     securityGradeCalculation.initialCalculation()
@@ -53,13 +54,16 @@ def initialCalculation():
 
 
 def update():
+    print("Update")
     availabilityGradeCalculation.update()
     reliabilityGradeCalculation.update()
     performanceGradeCalculation.update()
     correctnessGradeCalculation.update()
     trustCalculation()
 
+
 def dailyUpdate():
+    print("Daily Update")
     reliabilityGradeCalculation.dailyUpdate()
     securityGradeCalculation.dailyUpdate()
 
@@ -67,8 +71,8 @@ def dailyUpdate():
 def main():
     print("Main Call!")
     initialCalculation()
-    schedule.every().hour.do(update)
-    schedule.every().day.do(dailyUpdate)
+    schedule.every().minute.do(update)
+    schedule.every(2).minutes.do(dailyUpdate)
 
     while True:
         schedule.run_pending()
