@@ -21,7 +21,7 @@ class PrometheusRequest:
         elif requestParam == "container_spec_cpu_quota_history":
             # https://github.com/google/cadvisor/issues/2026
             cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/' \
-                                    'sum(container_spec_cpu_quota{namespace="sock-shop"}/container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
+                                  'sum(container_spec_cpu_quota{namespace="sock-shop"}/container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
 
         # https://brian-candler.medium.com/interpreting-prometheus-metrics-for-linux-disk-i-o-utilization-4db53dfedcfc
@@ -46,6 +46,15 @@ class PrometheusRequest:
         elif requestParam == "memory_usage_history":
             memoryCalculation = 'rate(node_memory_Active_bytes[1d:1h]) / rate(node_memory_MemTotal_bytes[1d:1h])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
+
+        elif requestParam == "response_time":
+            responseCalculation = '(rate(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"}[2h:1h])) / ' \
+                '(rate(http_request_duration_seconds_count{kubernetes_namespace="sock-shop"}[2h:1h]))'
+            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': responseCalculation})
+        elif requestParam == "response_time_history":
+            responseCalculation = '(rate(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"}[1d:1h])) / ' \
+                '(rate(http_request_duration_seconds_count{kubernetes_namespace="sock-shop"}[1d:1h]))'
+            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': responseCalculation})
 
         elif "_history" in requestParam:
             requestParam = requestParam.replace("_history", "") + '{kubernetes_namespace="sock-shop"}[1d:1h]'

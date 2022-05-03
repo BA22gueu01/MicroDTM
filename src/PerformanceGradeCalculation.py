@@ -22,13 +22,13 @@ class PerformanceGradeCalculation:
                 + self.diskReadWeight * numpy.average(self.diskReadGrades) + self.diskWriteWeight * numpy.average(self.diskWriteGrades)
                 + self.cpuUsageWeight * numpy.average(self.cpuUsageGrades))
 
-    # Todo What does this metric means? Use historical data
+    # Todo What does this metric mean? Use historical data
     def calculateResponseTimeGrade(self):
-        responseTime = self.prometheusRequest.makeRequest('gauge_response_metrics')[1]
+        responseTime = self.prometheusRequest.makeRequest('response_time')[1]
         responseTime = int(responseTime[1])
         print("responseTime: ", responseTime)
 
-        if responseTime > 5:
+        if responseTime > 1:
             self.responseTimeGrade = -5
         elif responseTime > 2.5:
             self.responseTimeGrade = 0
