@@ -5,7 +5,7 @@ class PerformanceGradeCalculation:
 
     def __init__(self, prometheus):
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
-        self.responseTimeGrade = 0
+        self.responseTimeGrades = numpy.zeros(24)
         self.responseTimeWeight = 0.4
         self.memoryUsageGrades = numpy.zeros(24)
         self.memoryUsageWeight = 0.2
@@ -18,11 +18,11 @@ class PerformanceGradeCalculation:
 
     def calculateGrade(self):
 
-        return (self.responseTimeWeight * self.responseTimeGrade + self.memoryUsageWeight * numpy.average(self.memoryUsageGrades)
+        return (self.responseTimeWeight * numpy.average(self.responseTimeGrades) + self.memoryUsageWeight * numpy.average(self.memoryUsageGrades)
                 + self.diskReadWeight * numpy.average(self.diskReadGrades) + self.diskWriteWeight * numpy.average(self.diskWriteGrades)
                 + self.cpuUsageWeight * numpy.average(self.cpuUsageGrades))
 
-    # Todo What does this metric mean? Use historical data
+
     def calculateResponseTimeGrade(self):
         responseTime = self.prometheusRequest.makeRequest('response_time')[1]
         print("responseTime: ", responseTime)
@@ -118,6 +118,8 @@ class PerformanceGradeCalculation:
         print(self.prometheusRequest.makeRequest('disk_write_history'))
         print(self.prometheusRequest.makeRequest('container_spec_cpu_quota'))
         print(self.prometheusRequest.makeRequest('container_spec_cpu_quota_history'))
+        print(self.prometheusRequest.makeRequest('response_time'))
+        print(self.prometheusRequest.makeRequest('response_time_history'))
         self.calculateResponseTimeGrade()
         self.calculateMemoryUsageGrade()
         self.calculateDiskReadGrade()
