@@ -15,28 +15,26 @@ class PrometheusRequest:
 
         elif requestParam == "container_spec_cpu_quota":
             # https://github.com/google/cadvisor/issues/2026
-            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[2h:1h])) by (pod_name, container_name)/' \
-                                  'sum(container_spec_cpu_quota{namespace="sock-shop"}/container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
+            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/sum(container_spec_cpu_quota{namespace="sock-shop"})/sum(container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
         elif requestParam == "container_spec_cpu_quota_history":
             # https://github.com/google/cadvisor/issues/2026
-            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/' \
-                                  'sum(container_spec_cpu_quota{namespace="sock-shop"}/container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
+            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/sum(container_spec_cpu_quota{namespace="sock-shop"})/sum(container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
 
         # https://brian-candler.medium.com/interpreting-prometheus-metrics-for-linux-disk-i-o-utilization-4db53dfedcfc
         elif requestParam == "disk_read":
-            diskReadCalculation = 'rate(node_disk_read_time_seconds_total[2h:1h]) / rate(node_disk_reads_completed_total[2h:1h])'
+            diskReadCalculation = '(node_disk_read_time_seconds_total / node_disk_reads_completed_total)[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
         elif requestParam == "disk_read_history":
-            diskReadCalculation = 'rate(node_disk_read_time_seconds_total[25h:1h]) / rate(node_disk_reads_completed_total[25h:1h])'
+            diskReadCalculation = '(node_disk_read_time_seconds_total / node_disk_reads_completed_total)[25h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
 
         elif requestParam == "disk_write":
-            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total[2h:1h]) / rate(node_disk_writes_completed_total[2h:1h])'
+            diskWriteCalculation = '(node_disk_write_time_seconds_total / node_disk_writes_completed_total)[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
         elif requestParam == "disk_write_history":
-            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total[25h:1h]) / rate(node_disk_writes_completed_total[25h:1h])'
+            diskWriteCalculation = '(node_disk_write_time_seconds_total / node_disk_writes_completed_total)[25h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
 
         # https://www.tigera.io/learn/guides/prometheus-monitoring/prometheus-metrics/
@@ -48,12 +46,12 @@ class PrometheusRequest:
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
 
         elif requestParam == "response_time":
-            responseCalculation = '(rate(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"}[2h:1h])) / ' \
-                '(rate(http_request_duration_seconds_count{kubernetes_namespace="sock-shop"}[2h:1h]))'
+            responseCalculation = '(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"} / ' \
+                    'http_request_duration_seconds_count{kubernetes_namespace="sock-shop"})[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': responseCalculation})
         elif requestParam == "response_time_history":
-            responseCalculation = '(rate(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"}[1d:1h])) / ' \
-                '(rate(http_request_duration_seconds_count{kubernetes_namespace="sock-shop"}[1d:1h]))'
+            responseCalculation = '(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"} / ' \
+                    'http_request_duration_seconds_count{kubernetes_namespace="sock-shop"})[1d:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': responseCalculation})
 
         elif "_history" in requestParam:
