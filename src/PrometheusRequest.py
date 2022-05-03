@@ -11,7 +11,7 @@ class PrometheusRequest:
         if requestParam == "uptime":
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query?query=uptime{kubernetes_namespace="sock-shop"}[2h:1h]')
         elif requestParam == "uptime_history":
-            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query?query=uptime{kubernetes_namespace="sock-shop"}[1d:1h]')
+            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query?query=uptime{kubernetes_namespace="sock-shop"}[25h:1h]')
 
         elif requestParam == "container_spec_cpu_quota":
             # https://github.com/google/cadvisor/issues/2026
@@ -20,7 +20,7 @@ class PrometheusRequest:
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
         elif requestParam == "container_spec_cpu_quota_history":
             # https://github.com/google/cadvisor/issues/2026
-            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/' \
+            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[25h:1h])) by (pod_name, container_name)/' \
                                     'sum(container_spec_cpu_quota{namespace="sock-shop"}/container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
 
@@ -29,14 +29,14 @@ class PrometheusRequest:
             diskReadCalculation = 'rate(node_disk_read_time_seconds_total[2h:1h]) / rate(node_disk_reads_completed_total[2h:1h])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
         elif requestParam == "disk_read_history":
-            diskReadCalculation = 'rate(node_disk_read_time_seconds_total[1d:1h]) / rate(node_disk_reads_completed_total[1d:1h])'
+            diskReadCalculation = 'rate(node_disk_read_time_seconds_total[25h:1h]) / rate(node_disk_reads_completed_total[25h:1h])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskReadCalculation})
 
         elif requestParam == "disk_write":
             diskWriteCalculation = 'rate(node_disk_write_time_seconds_total[2h:1h]) / rate(node_disk_writes_completed_total[2h:1h])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
         elif requestParam == "disk_write_history":
-            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total[1d:1h]) / rate(node_disk_writes_completed_total[1d:1h])'
+            diskWriteCalculation = 'rate(node_disk_write_time_seconds_total[25h:1h]) / rate(node_disk_writes_completed_total[25h:1h])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': diskWriteCalculation})
 
         # https://www.tigera.io/learn/guides/prometheus-monitoring/prometheus-metrics/
@@ -44,11 +44,11 @@ class PrometheusRequest:
             memoryCalculation = 'rate(node_memory_Active_bytes[2h:1h]) / rate(node_memory_MemTotal_bytes[2h:1h])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
         elif requestParam == "memory_usage_history":
-            memoryCalculation = 'rate(node_memory_Active_bytes[1d:1h]) / rate(node_memory_MemTotal_bytes[1d:1h])'
+            memoryCalculation = 'rate(node_memory_Active_bytes[25h:1h]) / rate(node_memory_MemTotal_bytes[25h:1h])'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
 
         elif "_history" in requestParam:
-            requestParam = requestParam.replace("_history", "") + '{kubernetes_namespace="sock-shop"}[1d:1h]'
+            requestParam = requestParam.replace("_history", "") + '{kubernetes_namespace="sock-shop"}[25h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': requestParam})
         else:
             requestParam = requestParam + '{kubernetes_namespace="sock-shop"}[2h:1h]'
