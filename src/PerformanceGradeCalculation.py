@@ -38,7 +38,6 @@ class PerformanceGradeCalculation:
 
     def calculateMemoryUsageGrade(self, value):
         memoryUsage = value[1]
-        print("Memory Usage: ", memoryUsage)
         memoryUsage = float(memoryUsage) * 100
 
         if memoryUsage > 90:
@@ -47,8 +46,7 @@ class PerformanceGradeCalculation:
             grade = 0
         else:
             grade = 5
-        print("MemoryUsageGrade: ", grade)
-        self.addNewGrade(grade, self.memoryUsageGrades)
+        return grade
 
     def calculateDiskGrade(self, value):
         diskUsage = value[1]
@@ -93,32 +91,43 @@ class PerformanceGradeCalculation:
         self.addNewGrade(grade, self.responseTimeGrades)
         print("Response Time Grade: ", grade)
 
+        memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage')
+        grade = 0
+        counter = 0
+        for x in range(len(memoryUsageValues)):
+            grade = grade + self.calculateMemoryUsageGrade(memoryUsageValues[x][1])
+            counter = counter + 1
+        grade = grade / counter
+        self.addNewGrade(grade, self.memoryUsageGrades)
+        print("Memory Usage Grade: ", grade)
 
-        memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage')[0]
-        self.calculateMemoryUsageGrade(memoryUsageValues[1])
-
-        diskReadUsageValues = self.prometheusRequest.makeRequest('disk_read')[0]
-        grade = self.calculateDiskGrade(diskReadUsageValues[1])
-        print("DiskReadGrade: ", grade)
+        diskReadUsageValues = self.prometheusRequest.makeRequest('disk_read')
+        grade = 0
+        counter = 0
+        for x in range(len(diskReadUsageValues)):
+            grade = grade + self.calculateDiskGrade(diskReadUsageValues[x][1])
+            counter = counter + 1
+        grade = grade / counter
         self.addNewGrade(grade, self.diskReadGrades)
+        print("Disk Read Grade: ", grade)
 
-        diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write')[0]
-        grade = self.calculateDiskGrade(diskWriteUsageValues[1])
-        print("DiskWriteGrade: ", grade)
+        diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write')
+        for x in range(len(diskWriteUsageValues)):
+            grade = grade + self.calculateDiskGrade(diskWriteUsageValues[x][1])
+            counter = counter + 1
+        grade = grade / counter
         self.addNewGrade(grade, self.diskWriteGrades)
+        print("Disk Write Grade: ", grade)
 
         cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota')
         self.calculateCpuUsageGrade(cpuUsageValues[1])
 
     def initialCalculation(self):
         responseTimeValues = self.prometheusRequest.makeRequest('response_time_history')
-        print(responseTimeValues)
         for x in range(len(responseTimeValues[0])):
-            print(x)
             grade = 0
             counter = 0
             for y in range(len(responseTimeValues)):
-                print(y)
                 grade = grade + self.calculateResponseTimeGrade(responseTimeValues[y][x])
                 counter = counter + 1
             grade = grade / counter
@@ -126,20 +135,37 @@ class PerformanceGradeCalculation:
             print("Response Time Grade: ", grade)
 
         memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage_history')
-        for value in memoryUsageValues:
-            self.calculateMemoryUsageGrade(value)
+        for x in range(len(memoryUsageValues[0])):
+            grade = 0
+            counter = 0
+            for y in range(len(memoryUsageValues)):
+                grade = grade + self.calculateMemoryUsageGrade(memoryUsageValues[y][x])
+                counter = counter + 1
+            grade = grade / counter
+            self.addNewGrade(grade, self.memoryUsageGrades)
+            print("Memory Usage Grade: ", grade)
 
-        diskReadUsageValues = self.prometheusRequest.makeRequest('disk_read_history')[0]
-        for value in diskReadUsageValues:
-            grade = self.calculateDiskGrade(value)
-            print("DiskReadGrade: ", grade)
+        diskReadUsageValues = self.prometheusRequest.makeRequest('disk_read_history')
+        for x in range(len(diskReadUsageValues[0])):
+            grade = 0
+            counter = 0
+            for y in range(len(diskReadUsageValues)):
+                grade = grade + self.calculateDiskGrade(diskReadUsageValues[y][x])
+                counter = counter + 1
+            grade = grade / counter
             self.addNewGrade(grade, self.diskReadGrades)
+            print("Disk Read Grade: ", grade)
 
-        diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write_history')[0]
-        for value in diskWriteUsageValues:
-            grade = self.calculateDiskGrade(value)
-            print("DiskWriteGrade: ", grade)
+        diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write_history')
+        for x in range(len(diskReadUsageValues[0])):
+            grade = 0
+            counter = 0
+            for y in range(len(diskWriteUsageValues)):
+                grade = grade + self.calculateDiskGrade(diskWriteUsageValues[y][x])
+                counter = counter + 1
+            grade = grade / counter
             self.addNewGrade(grade, self.diskWriteGrades)
+            print("Disk Write Grade: ", grade)
 
         cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota_history')
         for value in cpuUsageValues:
