@@ -79,7 +79,6 @@ class ReliabilityGradeCalculation:
         for x in range(length):
             self.calculateResponseErrorGrade(int(status200Values[x + 1][1]) - int(status200Values[x][1]),
                                              int(status500Values[x + 1][1]) - int(status500Values[x][1]))
-        print(self.responseErrorsGrades)
 
         logLevelErrorCount = self.logLevelCheck.getLogLevelCount()
         if logLevelErrorCount > 3000:

@@ -29,7 +29,7 @@ def trustCalculation():
     performanceWeight = 0.2
     print("PerformanceGrade: ", performanceGrade)
 
-    correctnessGrade = correctnessGradeCalculation.callCorrectnessGrade
+    correctnessGrade = correctnessGradeCalculation.calculateGrade()
     correctnessWeight = 0.2
     print("CorrectnessGrade: ", correctnessGrade)
 
@@ -56,12 +56,8 @@ def update():
     availabilityGradeCalculation.update()
     reliabilityGradeCalculation.update()
     performanceGradeCalculation.update()
+    correctnessGradeCalculation.update()
     trustCalculation()
-
-
-def hourlyUpdate():
-    correctnessGradeCalculation.hourlyUpdate()
-
 
 def dailyUpdate():
     reliabilityGradeCalculation.dailyUpdate()
@@ -71,8 +67,7 @@ def dailyUpdate():
 def main():
     print("Main Call!")
     initialCalculation()
-    schedule.every(30).seconds.do(update)
-    schedule.every().hour.do(hourlyUpdate)
+    schedule.every().hour.do(update)
     schedule.every().day.do(dailyUpdate)
 
     while True:

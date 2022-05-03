@@ -1,23 +1,23 @@
 import APIRequest
 import DBRequest
 import GetPods
+import numpy
 
 
 class CorrectnessGradeCalculation:
 
     def __init__(self, sockshop):
-        self.callCorrectnessGrade = 0
+        self.callCorrectnessGrades = numpy.zeros(24)
         self.callCorrectnessWeight = 1
         self.apiRequest = APIRequest.APIRequest(sockshop)
         self.dbRequest = DBRequest.DBRequest()
         self.getPods = GetPods.GetPods()
 
     def calculateGrade(self):
-        return self.callCorrectnessWeight * self.callCorrectnessGrade
+        return self.callCorrectnessWeight * numpy.average(self.callCorrectnessGrades)
 
     def calculateCallCorrectnessGrade(self):
-        self.callCorrectnessGrade = self.calculateCatalogueCorrectness()
-        print("callCorrectnessGrade: ", self.callCorrectnessGrade)
+        self.addNewGrade(self.calculateCatalogueCorrectness())
 
     def calculateCatalogueCorrectness(self):
         pods = self.getPods.getPods()
@@ -52,7 +52,14 @@ class CorrectnessGradeCalculation:
 
         return 5
 
-    def hourlyUpdate(self):
+    def addNewGrade(self, newGrade):
+        print("callCorrectnessGrade: ", newGrade)
+        length = len(self.callCorrectnessGrades) - 1
+        for x in range(length):
+            self.callCorrectnessGrades[x] = self.callCorrectnessGrades[x + 1]
+        self.callCorrectnessGrades[length] = newGrade
+
+    def update(self):
         self.calculateCallCorrectnessGrade()
 
     def initialCalculation(self):
