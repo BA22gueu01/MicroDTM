@@ -109,8 +109,10 @@ class PerformanceGradeCalculation:
 
     def initialCalculation(self):
         responseTimeValues = self.prometheusRequest.makeRequest('memory_usage_history')
+        print(responseTimeValues)
         for value in responseTimeValues:
-            self.calculateResponseTimeGrade(value)
+            print(value)
+            self.calculateResponseTimeGrade(value[1])
 
         memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage_history')
         for value in memoryUsageValues:
