@@ -20,8 +20,8 @@ class PrometheusRequest:
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
         elif requestParam == "container_spec_cpu_quota_history":
             # https://github.com/google/cadvisor/issues/2026
-            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[25h:1h])) by (pod_name, container_name)/' \
-                                    'sum(container_spec_cpu_quota{namespace="sock-shop"}/container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
+            cpuUsageCalculation = 'sum(rate(container_cpu_usage_seconds_total{namespace="sock-shop"}[1d:1h])) by (pod_name, container_name)/' \
+                                  'sum(container_spec_cpu_quota{namespace="sock-shop"}/container_spec_cpu_period{namespace="sock-shop"}) by (pod_name, container_name)'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': cpuUsageCalculation})
 
         # https://brian-candler.medium.com/interpreting-prometheus-metrics-for-linux-disk-i-o-utilization-4db53dfedcfc
@@ -41,11 +41,20 @@ class PrometheusRequest:
 
         # https://www.tigera.io/learn/guides/prometheus-monitoring/prometheus-metrics/
         elif requestParam == "memory_usage":
-            memoryCalculation = 'rate(node_memory_Active_bytes[2h:1h]) / rate(node_memory_MemTotal_bytes[2h:1h])'
+            memoryCalculation = '(node_memory_Active_bytes/ node_memory_MemTotal_bytes)[2h:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
         elif requestParam == "memory_usage_history":
-            memoryCalculation = 'rate(node_memory_Active_bytes[25h:1h]) / rate(node_memory_MemTotal_bytes[25h:1h])'
+            memoryCalculation = '(node_memory_Active_bytes/ node_memory_MemTotal_bytes)[1d:1h]'
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': memoryCalculation})
+
+        elif requestParam == "response_time":
+            responseCalculation = '(rate(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"}[2h:1h])) / ' \
+                '(rate(http_request_duration_seconds_count{kubernetes_namespace="sock-shop"}[2h:1h]))'
+            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': responseCalculation})
+        elif requestParam == "response_time_history":
+            responseCalculation = '(rate(http_request_duration_seconds_sum{kubernetes_namespace="sock-shop"}[1d:1h])) / ' \
+                '(rate(http_request_duration_seconds_count{kubernetes_namespace="sock-shop"}[1d:1h]))'
+            prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query', params={'query': responseCalculation})
 
         elif "_history" in requestParam:
             requestParam = requestParam.replace("_history", "") + '{kubernetes_namespace="sock-shop"}[25h:1h]'
