@@ -25,9 +25,7 @@ class PerformanceGradeCalculation:
 
     def calculateResponseTimeGrade(self, value):
         responseTime = value[1]
-        print("responseTime: ", responseTime)
         responseTime = float(responseTime)
-        print("responseTime: ", responseTime)
 
         if responseTime > 1:
             grade = -5
@@ -66,8 +64,7 @@ class PerformanceGradeCalculation:
             grade = 5
         return grade
 
-    def calculateCpuUsageGrade(self, value):
-        cpuUsage = value[1]
+    def calculateCpuUsageGrade(self, cpuUsage):
         print(cpuUsage)
         cpuUsage = float(cpuUsage) * 100
 
@@ -81,7 +78,6 @@ class PerformanceGradeCalculation:
         self.addNewGrade(grade, self.cpuUsageGrades)
 
     def addNewGrade(self, newGrade, grades):
-        print("uptime Grade: ", newGrade)
         length = len(grades) - 1
         for x in range(length):
             grades[x] = grades[x + 1]

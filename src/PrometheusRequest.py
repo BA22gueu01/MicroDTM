@@ -64,6 +64,10 @@ class PrometheusRequest:
         prometheusResponseJson = prometheusResponse.json()
         data = prometheusResponseJson["data"]
 
+        print(requestParam)
+        print(len(data["result"]))
+        print(data["result"])
+
         # Check if Prometheus result is empty
         result = []
         if len(data["result"]) == 0:
