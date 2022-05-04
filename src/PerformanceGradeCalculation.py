@@ -40,9 +40,9 @@ class PerformanceGradeCalculation:
         memoryUsage = value[1]
         memoryUsage = float(memoryUsage) * 100
 
-        if memoryUsage > 90:
+        if memoryUsage > 85:
             grade = -5
-        elif memoryUsage > 85:
+        elif memoryUsage > 70:
             grade = 0
         else:
             grade = 5
@@ -50,11 +50,12 @@ class PerformanceGradeCalculation:
 
     def calculateDiskGrade(self, value):
         diskUsage = value[1]
-        diskUsage = float(diskUsage) * 100
+        # seconds to ms
+        diskUsage = float(diskUsage) * 1000
 
-        if diskUsage > 4:
+        if diskUsage > 50:
             grade = -5
-        elif diskUsage > 2.5:
+        elif diskUsage > 25:
             grade = 0
         else:
             grade = 5
