@@ -127,7 +127,6 @@ class PerformanceGradeCalculation:
             grade = 0
             counter = 0
             for y in range(len(responseTimeValues)):
-                print(responseTimeValues)
                 grade = grade + self.calculateResponseTimeGrade(responseTimeValues[y][x])
                 counter = counter + 1
             grade = grade / counter
