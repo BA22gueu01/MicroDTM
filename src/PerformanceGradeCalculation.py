@@ -123,10 +123,13 @@ class PerformanceGradeCalculation:
 
     def initialCalculation(self):
         responseTimeValues = self.prometheusRequest.makeRequest('response_time_history')
+        print(responseTimeValues)
         for x in range(len(responseTimeValues[0])):
+            print("x: ", x)
             grade = 0
             counter = 0
             for y in range(len(responseTimeValues)):
+                print("y: ", y)
                 grade = grade + self.calculateResponseTimeGrade(responseTimeValues[y][x])
                 counter = counter + 1
             grade = grade / counter
