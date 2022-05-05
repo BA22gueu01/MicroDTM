@@ -100,10 +100,10 @@ class PatchLevelCheck:
 
             except Exception as e:
                 print("Read-only filesystem or permission denied")
-                print(e)
+                #print(e)
 
         except Exception as e:
-            print(e)
+            #print(e)
             currentVersion = False
             counterInst = 0
             counterSec = 0
