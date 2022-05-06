@@ -89,6 +89,9 @@ class ReliabilityGradeCalculation:
         self.calculatePatchLevelGrade()
 
     def subGradeCalculation(self, values200, values500, ):
+        print(values200)
+        print("\n")
+        print(values500)
         if values200 == [0, 0] or values500 == [0, 0]:
             grade = -5
             self.addNewGrade(grade, self.responseErrorsGrades)
@@ -100,7 +103,7 @@ class ReliabilityGradeCalculation:
                 if len(value) > length:
                     length = len(value)
 
-            for x in range(length):
+            for x in range(length - 1):
                 grade = 0
                 counter = 0
                 for y in range(min(len(values200), len(values500))):
