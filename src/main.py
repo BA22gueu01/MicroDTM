@@ -71,6 +71,7 @@ def dailyUpdate():
 def main():
     print("Main Call!")
     initialCalculation()
+    schedule.every().minute.do(correctnessGradeCalculation.update())
     schedule.every().hour.do(update)
     schedule.every().day.do(dailyUpdate)
 
