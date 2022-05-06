@@ -54,15 +54,11 @@ class AvailabilityGradeCalculation:
             for value in values:
                 if len(value) > length:
                     length = len(value)
-            print(length)
 
             for x in range(length - 1):
-                print(x)
                 grade = 0
                 counter = 0
                 for y in range(len(values)):
-                    print(y)
-                    print(len(values[y]))
                     if x < len(values[y]) - 1:
                         grade = grade + self.calculateUptimeGrade(values[y][x + 1], values[y][x])
                         counter = counter + 1

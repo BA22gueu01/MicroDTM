@@ -21,8 +21,8 @@ class ReliabilityGradeCalculation:
     def calculateGrade(self):
 
         return (self.responseErrorsWeight * numpy.average(self.responseErrorsGrades)) \
-                    + (self.logLevelWeight * numpy.average(self.logLevelGrades)) \
-                    + (self.patchLevelWeight * self.patchLevelGrade)
+               + (self.logLevelWeight * numpy.average(self.logLevelGrades)) \
+               + (self.patchLevelWeight * self.patchLevelGrade)
 
     def calculatePatchLevelGrade(self):
         self.patchLevelGrade = self.patchLevelCheck.getPatchLevelGrade()
@@ -54,10 +54,9 @@ class ReliabilityGradeCalculation:
         self.calculatePatchLevelGrade()
 
     def update(self):
-        status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items')[0]
-        status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items')[0]
-        self.calculateResponseErrorGrade(int(status200Values[1][1]) - int(status200Values[0][1]),
-                                         int(status500Values[1][1]) - int(status500Values[0][1]))
+        status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items')
+        status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items')
+        self.subGradeCalculation(status200Values, status500Values)
 
         logLevelErrorCount = self.logLevelCheck.getLogLevelCount()
         newLogLevelErrorCount = logLevelErrorCount - self.lastLogErrorCount
@@ -73,12 +72,9 @@ class ReliabilityGradeCalculation:
         print("LogLevelGrade: ", grade)
 
     def initialCalculation(self):
-        status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items_history')[0]
-        status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items_history')[0]
-        length = min(len(status200Values), len(status500Values)) - 1
-        for x in range(length):
-            self.calculateResponseErrorGrade(int(status200Values[x + 1][1]) - int(status200Values[x][1]),
-                                             int(status500Values[x + 1][1]) - int(status500Values[x][1]))
+        status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items_history')
+        status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items_history')
+        self.subGradeCalculation(status200Values, status500Values)
 
         logLevelErrorCount = self.logLevelCheck.getLogLevelCount()
         if logLevelErrorCount > 3000:
@@ -93,25 +89,28 @@ class ReliabilityGradeCalculation:
 
         self.calculatePatchLevelGrade()
 
-    def subGradeCalculation(self, values200, values500,):
-        if values == [0, 0]:
+    def subGradeCalculation(self, values200, values500, ):
+        if values200 == [0, 0] or values500 == [0, 0]:
             grade = -5
-            self.addNewGrade(grade, gradeArray)
-            print(gradeName, grade)
+            self.addNewGrade(grade, self.responseErrorsGrades)
+            print("Response Error grade: ", grade)
 
         else:
             length = 0
-            for value in values:
+            for value in values200:
                 if len(value) > length:
                     length = len(value)
 
             for x in range(length):
                 grade = 0
                 counter = 0
-                for y in range(len(values)):
-                    if x < len(values[y]):
-                        grade = grade + func(values[y][x])
+                for y in range(min(len(values200), len(values500))):
+                    if x < min(len(values200[y]), len(values500[y])) - 1:
+                        # noinspection PyTypeChecker
+                        grade = grade + self.calculateResponseErrorGrade(
+                            int(values200[y][x + 1][1]) - int(values200[y][x][1]),
+                            int(values500[y][x + 1][1]) - int(values500[y][x][1]))
                         counter = counter + 1
                 grade = grade / counter
-                self.addNewGrade(grade, gradeArray)
-                print(gradeName, grade)
+                self.addNewGrade(grade)
+                print("Response Error grade: ", grade)
