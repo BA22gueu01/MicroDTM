@@ -107,7 +107,16 @@ class ReliabilityGradeCalculation:
                 grade = 0
                 counter = 0
                 for y in range(min(len(values200), len(values500))):
-                    if x < min(len(values200[y]), len(values500[y])) - 1:
+                    if x < len(values200[y]) - 1:
+                        diff = len(values200[y]) - len(values500[y])
+                        if x - diff < -1:
+                            value500 = 0
+                        elif x - diff == -1:
+                            value500 = int(values500[y][0][1])
+                        else:
+                            value500 = int(values500[y][x + 1 - diff][1]) - int(values500[y][x - diff][1])
+                            print(values200[y][x][0])
+                            print(values500[y][x - diff][0])
                         # noinspection PyTypeChecker
                         grade = grade + self.calculateResponseErrorGrade(
                             int(values200[y][x + 1][1]) - int(values200[y][x][1]),
