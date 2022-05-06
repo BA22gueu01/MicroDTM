@@ -70,13 +70,6 @@ class PrometheusRequest:
         if len(data["result"]) == 0:
             result = [0, 0]
             return result
-        elif len(data["result"]) == 1:
-            print("len = 1")
-            for results in data["result"]:
-                if "values" in results:
-                    return results["values"]
-                else:
-                    return results["value"]
         else:
             for results in data["result"]:
                 if "values" in results:
