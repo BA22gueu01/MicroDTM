@@ -148,7 +148,7 @@ class PerformanceGradeCalculation:
             print("Memory Usage Grade: ", grade)
 
         diskReadUsageValues = self.prometheusRequest.makeRequest('disk_read_history')
-        self.subGradeCalculation(diskReadUsageValues, self.calculateDiskGrade(), self.diskReadGrades, "Disk Read Grade: ")
+        self.subGradeCalculation(diskReadUsageValues, self.calculateDiskGrade, self.diskReadGrades, "Disk Read Grade: ")
 
         diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write_history')
         for x in range(len(diskReadUsageValues[0])):
