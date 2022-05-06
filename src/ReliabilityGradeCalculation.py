@@ -111,5 +111,5 @@ class ReliabilityGradeCalculation:
                             int(values500[y][x + 1][1]) - int(values500[y][x][1]))
                         counter = counter + 1
                 grade = grade / counter
-                self.addNewGrade(grade)
+                self.addNewGrade(grade, self.responseErrorsGrades)
                 print("Response Error grade: ", grade)
