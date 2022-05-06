@@ -119,8 +119,7 @@ class ReliabilityGradeCalculation:
                             print(values500[y][x - diff][0])
                         # noinspection PyTypeChecker
                         grade = grade + self.calculateResponseErrorGrade(
-                            int(values200[y][x + 1][1]) - int(values200[y][x][1]),
-                            int(values500[y][x + 1][1]) - int(values500[y][x][1]))
+                            int(values200[y][x + 1][1]) - int(values200[y][x][1]), value500)
                         counter = counter + 1
                 grade = grade / counter
                 self.addNewGrade(grade, self.responseErrorsGrades)
