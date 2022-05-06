@@ -26,7 +26,6 @@ class PerformanceGradeCalculation:
     def calculateResponseTimeGrade(self, value):
         responseTime = value[1]
         responseTime = float(responseTime)
-        print(responseTime)
 
         if responseTime > 1:
             grade = -5
@@ -40,7 +39,6 @@ class PerformanceGradeCalculation:
     def calculateMemoryUsageGrade(self, value):
         memoryUsage = value[1]
         memoryUsage = float(memoryUsage) * 100
-        print(memoryUsage)
 
         if memoryUsage > 85:
             grade = -5
@@ -54,7 +52,6 @@ class PerformanceGradeCalculation:
         diskUsage = value[1]
         # seconds to ms
         diskUsage = float(diskUsage) * 1000
-        print(diskUsage)
 
         if diskUsage > 50:
             grade = -5

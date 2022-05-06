@@ -89,9 +89,7 @@ class ReliabilityGradeCalculation:
         self.calculatePatchLevelGrade()
 
     def subGradeCalculation(self, values200, values500, ):
-        print(values200)
-        print("\n")
-        print(values500)
+
         if values200 == [0, 0] or values500 == [0, 0]:
             grade = -5
             self.addNewGrade(grade, self.responseErrorsGrades)
@@ -115,8 +113,6 @@ class ReliabilityGradeCalculation:
                             value500 = int(values500[y][0][1])
                         else:
                             value500 = int(values500[y][x + 1 - diff][1]) - int(values500[y][x - diff][1])
-                            print(values200[y][x][0])
-                            print(values500[y][x - diff][0])
                         # noinspection PyTypeChecker
                         grade = grade + self.calculateResponseErrorGrade(
                             int(values200[y][x + 1][1]) - int(values200[y][x][1]), value500)
