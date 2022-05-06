@@ -28,7 +28,8 @@ class ApparmorCheck:
 
         try:
             output = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
-                                              containerName, "--", "cat", "/sys/module/apparmor/parameters/enabled"])
+                                              containerName, "--", "cat", "/sys/module/apparmor/parameters/enabled"],
+                                             stderr=subprocess.DEVNULL)
             output = output.decode()
 
         except Exception as e:

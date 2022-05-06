@@ -37,8 +37,7 @@ class PatchLevelCheck:
         try:
             # Get the os version of the pod
             version = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
-                                               containerName, "--", "cat", "/etc/os-release"],
-                                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                                               containerName, "--", "cat", "/etc/os-release"])
             version = version.decode()
 
             if 'ubuntu' in version.lower() or 'debian' in version.lower():
@@ -56,14 +55,12 @@ class PatchLevelCheck:
             try:
                 # Run the equivalent of apt-get update - fetch the latest list of available packages from the repositories
                 subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName,
-                                         "--", packageManager, "update"],
-                                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                                         "--", packageManager, "update"], stderr=subprocess.DEVNULL)
 
                 # Check number of pending updates. -s = No action; perform a simulation of events that would occur based
                 # on the current system state but do not actually change the system
                 pendingUpdates = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
-                                                          containerName, "--", packageManager, "-s", "upgrade"],
-                                                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                                                          containerName, "--", packageManager, "-s", "upgrade"], stderr=subprocess.DEVNULL)
                 pendingUpdates = pendingUpdates.decode()
 
                 if 'ubuntu' in version.lower() or 'debian' in version.lower():
@@ -83,7 +80,7 @@ class PatchLevelCheck:
                 # Check last time since the system was updated
                 lastUpdateFile = subprocess.check_output(
                     ["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName, "--", "ls", "-l",
-                     "/var/lib/" + packageManager[0:3] + "/"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                     "/var/lib/" + packageManager[0:3] + "/"], stderr=subprocess.DEVNULL)
                 lastUpdateFile = lastUpdateFile.decode()
 
                 if 'update-success-stamp' in lastUpdateFile.lower():
@@ -91,7 +88,7 @@ class PatchLevelCheck:
                     lastUpdate = subprocess.check_output(
                         ["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName, "--", "ls", "-l",
                          "/var/lib/" + packageManager[0:3] + "/periodic/update-success-stamp"],
-                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        stderr=subprocess.DEVNULL)
                     lastUpdate = lastUpdate.decode()
 
                     #for line in lastUpdate:
