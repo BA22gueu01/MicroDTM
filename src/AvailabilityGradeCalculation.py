@@ -44,7 +44,7 @@ class AvailabilityGradeCalculation:
         uptimeValues = self.prometheusRequest.makeRequest("uptime_history")
         self.subGradeCalculation(uptimeValues)
 
-    def subGradeCalculation(self, values, func):
+    def subGradeCalculation(self, values):
         if values == [0, 0]:
             grade = -5
             self.addNewGrade(grade)
