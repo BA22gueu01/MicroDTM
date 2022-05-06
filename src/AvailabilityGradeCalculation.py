@@ -53,7 +53,8 @@ class AvailabilityGradeCalculation:
             grade = 0
             counter = 0
             for value in uptimeValues:
-                grade = grade + self.calculateUptimeGrade(value[x + 1], value[x])
-                counter = counter + 1
+                if x + 1 < len(value):
+                    grade = grade + self.calculateUptimeGrade(value[x + 1], value[x])
+                    counter = counter + 1
             grade = grade / counter
             self.addNewGrade(grade)

@@ -75,7 +75,7 @@ class ReliabilityGradeCalculation:
     def initialCalculation(self):
         status200Values = self.prometheusRequest.makeRequest('counter_status_200_carts_customerId_items_history')
         status500Values = self.prometheusRequest.makeRequest('counter_status_500_carts_customerId_items_history')
-        length = len(status200Values) - 1
+        length = min(len(status200Values), len(status500Values)) - 1
         for x in range(length):
             self.calculateResponseErrorGrade(int(status200Values[x + 1][1]) - int(status200Values[x][1]),
                                              int(status500Values[x + 1][1]) - int(status500Values[x][1]))

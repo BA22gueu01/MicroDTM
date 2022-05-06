@@ -140,8 +140,9 @@ class PerformanceGradeCalculation:
             grade = 0
             counter = 0
             for y in range(len(memoryUsageValues)):
-                grade = grade + self.calculateMemoryUsageGrade(memoryUsageValues[y][x])
-                counter = counter + 1
+                if x < len(memoryUsageValues[y]):
+                    grade = grade + self.calculateMemoryUsageGrade(memoryUsageValues[y][x])
+                    counter = counter + 1
             grade = grade / counter
             self.addNewGrade(grade, self.memoryUsageGrades)
             print("Memory Usage Grade: ", grade)
@@ -151,8 +152,9 @@ class PerformanceGradeCalculation:
             grade = 0
             counter = 0
             for y in range(len(diskReadUsageValues)):
-                grade = grade + self.calculateDiskGrade(diskReadUsageValues[y][x])
-                counter = counter + 1
+                if x < len(memoryUsageValues[y]):
+                    grade = grade + self.calculateDiskGrade(diskReadUsageValues[y][x])
+                    counter = counter + 1
             grade = grade / counter
             self.addNewGrade(grade, self.diskReadGrades)
             print("Disk Read Grade: ", grade)
