@@ -41,8 +41,7 @@ class ReliabilityGradeCalculation:
         else:
             grade = -5
 
-        print("ResponseErrorGrade: ", grade)
-        self.addNewGrade(grade, self.responseErrorsGrades)
+        return grade
 
     def addNewGrade(self, newGrade, grades):
         length = len(grades) - 1
