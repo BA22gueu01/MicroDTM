@@ -123,7 +123,7 @@ class PerformanceGradeCalculation:
                 if len(value) > length:
                     length = len(value)
 
-            for x in range(length):
+            for x in range(length - 1):
                 grade = 0
                 counter = 0
                 for y in range(len(values)):
