@@ -66,7 +66,6 @@ class PrometheusRequest:
 
         # Check if Prometheus result is empty
         result = []
-        print(data["result"])
         if len(data["result"]) == 0:
             result = [0, 0]
             return result
