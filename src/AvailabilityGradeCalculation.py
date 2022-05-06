@@ -38,23 +38,29 @@ class AvailabilityGradeCalculation:
 
     def update(self):
         uptimeValues = self.prometheusRequest.makeRequest("uptime")
-        grade = 0
-        counter = 0
-        for value in uptimeValues:
-            grade = grade + self.calculateUptimeGrade(value[0], value[1])
-            counter = counter + 1
-        grade = grade/counter
-        self.addNewGrade(grade)
+        self.subGradeCalculation(uptimeValues)
 
     def initialCalculation(self):
         uptimeValues = self.prometheusRequest.makeRequest("uptime_history")
-        length = len(uptimeValues[0]) - 1
-        for x in range(length):
-            grade = 0
-            counter = 0
-            for value in uptimeValues:
-                if x + 1 < len(value):
-                    grade = grade + self.calculateUptimeGrade(value[x + 1], value[x])
-                    counter = counter + 1
-            grade = grade / counter
+        self.subGradeCalculation(uptimeValues)
+
+    def subGradeCalculation(self, values, func):
+        if values == [0, 0]:
+            grade = -5
             self.addNewGrade(grade)
+
+        else:
+            length = 0
+            for value in values:
+                if len(value) > length:
+                    length = len(value)
+
+            for x in range(length):
+                grade = 0
+                counter = 0
+                for y in range(len(values)):
+                    if x < len(values[y] - 1):
+                        grade = grade + self.calculateUptimeGrade(values[y][x + 1], values[y][x])
+                        counter = counter + 1
+                grade = grade / counter
+                self.addNewGrade(grade)
