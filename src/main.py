@@ -4,10 +4,19 @@ import ReliabilityGradeCalculation
 import PerformanceGradeCalculation
 import CorrectnessGradeCalculation
 import SecurityGradeCalculation
+import TrustscoreAPI
+import ParametersAPI
 import schedule
+import csv
+from datetime import datetime
+from flask import Flask
+from flask_restful import Api
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 SOCKSHOP = 'http://10.161.2.161:30001/'
+
+trustScore = []
+date = []
 
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
@@ -37,10 +46,29 @@ def trustCalculation():
     securityWeight = 0.2
     print("SecurityGrade: ", securityGrade)
 
-    trustScore = (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
-                  performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade)
+    trustScore.append(
+        (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
+         performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade))
 
-    print("Trustscore: ", trustScore)
+    date.append(datetime.now())
+
+    trustScoreDict = {
+        "timestamp": date,
+        "trustscore": trustScore
+    }
+
+    field_names = ['Timestamp', 'Trustscore']
+
+    with open('trustscore.csv', 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=field_names, delimiter=",")
+        writer.writeheader()
+        writer.writerows(trustScoreDict)
+
+    #print("Trustscore: ", trustScore)
+    with open('trustscore.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            print(', '.join(row))
 
 
 def initialCalculation():
@@ -68,8 +96,17 @@ def dailyUpdate():
     securityGradeCalculation.dailyUpdate()
 
 
+def flask():
+    app = Flask(__name__)
+    api = Api(app)
+    api.add_resource(TrustscoreAPI, '/trustscore')
+    #api.add_resource(ParametersAPI, '/parameters')
+    app.run()
+
+
 def main():
     print("Main Call!")
+
     initialCalculation()
     schedule.every().hour.do(update)
     schedule.every().day.do(dailyUpdate)
@@ -80,5 +117,5 @@ def main():
 
 
 if __name__ == "__main__":
+    flask()
     main()
-
