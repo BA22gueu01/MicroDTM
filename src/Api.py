@@ -25,8 +25,8 @@ def flask():
     api = Api(app)
     api.add_resource(TrustscoreAPI, '/trustscore')
     #api.add_resource(ParametersAPI, '/parameters')
-    app.run()
+    app.run(host="0.0.0.0")
 
 
 if __name__ == "__main__":
-    flask(host="0.0.0.0", port=5000)
+    flask()
