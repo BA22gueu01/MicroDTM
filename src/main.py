@@ -4,15 +4,10 @@ import ReliabilityGradeCalculation
 import PerformanceGradeCalculation
 import CorrectnessGradeCalculation
 import SecurityGradeCalculation
-#import TrustscoreAPI
-import ParametersAPI
-from flask_restful import Resource
-import pandas as pd
 import schedule
 import csv
 from datetime import datetime
-from flask import Flask
-from flask_restful import Api
+
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 SOCKSHOP = 'http://10.161.2.161:30001/'
@@ -98,22 +93,6 @@ def dailyUpdate():
     securityGradeCalculation.dailyUpdate()
 
 
-class TrustscoreAPI(Resource):
-    def get(self):
-        data = pd.read_csv('trustscore.csv')
-        data = data.to_dict()
-
-        return {'data': data}, 200
-
-
-def flask():
-    app = Flask(__name__)
-    api = Api(app)
-    api.add_resource(TrustscoreAPI, '/trustscore')
-    #api.add_resource(ParametersAPI, '/parameters')
-    app.run()
-
-
 def main():
     print("Main Call!")
 
@@ -127,5 +106,4 @@ def main():
 
 
 if __name__ == "__main__":
-    flask()
     main()
