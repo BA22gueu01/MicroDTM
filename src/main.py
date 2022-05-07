@@ -49,10 +49,10 @@ def trustCalculation():
 
     date.append(datetime.now())
 
-    trustScoreDict = {
-        "timestamp": date,
-        "trustscore": trustScore
-    }
+    trustScoreDict = [{
+        "Timestamp": date,
+        "Trustscore": trustScore
+    }]
 
     field_names = ['Timestamp', 'Trustscore']
 
