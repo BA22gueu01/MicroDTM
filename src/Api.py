@@ -29,4 +29,4 @@ def flask():
 
 
 if __name__ == "__main__":
-    flask()
+    flask(host="0.0.0.0", port=5000)

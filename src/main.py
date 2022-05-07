@@ -47,7 +47,7 @@ def trustCalculation():
         (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
          performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade))
 
-    date.append(datetime.now())
+    date.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
 
     trustScoreDict = [{
         "Timestamp": date,
