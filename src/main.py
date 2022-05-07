@@ -4,8 +4,10 @@ import ReliabilityGradeCalculation
 import PerformanceGradeCalculation
 import CorrectnessGradeCalculation
 import SecurityGradeCalculation
-import TrustscoreAPI
+#import TrustscoreAPI
 import ParametersAPI
+from flask_restful import Resource
+import pandas as pd
 import schedule
 import csv
 from datetime import datetime
@@ -94,6 +96,14 @@ def dailyUpdate():
     print("Daily Update")
     reliabilityGradeCalculation.dailyUpdate()
     securityGradeCalculation.dailyUpdate()
+
+
+class TrustscoreAPI(Resource):
+    def get(self):
+        data = pd.read_csv('trustscore.csv')
+        data = data.to_dict()
+
+        return {'data': data}, 200
 
 
 def flask():
