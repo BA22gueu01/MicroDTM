@@ -13,6 +13,7 @@ COPY --from=aquasec/trivy:latest /usr/local/bin/trivy /usr/local/bin/trivy
 
 RUN pip install -r requirements.txt
 
+RUN ["chmod", "+x", "/var/TrustCalculation/docker_entrypoint.sh"]
 #ENTRYPOINT [ "bash", "-c", "/var/TrustCalculation/docker_entrypoint.sh"]
 ENTRYPOINT [ "bash", "-c", "./docker_entrypoint.sh"]
 #ENTRYPOINT python -u /var/TrustCalculation/src/main.py
