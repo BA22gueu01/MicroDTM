@@ -19,7 +19,7 @@ class SecurityGradeCalculation:
         print("ApparmorGrade: ", self.apparmorGrade)
 
     def calculateCertificateGrade(self):
-        certificateCheck = CertificateCheck.CertificateCheck("jira.hoegger.com", "8443")
+        certificateCheck = CertificateCheck.CertificateCheck("ist.mit.edu", "443")
         self.certificateGrade = certificateCheck.checkCertificate()
         print("CertificateGrade: ", self.certificateGrade)
 
