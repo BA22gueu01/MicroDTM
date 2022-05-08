@@ -24,6 +24,7 @@ securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
 
 
 def trustCalculation():
+    """
     availabilityGrade = availabilityGradeCalculation.calculateGrade()
     availabilityWeight = 0.2
     print("AvailabilityGrade: ", availabilityGrade)
@@ -47,7 +48,8 @@ def trustCalculation():
     trustScore.append(
         (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
          performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade))
-
+    """
+    trustScore.append(-1.0)
     date.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     trustScoreDict = [{

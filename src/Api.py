@@ -1,5 +1,5 @@
 from flask_restful import Resource, Api
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 import pandas as pd
 import json
 
@@ -14,7 +14,7 @@ class TrustscoreAPI(Resource):
         #data = pd.read_json('trustscore.json')
 
         #return {"data": data}, 200
-        return {"data": jsonify(data)}, 200
+        return make_response(jsonify(data), 200)
 
 
 class ParametersAPI(Resource):
