@@ -54,7 +54,7 @@ def trustCalculation():
         "Trustscore": trustScore
     }]
 
-    field_names = ['Timestamp', 'Trustscore']
+    field_names = ["Timestamp", "Trustscore"]
 
     with open('trustscore.csv', 'w') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=field_names, delimiter=",")
@@ -63,9 +63,9 @@ def trustCalculation():
 
     #print("Trustscore: ", trustScore)
     with open('trustscore.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
+        csv_reader = csv.reader(csv_file, delimiter=",")
         for row in csv_reader:
-            print(', '.join(row))
+            print(", ".join(row))
 
 
 def initialCalculation():

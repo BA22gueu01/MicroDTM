@@ -8,7 +8,7 @@ class TrustscoreAPI(Resource):
         data = pd.read_csv('trustscore.csv')
         data = data.to_dict()
 
-        return {'data': data}, 200
+        return {"data": data}, 200
 
 
 class ParametersAPI(Resource):
@@ -17,7 +17,7 @@ class ParametersAPI(Resource):
         data = pd.read_csv('parameters.csv')
         data = data.to_dict()
 
-        return {'data': data}, 200
+        return {"data": data}, 200
 
 
 def flask():
