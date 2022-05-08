@@ -13,7 +13,7 @@ class TrustscoreAPI(Resource):
 
 class ParametersAPI(Resource):
     def get(self):
-        with open('parameters.json', 'r') as f:
+        with open('parameterscore.json', 'r') as f:
             data = json.loads(f.read())
 
         return make_response(jsonify(data), 200)
