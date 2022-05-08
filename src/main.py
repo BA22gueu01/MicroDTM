@@ -47,7 +47,7 @@ def trustCalculation():
         (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
          performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade))
 
-    date.append(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    date.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     trustScoreDict = [{
         "Timestamp": date,
@@ -60,12 +60,6 @@ def trustCalculation():
         writer = csv.DictWriter(csvfile, fieldnames=field_names, delimiter=",")
         writer.writeheader()
         writer.writerows(trustScoreDict)
-
-    #print("Trustscore: ", trustScore)
-    with open('trustscore.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        for row in csv_reader:
-            print(", ".join(row))
 
 
 def initialCalculation():
