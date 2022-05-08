@@ -5,7 +5,6 @@ import PerformanceGradeCalculation
 import CorrectnessGradeCalculation
 import SecurityGradeCalculation
 import schedule
-import csv
 import json
 from datetime import datetime
 
@@ -24,7 +23,6 @@ securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
 
 
 def trustCalculation():
-    """
     availabilityGrade = availabilityGradeCalculation.calculateGrade()
     availabilityWeight = 0.2
     print("AvailabilityGrade: ", availabilityGrade)
@@ -48,8 +46,7 @@ def trustCalculation():
     trustScore.append(
         (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
          performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade))
-    """
-    trustScore.append(-1.0)
+
     date.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     trustScoreDict = [{
@@ -57,25 +54,29 @@ def trustCalculation():
         "Trustscore": trustScore
     }]
 
-    field_names = ["Timestamp", "Trustscore"]
-
-    with open('trustscore.csv', 'w') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=field_names, delimiter=",")
-        writer.writeheader()
-        writer.writerows(trustScoreDict)
-
     with open('trustscore.json', 'w') as fp:
         fp.write(json.dumps(trustScoreDict))
 
+    parameterScoreDict = [{
+            "Timestamp": date,
+            "availabilityGrade": availabilityGrade,
+            "reliabilityGrade": reliabilityGrade,
+            "performanceGrade": performanceGrade,
+            "correctnessGrade": correctnessGrade,
+            "securityGrade": securityGrade
+        }]
+
+    with open('parameterscore.json', 'w') as fp:
+        fp.write(json.dumps(parameterScoreDict))
+
+
 def initialCalculation():
     print("Initial Calculation")
-    """
     availabilityGradeCalculation.initialCalculation()
     reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
     correctnessGradeCalculation.initialCalculation()
     securityGradeCalculation.initialCalculation()
-    """
     trustCalculation()
 
 
