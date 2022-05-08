@@ -1,15 +1,20 @@
 from flask_restful import Resource, Api
 from flask import Flask, jsonify
 import pandas as pd
+import json
 
 
 class TrustscoreAPI(Resource):
     def get(self):
         #data = pd.read_csv('trustscore.csv', delimiter=',')
         #data = data.to_json()
-        data = pd.read_json('trustscore.json')
+        with open('trustscore.json', 'r') as f:
+            data = json.loads(f.read())
 
-        return {"data": data}, 200
+        #data = pd.read_json('trustscore.json')
+
+        #return {"data": data}, 200
+        return {"data": jsonify(data)}, 200
 
 
 class ParametersAPI(Resource):
