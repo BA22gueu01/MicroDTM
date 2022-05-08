@@ -6,7 +6,7 @@ import pandas as pd
 class TrustscoreAPI(Resource):
     def get(self):
         data = pd.read_csv('trustscore.csv')
-        data = data.to_dict()
+        data = data.to_json()
 
         return {"data": data}, 200
 
@@ -15,7 +15,7 @@ class ParametersAPI(Resource):
 
     def get(self):
         data = pd.read_csv('parameters.csv')
-        data = data.to_dict()
+        data = data.to_json()
 
         return {"data": data}, 200
 
