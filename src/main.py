@@ -15,6 +15,12 @@ SOCKSHOP = 'http://10.161.2.161:30001/'
 trustScore = []
 date = []
 
+availabilityGradeList = []
+reliabilityGradeList = []
+performanceGradeList = []
+correctnessGradeList = []
+securityGradeList = []
+
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS)
@@ -57,13 +63,19 @@ def trustCalculation():
     with open('trustscore.json', 'w') as fp:
         fp.write(json.dumps(trustScoreDict))
 
+    availabilityGradeList.append(availabilityGrade)
+    reliabilityGradeList.append(reliabilityGrade)
+    performanceGradeList.append(performanceGrade)
+    correctnessGradeList.append(correctnessGrade)
+    securityGradeList.append(securityGrade)
+
     parameterScoreDict = [{
             "Timestamp": date,
-            "availabilityGrade": availabilityGrade,
-            "reliabilityGrade": reliabilityGrade,
-            "performanceGrade": performanceGrade,
-            "correctnessGrade": correctnessGrade,
-            "securityGrade": securityGrade
+            "availabilityGrade": availabilityGradeList,
+            "reliabilityGrade": reliabilityGradeList,
+            "performanceGrade": performanceGradeList,
+            "correctnessGrade": correctnessGradeList,
+            "securityGrade": securityGradeList
         }]
 
     with open('parameterscore.json', 'w') as fp:
