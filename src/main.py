@@ -62,7 +62,7 @@ def trustCalculation():
         writer.writeheader()
         writer.writerows(trustScoreDict)
 
-    with open('trustscore', 'w') as fp:
+    with open('trustscore.json', 'w') as fp:
         fp.write(json.dumps(trustScoreDict))
 
 def initialCalculation():
