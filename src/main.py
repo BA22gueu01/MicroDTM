@@ -6,6 +6,7 @@ import CorrectnessGradeCalculation
 import SecurityGradeCalculation
 import schedule
 import csv
+import json
 from datetime import datetime
 
 
@@ -61,6 +62,8 @@ def trustCalculation():
         writer.writeheader()
         writer.writerows(trustScoreDict)
 
+    with open('trustscore.json', 'w') as fp:
+        json.dump(trustScoreDict, fp)
 
 def initialCalculation():
     print("Initial Calculation")

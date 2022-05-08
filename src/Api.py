@@ -5,10 +5,11 @@ import pandas as pd
 
 class TrustscoreAPI(Resource):
     def get(self):
-        data = pd.read_csv('trustscore.csv', delimiter=',')
+        #data = pd.read_csv('trustscore.csv', delimiter=',')
         #data = data.to_json()
+        data = pd.read_json('trustscore.json')
 
-        return {"data": jsonify(data)}, 200
+        return {"data": data}, 200
 
 
 class ParametersAPI(Resource):
