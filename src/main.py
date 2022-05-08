@@ -69,11 +69,13 @@ def trustCalculation():
 
 def initialCalculation():
     print("Initial Calculation")
+    """
     availabilityGradeCalculation.initialCalculation()
     reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
     correctnessGradeCalculation.initialCalculation()
     securityGradeCalculation.initialCalculation()
+    """
     trustCalculation()
 
 
