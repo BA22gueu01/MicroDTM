@@ -19,7 +19,7 @@ class SecurityGradeCalculation:
         print("ApparmorGrade: ", self.apparmorGrade)
 
     def calculateCertificateGrade(self):
-        certificateCheck = CertificateCheck.CertificateCheck("office.ypsomed.com", "443")
+        certificateCheck = CertificateCheck.CertificateCheck("survey.ypsomed.com", "443")
         self.certificateGrade = certificateCheck.checkCertificate()
         print("CertificateGrade: ", self.certificateGrade)
 
