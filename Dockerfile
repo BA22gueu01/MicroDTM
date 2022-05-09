@@ -11,6 +11,21 @@ COPY --from=lachlanevenson/k8s-kubectl:v1.10.3 /usr/local/bin/kubectl /usr/local
 
 COPY --from=aquasec/trivy:latest /usr/local/bin/trivy /usr/local/bin/trivy
 
+# https://stackoverflow.com/questions/60382570/adding-lets-encrypt-certificates-to-debian9-docker-image
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      openssl \
+ && mkdir -p /usr/local/share/ca-certificates
+
+ADD https://letsencrypt.org/certs/isrgrootx1.pem.txt /usr/local/share/ca-certificates/isrgrootx1.pem
+ADD https://letsencrypt.org/certs/trustid-x3-root.pem.txt /usr/local/share/ca-certificates/trustid-x3-root.pem
+
+RUN cd /usr/local/share/ca-certificates \
+ && openssl x509 -in isrgrootx1.pem -inform PEM -out isrgrootx1.crt \
+ && openssl x509 -in trustid-x3-root.pem -inform PEM -out trustid-x3-root.crt \
+ && update-ca-certificates
+
 RUN pip install -r requirements.txt
 
 RUN ["chmod", "+x", "/var/TrustCalculation/docker_entrypoint.sh"]
