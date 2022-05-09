@@ -19,7 +19,9 @@ class SecurityGradeCalculation:
         print("ApparmorGrade: ", self.apparmorGrade)
 
     def calculateCertificateGrade(self):
+        print("here, 22")
         certificateCheck = CertificateCheck.CertificateCheck("zhaw.ch", "443")
+        print("here, 24")
         self.certificateGrade = certificateCheck.checkCertificate()
         print("CertificateGrade: ", self.certificateGrade)
 

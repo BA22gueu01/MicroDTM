@@ -16,8 +16,10 @@ from asn1crypto import pem
 
 class CertificateCheck:
     def __init__(self, hostname, port):
+        print("here, 19")
         self.hostname = hostname
         self.port = port
+        print("here, 22")
 
     def checkURLConnection(self, protocol):
         url = protocol + self.hostname + ":" + self.port
@@ -144,8 +146,10 @@ class CertificateCheck:
             return False
 
     def checkCertificate(self):
+        print("here, 149")
         hostname = self.hostname
         port = self.port
+        print("here, 152")
 
         print('Check certificate for: ' + hostname + ":" + port)
 

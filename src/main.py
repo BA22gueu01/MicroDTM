@@ -53,8 +53,6 @@ def trustCalculation():
         (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
          performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade))
 
-    trustScore.append(securityWeight * securityGrade)
-
     date.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     trustScoreDict = [{
@@ -90,7 +88,9 @@ def initialCalculation():
     reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
     correctnessGradeCalculation.initialCalculation()
+    print("here, 91")
     securityGradeCalculation.initialCalculation()
+    print("here, 93")
     trustCalculation()
 
 
