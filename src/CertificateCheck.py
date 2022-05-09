@@ -150,6 +150,8 @@ class CertificateCheck:
         print('Check certificate for: ' + hostname + ":" + port)
 
         context = ssl.create_default_context()
+        context.check_hostname = False
+        context.verify_mode = ssl.CERT_NONE
 
         # https://github.com/echovue/Operations/blob/master/PythonScripts/TLSValidator.py
         with socket.create_connection((hostname, port)) as sock:
