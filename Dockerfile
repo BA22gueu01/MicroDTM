@@ -18,11 +18,11 @@ RUN apt-get update \
       openssl \
  && mkdir -p /usr/local/share/ca-certificates
 
-# Root
+# install Let's Encrypt CA Root certificate
 ADD https://letsencrypt.org/certs/isrgrootx1.pem.txt /usr/local/share/ca-certificates/isrgrootx1.pem
 ADD https://letsencrypt.org/certs/trustid-x3-root.pem.txt /usr/local/share/ca-certificates/trustid-x3-root.pem
 
-# Intermediate
+# install Let's Encrypt CA Intermediate certificate
 ADD https://letsencrypt.org/certs/lets-encrypt-r3.pem /usr/local/share/ca-certificates/lets-encrypt-r3.pem
 
 RUN cd /usr/local/share/ca-certificates \
@@ -35,5 +35,5 @@ RUN pip install -r requirements.txt
 
 RUN ["chmod", "+x", "/var/TrustCalculation/docker_entrypoint.sh"]
 
-#ENTRYPOINT [ "bash", "-c", "./docker_entrypoint.sh"]
-ENTRYPOINT python -u /var/TrustCalculation/src/main.py
+ENTRYPOINT [ "bash", "-c", "./docker_entrypoint.sh"]
+#ENTRYPOINT python -u /var/TrustCalculation/src/main.py
