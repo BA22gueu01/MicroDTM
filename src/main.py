@@ -88,9 +88,7 @@ def initialCalculation():
     reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
     correctnessGradeCalculation.initialCalculation()
-    print("here, 91")
     securityGradeCalculation.initialCalculation()
-    print("here, 93")
     trustCalculation()
 
 

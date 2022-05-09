@@ -18,12 +18,17 @@ RUN apt-get update \
       openssl \
  && mkdir -p /usr/local/share/ca-certificates
 
+# Root
 ADD https://letsencrypt.org/certs/isrgrootx1.pem.txt /usr/local/share/ca-certificates/isrgrootx1.pem
 ADD https://letsencrypt.org/certs/trustid-x3-root.pem.txt /usr/local/share/ca-certificates/trustid-x3-root.pem
+
+# Intermediate
+ADD https://letsencrypt.org/certs/lets-encrypt-r3.pem /usr/local/share/ca-certificates/lets-encrypt-r3.pem
 
 RUN cd /usr/local/share/ca-certificates \
  && openssl x509 -in isrgrootx1.pem -inform PEM -out isrgrootx1.crt \
  && openssl x509 -in trustid-x3-root.pem -inform PEM -out trustid-x3-root.crt \
+ && openssl x509 -in lets-encrypt-r3.pem -inform PEM -out lets-encrypt-r3.crt \
  && update-ca-certificates
 
 RUN pip install -r requirements.txt
