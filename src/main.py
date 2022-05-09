@@ -29,7 +29,6 @@ securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
 
 
 def trustCalculation():
-    """
     availabilityGrade = availabilityGradeCalculation.calculateGrade()
     availabilityWeight = 0.2
     print("AvailabilityGrade: ", availabilityGrade)
@@ -45,16 +44,15 @@ def trustCalculation():
     correctnessGrade = correctnessGradeCalculation.calculateGrade()
     correctnessWeight = 0.2
     print("CorrectnessGrade: ", correctnessGrade)
-    """
 
     securityGrade = securityGradeCalculation.calculateGrade()
     securityWeight = 0.2
     print("SecurityGrade: ", securityGrade)
-    """
+
     trustScore.append(
         (availabilityWeight * availabilityGrade + reliabilityWeight * reliabilityGrade + performanceWeight *
          performanceGrade + correctnessWeight * correctnessGrade + securityWeight * securityGrade))
-    """
+
     trustScore.append(securityWeight * securityGrade)
 
     date.append(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -67,18 +65,18 @@ def trustCalculation():
     with open('trustscore.json', 'w') as fp:
         fp.write(json.dumps(trustScoreDict))
 
-    """availabilityGradeList.append(availabilityGrade)
+    availabilityGradeList.append(availabilityGrade)
     reliabilityGradeList.append(reliabilityGrade)
     performanceGradeList.append(performanceGrade)
-    correctnessGradeList.append(correctnessGrade)"""
+    correctnessGradeList.append(correctnessGrade)
     securityGradeList.append(securityGrade)
 
     parameterScoreDict = [{
             "Timestamp": date,
-            """"availabilityGrade": availabilityGradeList,
+            "availabilityGrade": availabilityGradeList,
             "reliabilityGrade": reliabilityGradeList,
             "performanceGrade": performanceGradeList,
-            "correctnessGrade": correctnessGradeList,"""
+            "correctnessGrade": correctnessGradeList,
             "securityGrade": securityGradeList
         }]
 
@@ -88,10 +86,10 @@ def trustCalculation():
 
 def initialCalculation():
     print("Initial Calculation")
-    """availabilityGradeCalculation.initialCalculation()
+    availabilityGradeCalculation.initialCalculation()
     reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
-    correctnessGradeCalculation.initialCalculation()"""
+    correctnessGradeCalculation.initialCalculation()
     securityGradeCalculation.initialCalculation()
     trustCalculation()
 
