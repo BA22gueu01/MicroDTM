@@ -32,7 +32,7 @@ def flask():
     api = Api(app)
     api.add_resource(TrustscoreAPI, '/trustscore')
     api.add_resource(ParametersAPI, '/parameters')
-    api.add_resource(ParametersAPI, '/subparameters')
+    api.add_resource(SubParametersAPI, '/subparameters')
     app.run(host="0.0.0.0")
 
 
