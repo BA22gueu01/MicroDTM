@@ -22,7 +22,12 @@ class ApparmorCheck:
             grade = grade + podGrade/countContainers
             countPods = countPods + 1
 
-        return grade/countPods
+        if countPods == 0:
+            print("ERROR: No Pods found ", pods)
+            return 0
+
+        else:
+            return grade/countPods
 
     def checkApparmor(self, podName, containerName):
 

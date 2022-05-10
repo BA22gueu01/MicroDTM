@@ -113,7 +113,7 @@ class PerformanceGradeCalculation:
 
     def subGradeCalculation(self, values, func, gradeArray, gradeName):
         if values == [0, 0]:
-            grade = -5
+            grade = 0
             self.addNewGrade(grade, gradeArray)
             print(gradeName, grade)
 

@@ -46,7 +46,7 @@ class AvailabilityGradeCalculation:
 
     def subGradeCalculation(self, values):
         if values == [0, 0]:
-            grade = -5
+            grade = 0
             self.addNewGrade(grade)
 
         else:

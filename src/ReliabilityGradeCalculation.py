@@ -91,7 +91,7 @@ class ReliabilityGradeCalculation:
     def subGradeCalculation(self, values200, values500, ):
 
         if values200 == [0, 0] or values500 == [0, 0]:
-            grade = -5
+            grade = 0
             self.addNewGrade(grade, self.responseErrorsGrades)
             print("Response Error grade: ", grade)
 
