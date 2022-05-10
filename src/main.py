@@ -21,6 +21,19 @@ performanceGradeList = []
 correctnessGradeList = []
 securityGradeList = []
 
+uptimeGradeList = []
+responseErrorsGradeList = []
+logLevelGradeList = []
+patchLevelGradeList = []
+responseTimeGradeList = []
+memoryUsageGradeList = []
+diskReadGradeList = []
+diskWriteGradeList = []
+cpuUsageGradeList = []
+callCorrectnessGradeList = []
+appArmorGradeList = []
+certificateGradeList = []
+
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS)
@@ -81,14 +94,33 @@ def trustCalculation():
     with open('parameterscore.json', 'w') as fp:
         fp.write(json.dumps(parameterScoreDict))
 
+    uptimeGradeList.append(availabilityGradeCalculation.getUptimeGrade())
+    responseErrorsGradeList.append(reliabilityGradeCalculation.getResponseErrorGrade())
+    logLevelGradeList.append(reliabilityGradeCalculation.getLogLevelGrade())
+    patchLevelGradeList.append(reliabilityGradeCalculation.getPatchLevelGrade())
+    responseTimeGradeList.append(performanceGradeCalculation.getResponseTimeGrade())
+    memoryUsageGradeList.append(performanceGradeCalculation.getMemoryUsageGrade())
+    diskReadGradeList.append(performanceGradeCalculation.getDiskReadGrade())
+    diskWriteGradeList.append(performanceGradeCalculation.getDiskWriteGrade())
+    cpuUsageGradeList.append(performanceGradeCalculation.getCpuUsageGrade())
+    callCorrectnessGradeList.append(correctnessGradeCalculation.getCallCorrectnessGrade())
+    appArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
+    certificateGradeList.append(securityGradeCalculation.getCertificateGrade())
 
     subParameterScoreDict = [{
             "Timestamp": date,
-            "availabilityGrade": availabilityGradeList,
-            "reliabilityGrade": reliabilityGradeList,
-            "performanceGrade": performanceGradeList,
-            "correctnessGrade": correctnessGradeList,
-            "securityGrade": securityGradeList
+            "uptimeGrade": uptimeGradeList,
+            "responseErrorGrade": responseErrorsGradeList,
+            "LogLevelGrade": logLevelGradeList,
+            "PatchLevelGrade": patchLevelGradeList,
+            "ResponseTimeGrade": responseTimeGradeList,
+            "MemoryUsageGrade": memoryUsageGradeList,
+            "DiskReadGrade": diskReadGradeList,
+            "DiskWriteGrade": diskWriteGradeList,
+            "cpuUsageGrade": cpuUsageGradeList,
+            "callCorrectnessGrade": callCorrectnessGradeList,
+            "AppArmorGrade": appArmorGradeList,
+            "CertificateGrade": certificateGradeList
         }]
 
     with open('subparameterscore.json', 'w') as fp:

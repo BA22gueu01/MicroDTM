@@ -24,6 +24,15 @@ class ReliabilityGradeCalculation:
                + (self.logLevelWeight * numpy.average(self.logLevelGrades)) \
                + (self.patchLevelWeight * self.patchLevelGrade)
 
+    def getResponseErrorGrade(self):
+        return numpy.average(self.responseErrorsGrades)
+
+    def getLogLevelGrade(self):
+        return numpy.average(self.logLevelGrades)
+
+    def getPatchLevelGrade(self):
+        return self.patchLevelGrade
+
     def calculatePatchLevelGrade(self):
         self.patchLevelGrade = self.patchLevelCheck.getPatchLevelGrade()
         print("PatchLevelGrade: ", self.patchLevelGrade)

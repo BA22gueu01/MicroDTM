@@ -16,6 +16,9 @@ class CorrectnessGradeCalculation:
     def calculateGrade(self):
         return self.callCorrectnessWeight * numpy.average(self.callCorrectnessGrades)
 
+    def getCallCorrectnessGrade(self):
+        return numpy.average(self.callCorrectnessGrades)
+
     def calculateCallCorrectnessGrade(self):
         self.addNewGrade(self.calculateCatalogueCorrectness())
 

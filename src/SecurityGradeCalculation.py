@@ -13,6 +13,12 @@ class SecurityGradeCalculation:
     def calculateGrade(self):
         return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade
 
+    def getAppArmorGrade(self):
+        return self.apparmorGrade
+
+    def getCertificateGrade(self):
+        return self.certificateGrade
+
     def calculateApparmorGrade(self):
         apparmorCheck = ApparmorCheck.ApparmorCheck()
         self.apparmorGrade = apparmorCheck.getApparmorGrade()
