@@ -82,6 +82,19 @@ def trustCalculation():
         fp.write(json.dumps(parameterScoreDict))
 
 
+    subParameterScoreDict = [{
+            "Timestamp": date,
+            "availabilityGrade": availabilityGradeList,
+            "reliabilityGrade": reliabilityGradeList,
+            "performanceGrade": performanceGradeList,
+            "correctnessGrade": correctnessGradeList,
+            "securityGrade": securityGradeList
+        }]
+
+    with open('subparameterscore.json', 'w') as fp:
+        fp.write(json.dumps(subParameterScoreDict))
+
+
 def initialCalculation():
     print("Initial Calculation")
     availabilityGradeCalculation.initialCalculation()
