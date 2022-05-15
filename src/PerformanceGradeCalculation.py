@@ -76,14 +76,18 @@ class PerformanceGradeCalculation:
         return grade
 
     def calculateCpuUsageGrade(self, cpuUsage):
-        cpuUsage = float(cpuUsage) * 100
-
-        if cpuUsage > 90:
-            grade = -5
-        elif cpuUsage > 75:
+        if cpuUsage == [0, 0]:
             grade = 0
+
         else:
-            grade = 5
+            cpuUsage = float(cpuUsage[0][1]) * 100
+
+            if cpuUsage > 90:
+                grade = -5
+            elif cpuUsage > 75:
+                grade = 0
+            else:
+                grade = 5
         print("CPU UsageGrade: ", grade)
         self.addNewGrade(grade, self.cpuUsageGrades)
 
@@ -106,8 +110,8 @@ class PerformanceGradeCalculation:
         diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write')
         self.subGradeCalculation(diskWriteUsageValues, self.calculateDiskGrade, self.diskWriteGrades, "Disk Write Grade: ")
 
-        cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota')[0]
-        self.calculateCpuUsageGrade(cpuUsageValues[1])
+        cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota')
+        self.calculateCpuUsageGrade(cpuUsageValues)
 
     def initialCalculation(self):
         responseTimeValues = self.prometheusRequest.makeRequest('response_time_history')
@@ -122,8 +126,8 @@ class PerformanceGradeCalculation:
         diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write_history')
         self.subGradeCalculation(diskWriteUsageValues, self.calculateDiskGrade, self.diskWriteGrades, "Disk Write Grade: ")
 
-        cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota_history')[0]
-        self.calculateCpuUsageGrade(cpuUsageValues[1])
+        cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota_history')
+        self.calculateCpuUsageGrade(cpuUsageValues)
 
     def subGradeCalculation(self, values, func, gradeArray, gradeName):
         if values == [0, 0]:
