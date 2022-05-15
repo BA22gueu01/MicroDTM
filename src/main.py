@@ -139,17 +139,37 @@ def initialCalculation():
 
 def update():
     print("Update")
-    availabilityGradeCalculation.update()
-    reliabilityGradeCalculation.update()
-    performanceGradeCalculation.update()
-    correctnessGradeCalculation.update()
+    try:
+        availabilityGradeCalculation.update()
+    except Exception as e:
+        print(e)
+    try:
+        reliabilityGradeCalculation.update()
+    except Exception as e:
+        print(e)
+    try:
+        performanceGradeCalculation.update()
+    except Exception as e:
+        print(e)
+    try:
+        correctnessGradeCalculation.update()
+    except Exception as e:
+        print(e)
+
     trustCalculation()
 
 
 def dailyUpdate():
     print("Daily Update")
-    reliabilityGradeCalculation.dailyUpdate()
-    securityGradeCalculation.dailyUpdate()
+    try:
+        reliabilityGradeCalculation.dailyUpdate()
+    except Exception as e:
+        print(e)
+
+    try:
+        securityGradeCalculation.dailyUpdate()
+    except Exception as e:
+        print(e)
 
 
 def main():
