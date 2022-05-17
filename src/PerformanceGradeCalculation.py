@@ -1,21 +1,20 @@
 import PrometheusRequest
 import numpy
-from main import HISTORIC_DATA
 
 
 class PerformanceGradeCalculation:
 
-    def __init__(self, prometheus):
-        self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
-        self.responseTimeGrades = numpy.zeros(HISTORIC_DATA)
+    def __init__(self, prometheus, updateInterval, historicData):
+        self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus, updateInterval, historicData)
+        self.responseTimeGrades = numpy.zeros(historicData)
         self.responseTimeWeight = 0.4
-        self.memoryUsageGrades = numpy.zeros(HISTORIC_DATA)
+        self.memoryUsageGrades = numpy.zeros(historicData)
         self.memoryUsageWeight = 0.2
-        self.diskReadGrades = numpy.zeros(HISTORIC_DATA)
+        self.diskReadGrades = numpy.zeros(historicData)
         self.diskReadWeight = 0.1
-        self.diskWriteGrades = numpy.zeros(HISTORIC_DATA)
+        self.diskWriteGrades = numpy.zeros(historicData)
         self.diskWriteWeight = 0.1
-        self.cpuUsageGrades = numpy.zeros(HISTORIC_DATA)
+        self.cpuUsageGrades = numpy.zeros(historicData)
         self.cpuUsageWeight = 0.2
 
     def calculateGrade(self):

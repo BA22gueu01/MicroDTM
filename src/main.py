@@ -36,10 +36,10 @@ callCorrectnessGradeList = []
 appArmorGradeList = []
 certificateGradeList = []
 
-availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS)
-reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS)
-performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS)
-correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation(SOCKSHOP)
+availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
+reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
+performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
+correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation(SOCKSHOP, UPDATE_INTERVAL, HISTORIC_DATA)
 securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
 
 

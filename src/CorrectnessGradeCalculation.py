@@ -2,13 +2,12 @@ import APIRequest
 import DBRequest
 import GetPods
 import numpy
-from main import HISTORIC_DATA
 
 
 class CorrectnessGradeCalculation:
 
-    def __init__(self, sockshop):
-        self.callCorrectnessGrades = numpy.zeros(HISTORIC_DATA)
+    def __init__(self, sockshop, updateInterval, historicData):
+        self.callCorrectnessGrades = numpy.zeros(historicData)
         self.callCorrectnessWeight = 1
         self.apiRequest = APIRequest.APIRequest(sockshop)
         self.dbRequest = DBRequest.DBRequest()

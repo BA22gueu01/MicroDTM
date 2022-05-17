@@ -1,14 +1,12 @@
 import requests
 
-from main import UPDATE_INTERVAL, HISTORIC_DATA
-
 
 class PrometheusRequest:
 
-    def __init__(self, Prometheus):
+    def __init__(self, Prometheus, updateInterval, historicData):
         self.PROMETHEUS = Prometheus
-        self.update_interval = UPDATE_INTERVAL
-        self.historic_interval = (HISTORIC_DATA + 1) * self.update_interval
+        self.update_interval = updateInterval
+        self.historic_interval = (historicData + 1) * self.update_interval
         self.query_interval = 2 * self.update_interval
 
     def makeRequest(self, requestParam):
