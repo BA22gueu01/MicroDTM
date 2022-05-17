@@ -2,6 +2,7 @@ import LogLevelCheck
 import PatchLevelCheck
 import PrometheusRequest
 import numpy
+from src.main import HISTORIC_DATA
 
 
 class ReliabilityGradeCalculation:
@@ -10,9 +11,9 @@ class ReliabilityGradeCalculation:
         self.logLevelCheck = LogLevelCheck.LogLevelCheck()
         self.patchLevelCheck = PatchLevelCheck.PatchLevelCheck()
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
-        self.responseErrorsGrades = numpy.zeros(24)
+        self.responseErrorsGrades = numpy.zeros(HISTORIC_DATA)
         self.responseErrorsWeight = 0.4
-        self.logLevelGrades = numpy.zeros(24)
+        self.logLevelGrades = numpy.zeros(HISTORIC_DATA)
         self.logLevelWeight = 0.2
         self.patchLevelGrade = 0
         self.patchLevelWeight = 0.4

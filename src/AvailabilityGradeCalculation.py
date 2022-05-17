@@ -1,5 +1,6 @@
 import PrometheusRequest
 import numpy
+from src.main import HISTORIC_DATA
 
 
 class AvailabilityGradeCalculation:
@@ -7,7 +8,7 @@ class AvailabilityGradeCalculation:
     def __init__(self, prometheus):
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus)
         self.uptimeWeight = 1
-        self.uptimeGrades = numpy.zeros(24)
+        self.uptimeGrades = numpy.zeros(HISTORIC_DATA)
 
     def calculateGrade(self):
         return self.uptimeWeight * numpy.average(self.uptimeGrades)

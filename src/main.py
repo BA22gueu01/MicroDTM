@@ -11,6 +11,8 @@ from datetime import datetime
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 SOCKSHOP = 'http://10.161.2.161:30001/'
+UPDATE_INTERVAL = 60
+HISTORIC_DATA = 24
 
 trustScore = []
 date = []
@@ -176,8 +178,8 @@ def main():
     print("Main Call!")
 
     initialCalculation()
-    schedule.every().hour.do(update)
-    schedule.every().day.do(dailyUpdate)
+    schedule.every(UPDATE_INTERVAL).minutes.do(update)
+    schedule.every(HISTORIC_DATA * UPDATE_INTERVAL).minutes.do(dailyUpdate)
 
     while True:
         schedule.run_pending()
