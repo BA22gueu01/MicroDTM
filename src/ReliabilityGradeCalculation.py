@@ -2,7 +2,7 @@ import LogLevelCheck
 import PatchLevelCheck
 import PrometheusRequest
 import numpy
-from src.main import HISTORIC_DATA
+from main import HISTORIC_DATA
 
 
 class ReliabilityGradeCalculation:

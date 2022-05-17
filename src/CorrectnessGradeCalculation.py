@@ -2,7 +2,7 @@ import APIRequest
 import DBRequest
 import GetPods
 import numpy
-from src.main import HISTORIC_DATA
+from main import HISTORIC_DATA
 
 
 class CorrectnessGradeCalculation:

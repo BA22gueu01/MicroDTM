@@ -1,6 +1,6 @@
 import requests
 
-from src.main import UPDATE_INTERVAL, HISTORIC_DATA
+from main import UPDATE_INTERVAL, HISTORIC_DATA
 
 
 class PrometheusRequest:
