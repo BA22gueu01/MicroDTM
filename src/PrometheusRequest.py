@@ -6,8 +6,8 @@ class PrometheusRequest:
     def __init__(self, Prometheus, updateInterval, historicData):
         self.PROMETHEUS = Prometheus
         self.update_interval = updateInterval
-        self.historic_interval = (historicData + 1) * str(self.update_interval)
-        self.query_interval = 2 * str(self.update_interval)
+        self.historic_interval = (historicData + 1) * self.update_interval
+        self.query_interval = 2 * self.update_interval
 
     def makeRequest(self, requestParam):
 
@@ -15,9 +15,7 @@ class PrometheusRequest:
             prometheusResponse = requests.get(self.PROMETHEUS + '/api/v1/query?query=uptime{container!~"istio-proxy", kubernetes_namespace="sock-shop"}[' + self.query_interval + 'm:' + str(self.update_interval) + 'm]')
         elif requestParam == "uptime_history":
             request = '/api/v1/query?query=uptime{container!~"istio-proxy", kubernetes_namespace="sock-shop"}[' + str(self.historic_interval) + 'm:' + str(self.update_interval) + 'm]'
-            print(request)
             prometheusResponse = requests.get(self.PROMETHEUS + request)
-            print(prometheusResponse)
 
         elif requestParam == "container_spec_cpu_quota":
             # https://github.com/google/cadvisor/issues/2026
