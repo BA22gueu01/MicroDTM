@@ -19,11 +19,11 @@ RUN apt-get update \
  && mkdir -p /usr/local/share/ca-certificates
 
 # install Let's Encrypt CA Root certificate
-# ADD https://letsencrypt.org/certs/isrgrootx1.pem.txt /usr/local/share/ca-certificates/isrgrootx1.pem
-# ADD https://letsencrypt.org/certs/trustid-x3-root.pem.txt /usr/local/share/ca-certificates/trustid-x3-root.pem
+ADD https://letsencrypt.org/certs/isrgrootx1.pem.txt /usr/local/share/ca-certificates/isrgrootx1.pem
+ADD https://letsencrypt.org/certs/trustid-x3-root.pem.txt /usr/local/share/ca-certificates/trustid-x3-root.pem
 
 # install Let's Encrypt CA Intermediate certificate
-# ADD https://letsencrypt.org/certs/lets-encrypt-r3.pem /usr/local/share/ca-certificates/lets-encrypt-r3.pem
+ADD https://letsencrypt.org/certs/lets-encrypt-r3.pem /usr/local/share/ca-certificates/lets-encrypt-r3.pem
 
 # RUN cd /usr/local/share/ca-certificates \
 # && openssl x509 -in isrgrootx1.pem -inform PEM -out isrgrootx1.crt \
