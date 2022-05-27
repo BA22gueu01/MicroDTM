@@ -38,6 +38,21 @@ class PerformanceGradeCalculation:
     def getCpuUsageGrade(self):
         return numpy.average(self.cpuUsageGrades)
 
+    def getSingleResponseTimeGrade(self):
+        return self.responseTimeGrades[0]
+
+    def getSingleMemoryUsageGrade(self):
+        return self.memoryUsageGrades[0]
+
+    def getSingleDiskReadGrade(self):
+        return self.diskReadGrades[0]
+
+    def getSingleDiskWriteGrade(self):
+        return self.diskWriteGrades[0]
+
+    def getSingleCpuUsageGrade(self):
+        return self.cpuUsageGrades[0]
+
     def calculateResponseTimeGrade(self, value):
         responseTime = value[1]
         responseTime = float(responseTime)

@@ -36,6 +36,19 @@ callCorrectnessGradeList = []
 appArmorGradeList = []
 certificateGradeList = []
 
+singleUptimeGradeList = []
+singleResponseErrorsGradeList = []
+singleLogLevelGradeList = []
+singlePatchLevelGradeList = []
+singleResponseTimeGradeList = []
+singleMemoryUsageGradeList = []
+singleDiskReadGradeList = []
+singleDiskWriteGradeList = []
+singleCpuUsageGradeList = []
+singleCallCorrectnessGradeList = []
+singleAppArmorGradeList = []
+singleCertificateGradeList = []
+
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
@@ -127,6 +140,38 @@ def trustCalculation():
 
     with open('subparameterscore.json', 'w') as fp:
         fp.write(json.dumps(subParameterScoreDict))
+
+    singleUptimeGradeList.append(availabilityGradeCalculation.getSingleUptimeGrade())
+    singleResponseErrorsGradeList.append(reliabilityGradeCalculation.getSingleResponseErrorGrade())
+    singleLogLevelGradeList.append(reliabilityGradeCalculation.getSingleLogLevelGrade())
+    singlePatchLevelGradeList.append(reliabilityGradeCalculation.getPatchLevelGrade())
+    singleResponseTimeGradeList.append(performanceGradeCalculation.getSingleResponseTimeGrade())
+    singleMemoryUsageGradeList.append(performanceGradeCalculation.getSingleMemoryUsageGrade())
+    singleDiskReadGradeList.append(performanceGradeCalculation.getSingleDiskReadGrade())
+    singleDiskWriteGradeList.append(performanceGradeCalculation.getSingleDiskWriteGrade())
+    singleCpuUsageGradeList.append(performanceGradeCalculation.getSingleCpuUsageGrade())
+    singleCallCorrectnessGradeList.append(correctnessGradeCalculation.getSingleCallCorrectnessGrade())
+    singleAppArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
+    singleCertificateGradeList.append(securityGradeCalculation.getCertificateGrade())
+
+    singleSubParameterScoreDict = [{
+            "Timestamp": date,
+            "uptimeGrade": singleUptimeGradeList,
+            "responseErrorGrade": singleResponseErrorsGradeList,
+            "LogLevelGrade": singleLogLevelGradeList,
+            "PatchLevelGrade": singlePatchLevelGradeList,
+            "ResponseTimeGrade": singleResponseTimeGradeList,
+            "MemoryUsageGrade": singleMemoryUsageGradeList,
+            "DiskReadGrade": singleDiskReadGradeList,
+            "DiskWriteGrade": singleDiskWriteGradeList,
+            "cpuUsageGrade": singleCpuUsageGradeList,
+            "callCorrectnessGrade": singleCallCorrectnessGradeList,
+            "AppArmorGrade": singleAppArmorGradeList,
+            "CertificateGrade": singleCertificateGradeList
+        }]
+
+    with open('singlesubparameterscore.json', 'w') as fp:
+        fp.write(json.dumps(singleSubParameterScoreDict))
 
 
 def initialCalculation():
