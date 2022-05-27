@@ -31,10 +31,10 @@ class ReliabilityGradeCalculation:
         return numpy.average(self.logLevelGrades)
 
     def getSingleResponseErrorGrade(self):
-        return self.responseErrorsGrades[0]
+        return self.responseErrorsGrades[len(self.responseErrorsGrades) - 1]
 
     def getSingleLogLevelGrade(self):
-        return self.logLevelGrades[0]
+        return self.logLevelGrades[len(self.logLevelGrades) - 1]
 
     def getPatchLevelGrade(self):
         return self.patchLevelGrade
