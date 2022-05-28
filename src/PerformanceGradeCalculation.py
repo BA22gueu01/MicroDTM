@@ -162,8 +162,13 @@ class PerformanceGradeCalculation:
                 counter = 0
                 for y in range(len(values)):
                     if x < len(values[y]):
-                        grade = grade + func(values[y][x])
+                        newGrade = func(values[y][x])
+                        grade = grade + newGrade
                         counter = counter + 1
+                        if newGrade < 0:
+                            grade = grade + newGrade
+                            counter = counter + 1
+
                 grade = grade / counter
                 self.addNewGrade(grade, gradeArray)
                 print(gradeName, grade)
