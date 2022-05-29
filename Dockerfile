@@ -33,6 +33,8 @@ RUN cd /usr/local/share/ca-certificates \
 
 RUN pip install -r requirements.txt
 
+RUN trivy image --download-db-only
+
 RUN ["chmod", "+x", "/var/TrustCalculation/docker_entrypoint.sh"]
 
 ENTRYPOINT [ "bash", "-c", "./docker_entrypoint.sh"]
