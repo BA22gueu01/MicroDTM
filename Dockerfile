@@ -42,7 +42,7 @@ RUN wget https://github.com/sullo/nikto/archive/master.zip -P /var/TrustCalculat
 # Install ssllabs
 RUN cd /var/TrustCalculation/ \
 && git clone https://github.com/ssllabs/ssllabs-scan.git \
-&& cd /var/TrustCalculation/ssllabs-scan/
+&& cd /var/TrustCalculation/ssllabs-scan/ \
 && go build ssllabs-scan-v3.go
 
 RUN pip install -r requirements.txt
