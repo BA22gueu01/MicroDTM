@@ -18,6 +18,7 @@ RUN apt-get update \
       openssl \
       wget \
       unzip \
+      golang-go \
  && mkdir -p /usr/local/share/ca-certificates
 
 # install Let's Encrypt CA Root certificate
@@ -39,10 +40,10 @@ RUN wget https://github.com/sullo/nikto/archive/master.zip -P /var/TrustCalculat
 && unzip master.zip
 
 # Install ssllabs
-RUN git clone https://github.com/ssllabs/ssllabs-scan.git
-WORKDIR /var/TrustCalculation/ssllabs-scan/
-RUN make build
-RUN ["chmod", "+x", "/var/TrustCalculation/ssllabs-scan/ssllabs-scan-v3"]
+RUN cd /var/TrustCalculation/ \
+&& git clone https://github.com/ssllabs/ssllabs-scan.git \
+&& cd /var/TrustCalculation/ssllabs-scan/
+&& go build ssllabs-scan-v3.go
 
 RUN pip install -r requirements.txt
 
