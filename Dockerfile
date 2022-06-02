@@ -31,6 +31,13 @@ RUN cd /usr/local/share/ca-certificates \
 && openssl x509 -in lets-encrypt-r3.pem -inform PEM -out lets-encrypt-r3.crt \
 && update-ca-certificates
 
+# Install Nikto
+RUN wget https://github.com/sullo/nikto/archive/master.zip .
+
+# Install ssllabs
+RUN git clone https://github.com/ssllabs/ssllabs-scan.git
+RUN ["chmod", "+x", "/var/TrustCalculation/ssllabs-scan/ssllabs-*"]
+
 RUN pip install -r requirements.txt
 
 RUN ["chmod", "+x", "/var/TrustCalculation/docker_entrypoint.sh"]
