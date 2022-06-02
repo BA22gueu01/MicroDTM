@@ -18,6 +18,7 @@ RUN apt-get update \
       openssl \
       wget \
       unzip \
+      make \
  && mkdir -p /usr/local/share/ca-certificates
 
 # install Let's Encrypt CA Root certificate
@@ -35,11 +36,13 @@ RUN cd /usr/local/share/ca-certificates \
 
 # Install Nikto
 RUN wget https://github.com/sullo/nikto/archive/master.zip -P /var/TrustCalculation/nikto \
-&& cd /var/TrustCalculation/nikto #\
-#&& unzip master.zip
+&& cd /var/TrustCalculation/nikto \
+&& unzip master.zip
 
 # Install ssllabs
 RUN git clone https://github.com/ssllabs/ssllabs-scan.git
+RUN cd /var/TrustCalculation/ssllabs-scan/
+RUN make
 RUN ["chmod", "+x", "/var/TrustCalculation/ssllabs-scan/ssllabs-*"]
 
 RUN pip install -r requirements.txt
