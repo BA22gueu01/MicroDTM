@@ -34,9 +34,9 @@ RUN cd /usr/local/share/ca-certificates \
 && update-ca-certificates
 
 # Install Nikto
-RUN cd /var/TrustCalculation/ \
-&& wget https://github.com/sullo/nikto/archive/master.zip . \
-&& unzip master.zip
+RUN wget https://github.com/sullo/nikto/archive/master.zip -P /var/TrustCalculation/nikto \
+&& cd /var/TrustCalculation/nikto #\
+#&& unzip master.zip
 
 # Install ssllabs
 RUN git clone https://github.com/ssllabs/ssllabs-scan.git
