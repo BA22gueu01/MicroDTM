@@ -17,6 +17,7 @@ RUN apt-get update \
       ca-certificates \
       openssl \
       wget \
+      unzip \
  && mkdir -p /usr/local/share/ca-certificates
 
 # install Let's Encrypt CA Root certificate
