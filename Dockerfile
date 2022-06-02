@@ -40,7 +40,7 @@ RUN wget https://github.com/sullo/nikto/archive/master.zip -P /var/TrustCalculat
 
 # Install ssllabs
 RUN git clone https://github.com/ssllabs/ssllabs-scan.git
-RUN cd /var/TrustCalculation/ssllabs-scan/
+WORKDIR /var/TrustCalculation/ssllabs-scan/
 RUN make build
 RUN ["chmod", "+x", "/var/TrustCalculation/ssllabs-scan/ssllabs-scan-v3"]
 
