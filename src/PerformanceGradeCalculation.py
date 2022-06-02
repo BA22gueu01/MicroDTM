@@ -38,6 +38,21 @@ class PerformanceGradeCalculation:
     def getCpuUsageGrade(self):
         return numpy.average(self.cpuUsageGrades)
 
+    def getSingleResponseTimeGrade(self):
+        return self.responseTimeGrades[len(self.responseTimeGrades) - 1]
+
+    def getSingleMemoryUsageGrade(self):
+        return self.memoryUsageGrades[len(self.memoryUsageGrades) - 1]
+
+    def getSingleDiskReadGrade(self):
+        return self.diskReadGrades[len(self.diskReadGrades) - 1]
+
+    def getSingleDiskWriteGrade(self):
+        return self.diskWriteGrades[len(self.diskWriteGrades) - 1]
+
+    def getSingleCpuUsageGrade(self):
+        return self.cpuUsageGrades[len(self.cpuUsageGrades) - 1]
+
     def calculateResponseTimeGrade(self, value):
         responseTime = value[1]
         responseTime = float(responseTime)
@@ -147,8 +162,13 @@ class PerformanceGradeCalculation:
                 counter = 0
                 for y in range(len(values)):
                     if x < len(values[y]):
-                        grade = grade + func(values[y][x])
+                        newGrade = func(values[y][x])
+                        grade = grade + newGrade
                         counter = counter + 1
+                        if newGrade < 0:
+                            grade = grade + newGrade
+                            counter = counter + 1
+
                 grade = grade / counter
                 self.addNewGrade(grade, gradeArray)
                 print(gradeName, grade)

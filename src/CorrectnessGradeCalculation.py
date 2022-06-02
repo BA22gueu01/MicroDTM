@@ -19,6 +19,9 @@ class CorrectnessGradeCalculation:
     def getCallCorrectnessGrade(self):
         return numpy.average(self.callCorrectnessGrades)
 
+    def getSingleCallCorrectnessGrade(self):
+        return self.callCorrectnessGrades[len(self.callCorrectnessGrades) - 1]
+
     def calculateCallCorrectnessGrade(self):
         self.addNewGrade(self.calculateCatalogueCorrectness())
 

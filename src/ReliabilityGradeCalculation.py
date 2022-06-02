@@ -30,6 +30,12 @@ class ReliabilityGradeCalculation:
     def getLogLevelGrade(self):
         return numpy.average(self.logLevelGrades)
 
+    def getSingleResponseErrorGrade(self):
+        return self.responseErrorsGrades[len(self.responseErrorsGrades) - 1]
+
+    def getSingleLogLevelGrade(self):
+        return self.logLevelGrades[len(self.logLevelGrades) - 1]
+
     def getPatchLevelGrade(self):
         return self.patchLevelGrade
 
@@ -123,9 +129,13 @@ class ReliabilityGradeCalculation:
                         else:
                             value500 = int(values500[y][x + 1 - diff][1]) - int(values500[y][x - diff][1])
                         # noinspection PyTypeChecker
-                        grade = grade + self.calculateResponseErrorGrade(
-                            int(values200[y][x + 1][1]) - int(values200[y][x][1]), value500)
+                        newGrade = self.calculateResponseErrorGrade(int(values200[y][x + 1][1]) - int(values200[y][x][1]), value500)
+                        grade = grade + newGrade
                         counter = counter + 1
+                        if newGrade < 0:
+                            grade = grade + newGrade
+                            counter = counter + 1
+
                 grade = grade / counter
                 self.addNewGrade(grade, self.responseErrorsGrades)
                 print("Response Error grade: ", grade)
