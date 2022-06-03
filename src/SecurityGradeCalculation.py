@@ -9,9 +9,9 @@ class SecurityGradeCalculation:
         self.apparmorGrade = 0
         self.apparmorWeight = 0.2
         self.certificateGrade = 0
-        self.certificateWeight = 0.4
+        self.certificateWeight = 0.3
         self.vulnerabilityScanGrade = 0
-        self.vulnerabilityScanWeight = 0.4
+        self.vulnerabilityScanWeight = 0.5
 
     def calculateGrade(self):
         return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade + self.vulnerabilityScanWeight * self.vulnerabilityScanGrade
