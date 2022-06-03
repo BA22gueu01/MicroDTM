@@ -35,6 +35,7 @@ cpuUsageGradeList = []
 callCorrectnessGradeList = []
 appArmorGradeList = []
 certificateGradeList = []
+vulnerabilityGradeList = []
 
 singleUptimeGradeList = []
 singleResponseErrorsGradeList = []
@@ -48,6 +49,7 @@ singleCpuUsageGradeList = []
 singleCallCorrectnessGradeList = []
 singleAppArmorGradeList = []
 singleCertificateGradeList = []
+singleVulnerabilityGradeList = []
 
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
@@ -121,6 +123,7 @@ def trustCalculation():
     callCorrectnessGradeList.append(correctnessGradeCalculation.getCallCorrectnessGrade())
     appArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
     certificateGradeList.append(securityGradeCalculation.getCertificateGrade())
+    vulnerabilityGradeList.append(securityGradeCalculation.getVulnerabilityScanGrade())
 
     subParameterScoreDict = [{
             "Timestamp": date,
@@ -135,7 +138,8 @@ def trustCalculation():
             "cpuUsageGrade": cpuUsageGradeList,
             "callCorrectnessGrade": callCorrectnessGradeList,
             "AppArmorGrade": appArmorGradeList,
-            "CertificateGrade": certificateGradeList
+            "CertificateGrade": certificateGradeList,
+            "VulnerabilityGrade": vulnerabilityGradeList
         }]
 
     with open('subparameterscore.json', 'w') as fp:
@@ -153,6 +157,7 @@ def trustCalculation():
     singleCallCorrectnessGradeList.append(correctnessGradeCalculation.getSingleCallCorrectnessGrade())
     singleAppArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
     singleCertificateGradeList.append(securityGradeCalculation.getCertificateGrade())
+    singleVulnerabilityGradeList.append(securityGradeCalculation.getVulnerabilityScanGrade())
 
     singleSubParameterScoreDict = [{
             "Timestamp": date,
@@ -167,7 +172,8 @@ def trustCalculation():
             "cpuUsageGrade": singleCpuUsageGradeList,
             "callCorrectnessGrade": singleCallCorrectnessGradeList,
             "AppArmorGrade": singleAppArmorGradeList,
-            "CertificateGrade": singleCertificateGradeList
+            "CertificateGrade": singleCertificateGradeList,
+            "VulnerabilityGrade": singleVulnerabilityGradeList,
         }]
 
     with open('singlesubparameterscore.json', 'w') as fp:
