@@ -2,5 +2,5 @@
 
 set -e
 
-exec python3 /var/TrustCalculation/src/main.py &
-exec python3 /var/TrustCalculation/src/Api.py
+exec python3 -u /var/TrustCalculation/src/main.py &
+exec python3 -u /var/TrustCalculation/src/Api.py
