@@ -237,7 +237,7 @@ def main():
     print("Main Call!")
     initialCalculation()
     schedule.every(UPDATE_INTERVAL).minutes.do(update)
-    schedule.every(2).minutes.do(dailyUpdate)
+    schedule.every(HISTORIC_DATA * UPDATE_INTERVAL).minutes.do(dailyUpdate)
 
     while True:
         schedule.run_pending()
