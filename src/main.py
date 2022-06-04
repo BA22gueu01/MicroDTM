@@ -183,7 +183,7 @@ def trustCalculation():
             "NiktoCheckGrade": singleNiktoCheckGradeList,
             "SsllabsCheckGrade": singleSsllabsCheckGradeList,
             "HttpobsCheckGrade": singleHttpobsCheckGradeList,
-            "NiktoCheckOutpt": niktoCheckOutputList,
+            "NiktoCheckOutput": niktoCheckOutputList,
             "SSLLabsCheckLetter": ssllabsCheckLetterList,
             "HttpobsCheckLetter": httpobsCheckLetterList
 
