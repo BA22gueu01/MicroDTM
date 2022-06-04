@@ -54,7 +54,7 @@ class SecurityGradeCalculation:
     def dailyUpdate(self):
         self.calculateCertificateGrade()
         self.calculateApparmorGrade()
-        self.calculateVulnerabilityScanGrade(self.externUrl[self.counter])
+        self.calculateVulnerabilityScanGrade()
         self.counter = (self.counter + 1) % len(self.externUrl)
 
     def initialCalculation(self):
