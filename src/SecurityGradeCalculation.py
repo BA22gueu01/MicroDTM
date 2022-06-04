@@ -12,6 +12,7 @@ class SecurityGradeCalculation:
         self.certificateWeight = 0.3
         self.vulnerabilityScanGrade = 0
         self.vulnerabilityScanWeight = 0.5
+        self.vulnerabilityScan = VulnerabilityScanCheck.VulnerabilityScan()
 
     def calculateGrade(self):
         return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade + self.vulnerabilityScanWeight * self.vulnerabilityScanGrade
@@ -25,9 +26,18 @@ class SecurityGradeCalculation:
     def getVulnerabilityScanGrade(self):
         return self.vulnerabilityScanGrade
 
+    def getNiktoCheckGrade(self):
+        return self.vulnerabilityScan.getNiktoCheckGrade()
+
+    def getSsllabsCheckGrade(self):
+        return self.vulnerabilityScan.getSsllabsCheckGrade()
+
+    def getHttpobsCheckGrade(self):
+        return self.vulnerabilityScan.getHttpobsCheckGrade()
+
+
     def calculateVulnerabilityScanGrade(self):
-        vulnerabilityScan = VulnerabilityScanCheck.VulnerabilityScan()
-        self.vulnerabilityScanGrade = vulnerabilityScan.getVulnerabilityScanGrade()
+        self.vulnerabilityScanGrade = self.vulnerabilityScan.getVulnerabilityScanGrade()
         print("VulnerabilityScanGrade: ", self.vulnerabilityScanGrade)
 
     def calculateApparmorGrade(self):

@@ -49,7 +49,9 @@ singleCpuUsageGradeList = []
 singleCallCorrectnessGradeList = []
 singleAppArmorGradeList = []
 singleCertificateGradeList = []
-singleVulnerabilityGradeList = []
+singleNiktoCheckGradeList = []
+singleSsllabsCheckGradeList = []
+singleHttpobsCheckGradeList = []
 
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
@@ -139,7 +141,9 @@ def trustCalculation():
             "callCorrectnessGrade": callCorrectnessGradeList,
             "AppArmorGrade": appArmorGradeList,
             "CertificateGrade": certificateGradeList,
-            "VulnerabilityGrade": vulnerabilityGradeList
+            "NiktoCheckGrade": singleNiktoCheckGradeList,
+            "SsllabsCheckGrade": singleSsllabsCheckGradeList,
+            "HttpobsCheckGrade": singleHttpobsCheckGradeList
         }]
 
     with open('subparameterscore.json', 'w') as fp:
@@ -157,7 +161,9 @@ def trustCalculation():
     singleCallCorrectnessGradeList.append(correctnessGradeCalculation.getSingleCallCorrectnessGrade())
     singleAppArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
     singleCertificateGradeList.append(securityGradeCalculation.getCertificateGrade())
-    singleVulnerabilityGradeList.append(securityGradeCalculation.getVulnerabilityScanGrade())
+    singleNiktoCheckGradeList.append(securityGradeCalculation.getNiktoCheckGrade())
+    singleSsllabsCheckGradeList.append(securityGradeCalculation.getSsllabsCheckGrade())
+    singleHttpobsCheckGradeList.append(securityGradeCalculation.getHttpobsCheckGrade())
 
     singleSubParameterScoreDict = [{
             "Timestamp": date,
