@@ -1,4 +1,6 @@
 import time
+from multiprocessing import Process
+
 import AvailabilityGradeCalculation
 import ReliabilityGradeCalculation
 import PerformanceGradeCalculation
@@ -198,7 +200,7 @@ def initialCalculation():
     trustCalculation()
 
 
-def update():
+def hourlyUpdate():
     print("Update")
     try:
         availabilityGradeCalculation.update()
@@ -220,6 +222,11 @@ def update():
     trustCalculation()
 
 
+def run_hourlyUpdate():
+    schedule.every(1).minutes.do(hourlyUpdate)
+    run_schedule()
+
+
 def dailyUpdate():
     print("Daily Update")
     try:
@@ -233,15 +240,30 @@ def dailyUpdate():
         print(e)
 
 
+def run_dailyUpdate():
+    schedule.every(2).minutes.do(dailyUpdate)
+    run_schedule()
+
+
+def run_schedule():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
+def run_updates():
+    hourly = Process(target=run_hourlyUpdate)
+    daily = Process(target=run_dailyUpdate)
+    hourly.start()
+    daily.start()
+    hourly.join()
+    daily.join()
+
+
 def main():
     print("Main Call!")
     initialCalculation()
-    schedule.every(UPDATE_INTERVAL).minutes.do(update)
-    schedule.every(HISTORIC_DATA * UPDATE_INTERVAL).minutes.do(dailyUpdate)
-
-    while True:
-        schedule.run_pending()
-        time.sleep(10)
+    run_updates()
 
 
 if __name__ == "__main__":
