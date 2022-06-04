@@ -51,5 +51,5 @@ RUN trivy image --download-db-only
 
 RUN ["chmod", "+x", "/var/TrustCalculation/docker_entrypoint.sh"]
 
-ENTRYPOINT [ "bash", "-c", "./docker_entrypoint.sh"]
-#ENTRYPOINT python -u /var/TrustCalculation/src/main.py
+#ENTRYPOINT [ "bash", "-c", "./docker_entrypoint.sh"]
+ENTRYPOINT python -u /var/TrustCalculation/src/main.py
