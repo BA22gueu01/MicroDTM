@@ -13,6 +13,7 @@ PROMETHEUS = 'http://10.161.2.161:31090/'
 SOCKSHOP = 'http://10.161.2.161:30001/'
 UPDATE_INTERVAL = 5
 HISTORIC_DATA = 24
+EXTERN_URL = ["zhaw.ch", "zhaw.ch", "mozilla.org", "google.com", "wikipedia.org", "moodle.zhaw.ch"]
 
 trustScore = []
 date = []
@@ -57,7 +58,7 @@ availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCal
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation(SOCKSHOP, UPDATE_INTERVAL, HISTORIC_DATA)
-securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation()
+securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation(EXTERN_URL)
 
 
 def trustCalculation():
@@ -236,7 +237,7 @@ def main():
     print("Main Call!")
     initialCalculation()
     schedule.every(UPDATE_INTERVAL).minutes.do(update)
-    schedule.every(HISTORIC_DATA * UPDATE_INTERVAL).minutes.do(dailyUpdate)
+    schedule.every(2).minutes.do(dailyUpdate)
 
     while True:
         schedule.run_pending()
