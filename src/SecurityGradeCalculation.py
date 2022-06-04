@@ -26,14 +26,14 @@ class SecurityGradeCalculation:
     def getVulnerabilityScanGrade(self):
         return self.vulnerabilityScanGrade
 
-    def getNiktoCheckGrade(self, list):
-        return self.vulnerabilityScan.getNiktoCheckGrade(list)
+    def getNiktoCheckGrade(self):
+        return self.vulnerabilityScan.getNiktoCheckGrade()
 
-    def getSsllabsCheckGrade(self, list):
-        return self.vulnerabilityScan.getSsllabsCheckGrade(list)
+    def getSsllabsCheckGrade(self):
+        return self.vulnerabilityScan.getSsllabsCheckGrade()
 
-    def getHttpobsCheckGrade(self, list):
-        return self.vulnerabilityScan.getHttpobsCheckGrade(list)
+    def getHttpobsCheckGrade(self):
+        return self.vulnerabilityScan.getHttpobsCheckGrade()
 
 
     def calculateVulnerabilityScanGrade(self):
