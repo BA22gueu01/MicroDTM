@@ -52,6 +52,9 @@ singleCertificateGradeList = []
 singleNiktoCheckGradeList = []
 singleSsllabsCheckGradeList = []
 singleHttpobsCheckGradeList = []
+niktoCheckOutputList = []
+ssllabsCheckLetterList = []
+httpobsCheckLetterList = []
 
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
@@ -159,9 +162,9 @@ def trustCalculation():
     singleCallCorrectnessGradeList.append(correctnessGradeCalculation.getSingleCallCorrectnessGrade())
     singleAppArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
     singleCertificateGradeList.append(securityGradeCalculation.getCertificateGrade())
-    singleNiktoCheckGradeList.append(securityGradeCalculation.getNiktoCheckGrade())
-    singleSsllabsCheckGradeList.append(securityGradeCalculation.getSsllabsCheckGrade())
-    singleHttpobsCheckGradeList.append(securityGradeCalculation.getHttpobsCheckGrade())
+    singleNiktoCheckGradeList.append(securityGradeCalculation.getNiktoCheckGrade(niktoCheckOutputList))
+    singleSsllabsCheckGradeList.append(securityGradeCalculation.getSsllabsCheckGrade(ssllabsCheckLetterList))
+    singleHttpobsCheckGradeList.append(securityGradeCalculation.getHttpobsCheckGrade(httpobsCheckLetterList))
 
     singleSubParameterScoreDict = [{
             "Timestamp": date,
@@ -179,7 +182,10 @@ def trustCalculation():
             "CertificateGrade": singleCertificateGradeList,
             "NiktoCheckGrade": singleNiktoCheckGradeList,
             "SsllabsCheckGrade": singleSsllabsCheckGradeList,
-            "HttpobsCheckGrade": singleHttpobsCheckGradeList
+            "HttpobsCheckGrade": singleHttpobsCheckGradeList,
+            "NiktoCheckOutpt": niktoCheckOutputList,
+            "SSLLabsCheckLetter": ssllabsCheckLetterList,
+            "HttpobsCheckLetter": httpobsCheckLetterList
 
         }]
 
