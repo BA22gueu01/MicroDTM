@@ -141,9 +141,7 @@ def trustCalculation():
             "callCorrectnessGrade": callCorrectnessGradeList,
             "AppArmorGrade": appArmorGradeList,
             "CertificateGrade": certificateGradeList,
-            "NiktoCheckGrade": singleNiktoCheckGradeList,
-            "SsllabsCheckGrade": singleSsllabsCheckGradeList,
-            "HttpobsCheckGrade": singleHttpobsCheckGradeList
+            "VulnerabilityGrade": vulnerabilityGradeList
         }]
 
     with open('subparameterscore.json', 'w') as fp:
@@ -179,7 +177,10 @@ def trustCalculation():
             "callCorrectnessGrade": singleCallCorrectnessGradeList,
             "AppArmorGrade": singleAppArmorGradeList,
             "CertificateGrade": singleCertificateGradeList,
-            "VulnerabilityGrade": singleVulnerabilityGradeList,
+            "NiktoCheckGrade": singleNiktoCheckGradeList,
+            "SsllabsCheckGrade": singleSsllabsCheckGradeList,
+            "HttpobsCheckGrade": singleHttpobsCheckGradeList
+
         }]
 
     with open('singlesubparameterscore.json', 'w') as fp:
