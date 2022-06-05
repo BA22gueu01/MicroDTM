@@ -1,11 +1,13 @@
 import ApparmorCheck
 import CertificateCheck
 import VulnerabilityScanCheck
+from multiprocessing import Lock
 
 
 class SecurityGradeCalculation:
 
     def __init__(self, EXTERN_URL):
+        self.lock = Lock()
         self.apparmorGrade = 0
         self.apparmorWeight = 0.2
         self.certificateGrade = 0
@@ -17,16 +19,20 @@ class SecurityGradeCalculation:
         self.counter = 0
 
     def calculateGrade(self):
-        return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade + self.vulnerabilityScanWeight * self.vulnerabilityScanGrade
+        with self.lock:
+            return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade + self.vulnerabilityScanWeight * self.vulnerabilityScanGrade
 
     def getAppArmorGrade(self):
-        return self.apparmorGrade
+        with self.lock:
+            return self.apparmorGrade
 
     def getCertificateGrade(self):
-        return self.certificateGrade
+        with self.lock:
+            return self.certificateGrade
 
     def getVulnerabilityScanGrade(self):
-        return self.vulnerabilityScanGrade
+        with self.lock:
+            return self.vulnerabilityScanGrade
 
     def getNiktoCheckGrade(self):
         return self.vulnerabilityScan.getNiktoCheckGrade()
@@ -38,27 +44,37 @@ class SecurityGradeCalculation:
         return self.vulnerabilityScan.getHttpobsCheckGrade()
 
     def calculateVulnerabilityScanGrade(self):
-        self.vulnerabilityScanGrade = self.vulnerabilityScan.getVulnerabilityScanGrade(self.externUrl[self.counter])
-        print("VulnerabilityScanGrade: ", self.vulnerabilityScanGrade)
+        with self.lock:
+            counter = self.counter
+        grade = self.vulnerabilityScan.getVulnerabilityScanGrade(self.externUrl[counter])
+        with self.lock:
+            self.vulnerabilityScanGrade = grade
+            print("VulnerabilityScanGrade: ", self.vulnerabilityScanGrade)
 
     def calculateApparmorGrade(self):
         apparmorCheck = ApparmorCheck.ApparmorCheck()
-        self.apparmorGrade = apparmorCheck.getApparmorGrade()
-        print("ApparmorGrade: ", self.apparmorGrade)
+        grade = apparmorCheck.getApparmorGrade()
+        with self.lock:
+            self.apparmorGrade = grade
+            print("ApparmorGrade: ", self.apparmorGrade)
 
     def calculateCertificateGrade(self):
         certificateCheck = CertificateCheck.CertificateCheck("zhaw.ch", "443")
-        self.certificateGrade = certificateCheck.checkCertificate()
-        print("CertificateGrade: ", self.certificateGrade)
+        grade = certificateCheck.checkCertificate()
+        with self.lock:
+            self.certificateGrade = grade
+            print("CertificateGrade: ", self.certificateGrade)
 
     def dailyUpdate(self):
         self.calculateCertificateGrade()
         self.calculateApparmorGrade()
         self.calculateVulnerabilityScanGrade()
-        self.counter = (self.counter + 1) % len(self.externUrl)
+        with self.lock:
+            self.counter = (self.counter + 1) % len(self.externUrl)
 
     def initialCalculation(self):
         self.calculateCertificateGrade()
         self.calculateApparmorGrade()
         self.calculateVulnerabilityScanGrade()
-        self.counter = (self.counter + 1) % len(self.externUrl)
+        with self.lock:
+            self.counter = (self.counter + 1) % len(self.externUrl)
