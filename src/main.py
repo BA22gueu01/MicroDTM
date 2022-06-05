@@ -72,6 +72,7 @@ sslLabCheckGrade = manager.Value(int, 0)
 httpobsCheckGrade = manager.Value(int, 0)
 niktoCheckGrade = manager.Value(int, 0)
 
+
 def trustCalculation():
     availabilityGrade = availabilityGradeCalculation.calculateGrade()
     availabilityWeight = 0.2
@@ -287,7 +288,7 @@ def dailyUpdate():
 
 
 def run_dailyUpdate():
-    schedule.every(10).minutes.do(dailyUpdate)
+    schedule.every(5).minutes.do(dailyUpdate)
     run_schedule()
 
 
