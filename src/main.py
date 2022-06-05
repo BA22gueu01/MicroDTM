@@ -1,6 +1,4 @@
 import time
-from multiprocessing import Process, Manager, Value
-
 import AvailabilityGradeCalculation
 import ReliabilityGradeCalculation
 import PerformanceGradeCalculation
@@ -16,8 +14,6 @@ SOCKSHOP = 'http://10.161.2.161:30001/'
 UPDATE_INTERVAL = 5
 HISTORIC_DATA = 24
 EXTERN_URL = ["moodle.zhaw.ch", "zhaw.ch", "mozilla.org", "google.com", "wikipedia.org"]
-
-manager = Manager()
 
 trustScore = []
 date = []
@@ -60,17 +56,9 @@ singleHttpobsCheckGradeList = []
 
 availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
-patchLevelGrade = manager.Value(int, 0)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation(SOCKSHOP, UPDATE_INTERVAL, HISTORIC_DATA)
 securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation(EXTERN_URL)
-securityGlobalGrade = manager.Value(int, 0)
-appArmorGrade = manager.Value(int, 0)
-certificateGrade = manager.Value(int, 0)
-vulnerabilityGrade = manager.Value(int, 0)
-sslLabCheckGrade = manager.Value(int, 0)
-httpobsCheckGrade = manager.Value(int, 0)
-niktoCheckGrade = manager.Value(int, 0)
 
 
 def trustCalculation():
@@ -78,7 +66,7 @@ def trustCalculation():
     availabilityWeight = 0.2
     print("AvailabilityGrade: ", availabilityGrade)
 
-    reliabilityGrade = reliabilityGradeCalculation.calculateGrade(patchLevelGrade)
+    reliabilityGrade = reliabilityGradeCalculation.calculateGrade()
     reliabilityWeight = 0.2
     print("ReliabilityGrade: ", reliabilityGrade)
 
@@ -90,7 +78,7 @@ def trustCalculation():
     correctnessWeight = 0.2
     print("CorrectnessGrade: ", correctnessGrade)
 
-    securityGrade = securityGlobalGrade
+    securityGrade = securityGradeCalculation.calculateGrade()
     securityWeight = 0.2
     print("SecurityGrade: ", securityGrade)
 
@@ -129,16 +117,16 @@ def trustCalculation():
     uptimeGradeList.append(availabilityGradeCalculation.getUptimeGrade())
     responseErrorsGradeList.append(reliabilityGradeCalculation.getResponseErrorGrade())
     logLevelGradeList.append(reliabilityGradeCalculation.getLogLevelGrade())
-    patchLevelGradeList.append(patchLevelGrade)
+    patchLevelGradeList.append(reliabilityGradeCalculation.getPatchLevelGrade())
     responseTimeGradeList.append(performanceGradeCalculation.getResponseTimeGrade())
     memoryUsageGradeList.append(performanceGradeCalculation.getMemoryUsageGrade())
     diskReadGradeList.append(performanceGradeCalculation.getDiskReadGrade())
     diskWriteGradeList.append(performanceGradeCalculation.getDiskWriteGrade())
     cpuUsageGradeList.append(performanceGradeCalculation.getCpuUsageGrade())
     callCorrectnessGradeList.append(correctnessGradeCalculation.getCallCorrectnessGrade())
-    appArmorGradeList.append(appArmorGrade)
-    certificateGradeList.append(certificateGrade)
-    vulnerabilityGradeList.append(vulnerabilityGrade)
+    appArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
+    certificateGradeList.append(securityGradeCalculation.getCertificateGrade())
+    vulnerabilityGradeList.append(securityGradeCalculation.getVulnerabilityScanGrade())
 
     subParameterScoreDict = [{
             "Timestamp": date,
@@ -163,18 +151,18 @@ def trustCalculation():
     singleUptimeGradeList.append(availabilityGradeCalculation.getSingleUptimeGrade())
     singleResponseErrorsGradeList.append(reliabilityGradeCalculation.getSingleResponseErrorGrade())
     singleLogLevelGradeList.append(reliabilityGradeCalculation.getSingleLogLevelGrade())
-    singlePatchLevelGradeList.append(patchLevelGrade)
+    singlePatchLevelGradeList.append(reliabilityGradeCalculation.getPatchLevelGrade())
     singleResponseTimeGradeList.append(performanceGradeCalculation.getSingleResponseTimeGrade())
     singleMemoryUsageGradeList.append(performanceGradeCalculation.getSingleMemoryUsageGrade())
     singleDiskReadGradeList.append(performanceGradeCalculation.getSingleDiskReadGrade())
     singleDiskWriteGradeList.append(performanceGradeCalculation.getSingleDiskWriteGrade())
     singleCpuUsageGradeList.append(performanceGradeCalculation.getSingleCpuUsageGrade())
     singleCallCorrectnessGradeList.append(correctnessGradeCalculation.getSingleCallCorrectnessGrade())
-    singleAppArmorGradeList.append(appArmorGrade)
-    singleCertificateGradeList.append(certificateGrade)
-    singleNiktoCheckGradeList.append(niktoCheckGrade)
-    singleSsllabsCheckGradeList.append(sslLabCheckGrade)
-    singleHttpobsCheckGradeList.append(httpobsCheckGrade)
+    singleAppArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
+    singleCertificateGradeList.append(securityGradeCalculation.getCertificateGrade())
+    singleNiktoCheckGradeList.append(securityGradeCalculation.getNiktoCheckGrade())
+    singleSsllabsCheckGradeList.append(securityGradeCalculation.getSsllabsCheckGrade())
+    singleHttpobsCheckGradeList.append(securityGradeCalculation.getHttpobsCheckGrade())
 
     singleSubParameterScoreDict = [{
             "Timestamp": date,
@@ -202,34 +190,15 @@ def trustCalculation():
 
 def initialCalculation():
     print("Initial Calculation")
-    global securityGlobalGrade
-    global appArmorGrade
-    global certificateGrade
-    global vulnerabilityGrade
-    global sslLabCheckGrade
-    global httpobsCheckGrade
-    global niktoCheckGrade
-    global patchLevelGrade
-
     availabilityGradeCalculation.initialCalculation()
     reliabilityGradeCalculation.initialCalculation()
     performanceGradeCalculation.initialCalculation()
     correctnessGradeCalculation.initialCalculation()
     securityGradeCalculation.initialCalculation()
-
-    securityGlobalGrade = securityGradeCalculation.calculateGrade()
-    appArmorGrade = securityGradeCalculation.getAppArmorGrade()
-    certificateGrade = securityGradeCalculation.getCertificateGrade()
-    vulnerabilityGrade = securityGradeCalculation.getVulnerabilityScanGrade()
-    sslLabCheckGrade = securityGradeCalculation.getSsllabsCheckGrade()
-    httpobsCheckGrade = securityGradeCalculation.getHttpobsCheckGrade()
-    niktoCheckGrade = securityGradeCalculation.getNiktoCheckGrade()
-    patchLevelGrade = reliabilityGradeCalculation.getPatchLevelGrade()
-
     trustCalculation()
 
 
-def hourlyUpdate():
+def update():
     print("Update")
     try:
         availabilityGradeCalculation.update()
@@ -251,21 +220,7 @@ def hourlyUpdate():
     trustCalculation()
 
 
-def run_hourlyUpdate():
-    schedule.every(2).minutes.do(hourlyUpdate)
-    run_schedule()
-
-
 def dailyUpdate():
-    global securityGlobalGrade
-    global appArmorGrade
-    global certificateGrade
-    global vulnerabilityGrade
-    global sslLabCheckGrade
-    global httpobsCheckGrade
-    global niktoCheckGrade
-    global patchLevelGrade
-
     print("Daily Update")
     try:
         reliabilityGradeCalculation.dailyUpdate()
@@ -277,40 +232,16 @@ def dailyUpdate():
     except Exception as e:
         print(e)
 
-    securityGlobalGrade = securityGradeCalculation.calculateGrade()
-    appArmorGrade = securityGradeCalculation.getAppArmorGrade()
-    certificateGrade = securityGradeCalculation.getCertificateGrade()
-    vulnerabilityGrade = securityGradeCalculation.getVulnerabilityScanGrade()
-    sslLabCheckGrade = securityGradeCalculation.getSsllabsCheckGrade()
-    httpobsCheckGrade = securityGradeCalculation.getHttpobsCheckGrade()
-    niktoCheckGrade = securityGradeCalculation.getNiktoCheckGrade()
-    patchLevelGrade = reliabilityGradeCalculation.getPatchLevelGrade()
-
-
-def run_dailyUpdate():
-    schedule.every(5).minutes.do(dailyUpdate)
-    run_schedule()
-
-
-def run_schedule():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-
-def run_updates():
-    hourly = Process(target=run_hourlyUpdate)
-    daily = Process(target=run_dailyUpdate)
-    hourly.start()
-    daily.start()
-    hourly.join()
-    daily.join()
-
 
 def main():
     print("Main Call!")
     initialCalculation()
-    run_updates()
+    schedule.every(UPDATE_INTERVAL).minutes.do(update)
+    schedule.every(HISTORIC_DATA * UPDATE_INTERVAL).minutes.do(dailyUpdate)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(10)
 
 
 if __name__ == "__main__":

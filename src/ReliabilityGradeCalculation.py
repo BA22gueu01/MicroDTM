@@ -2,13 +2,11 @@ import LogLevelCheck
 import PatchLevelCheck
 import PrometheusRequest
 import numpy
-from multiprocessing import Lock
 
 
 class ReliabilityGradeCalculation:
 
     def __init__(self, prometheus, updateInterval, historicData):
-        self.lock = Lock()
         self.logLevelCheck = LogLevelCheck.LogLevelCheck()
         self.patchLevelCheck = PatchLevelCheck.PatchLevelCheck()
         self.prometheusRequest = PrometheusRequest.PrometheusRequest(prometheus, updateInterval, historicData)
@@ -20,12 +18,11 @@ class ReliabilityGradeCalculation:
         self.patchLevelWeight = 0.4
         self.lastLogErrorCount = 0
 
-    def calculateGrade(self, patchGrade):
+    def calculateGrade(self):
 
-        with self.lock:
-            return (self.responseErrorsWeight * numpy.average(self.responseErrorsGrades)) \
-                + (self.logLevelWeight * numpy.average(self.logLevelGrades)) \
-                + (self.patchLevelWeight * patchGrade)
+        return (self.responseErrorsWeight * numpy.average(self.responseErrorsGrades)) \
+               + (self.logLevelWeight * numpy.average(self.logLevelGrades)) \
+               + (self.patchLevelWeight * self.patchLevelGrade)
 
     def getResponseErrorGrade(self):
         return numpy.average(self.responseErrorsGrades)
@@ -40,14 +37,11 @@ class ReliabilityGradeCalculation:
         return self.logLevelGrades[len(self.logLevelGrades) - 1]
 
     def getPatchLevelGrade(self):
-        with self.lock:
-            return self.patchLevelGrade
+        return self.patchLevelGrade
 
     def calculatePatchLevelGrade(self):
-        grade = self.patchLevelCheck.getPatchLevelGrade()
-        with self.lock:
-            self.patchLevelGrade = grade
-            print("PatchLevelGrade: ", self.patchLevelGrade)
+        self.patchLevelGrade = self.patchLevelCheck.getPatchLevelGrade()
+        print("PatchLevelGrade: ", self.patchLevelGrade)
 
     def calculateResponseErrorGrade(self, status200Value, status500Value):
         if status200Value == 0:
