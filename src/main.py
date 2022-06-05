@@ -223,7 +223,7 @@ def hourlyUpdate():
 
 
 def run_hourlyUpdate():
-    schedule.every(UPDATE_INTERVAL).minutes.do(hourlyUpdate)
+    schedule.every(2).minutes.do(hourlyUpdate)
     run_schedule()
 
 
@@ -241,7 +241,7 @@ def dailyUpdate():
 
 
 def run_dailyUpdate():
-    schedule.every(HISTORIC_DATA * UPDATE_INTERVAL).minutes.do(dailyUpdate)
+    schedule.every(10).minutes.do(dailyUpdate)
     run_schedule()
 
 
