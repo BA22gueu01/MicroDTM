@@ -136,7 +136,7 @@ def trustCalculation():
     diskWriteGradeList.append(performanceGradeCalculation.getDiskWriteGrade())
     cpuUsageGradeList.append(performanceGradeCalculation.getCpuUsageGrade())
     callCorrectnessGradeList.append(correctnessGradeCalculation.getCallCorrectnessGrade())
-    appArmorGradeList.append(appArmorGradeList)
+    appArmorGradeList.append(appArmorGrade)
     certificateGradeList.append(certificateGrade)
     vulnerabilityGradeList.append(vulnerabilityGrade)
 
