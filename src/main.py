@@ -13,7 +13,7 @@ PROMETHEUS = 'http://10.161.2.161:31090/'
 SOCKSHOP = 'http://10.161.2.161:30001/'
 UPDATE_INTERVAL = 5
 HISTORIC_DATA = 24
-EXTERN_URL = ["zhaw.ch"]
+EXTERN_URL = ["moodle.zhaw.ch", "zhaw.ch", "mozilla.org", "google.com", "wikipedia.org"]
 
 trustScore = []
 date = []
