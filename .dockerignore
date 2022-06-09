@@ -1,9 +1,10 @@
 # Virtual Environment
 
 # Project Settings
-
 .idea/
 
 # git
-
 .git/
+
+# helm
+.helm/
