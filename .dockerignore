@@ -8,3 +8,6 @@
 
 # helm
 .helm/
+
+#documents
+./thesis
