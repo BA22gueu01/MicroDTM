@@ -51,7 +51,7 @@ class PatchLevelCheck:
                     currentVersion = True
                 packageManager = "apt-get"
             elif 'alpine' in version.lower():
-                if "3.12" in version or "3.13" in version or "3.14" in version or "3.15" in version:
+                if "3.13" in version or "3.14" in version or "3.15" in version:
                     currentVersion = True
                 packageManager = "apk"
             else:
