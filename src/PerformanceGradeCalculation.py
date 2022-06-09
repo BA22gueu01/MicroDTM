@@ -19,9 +19,10 @@ class PerformanceGradeCalculation:
 
     def calculateGrade(self):
 
-        return (self.responseTimeWeight * numpy.average(self.responseTimeGrades) + self.memoryUsageWeight * numpy.average(self.memoryUsageGrades)
-                + self.diskReadWeight * numpy.average(self.diskReadGrades) + self.diskWriteWeight * numpy.average(self.diskWriteGrades)
-                + self.cpuUsageWeight * numpy.average(self.cpuUsageGrades))
+        return (self.responseTimeWeight * numpy.average(self.responseTimeGrades) + self.memoryUsageWeight
+                * numpy.average(self.memoryUsageGrades) + self.diskReadWeight * numpy.average(self.diskReadGrades)
+                + self.diskWriteWeight * numpy.average(self.diskWriteGrades) + self.cpuUsageWeight
+                * numpy.average(self.cpuUsageGrades))
 
     def getResponseTimeGrade(self):
         return numpy.average(self.responseTimeGrades)
@@ -115,32 +116,40 @@ class PerformanceGradeCalculation:
 
     def update(self):
         responseTimeValues = self.prometheusRequest.makeRequest('response_time')
-        self.subGradeCalculation(responseTimeValues, self.calculateResponseTimeGrade, self.responseTimeGrades, "Response Time Grade: ")
+        self.subGradeCalculation(responseTimeValues, self.calculateResponseTimeGrade, self.responseTimeGrades,
+                                 "Response Time Grade: ")
 
         memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage')
-        self.subGradeCalculation(memoryUsageValues, self.calculateMemoryUsageGrade, self.memoryUsageGrades, "Memory Usage Grade: ")
+        self.subGradeCalculation(memoryUsageValues, self.calculateMemoryUsageGrade, self.memoryUsageGrades,
+                                 "Memory Usage Grade: ")
 
         diskReadUsageValues = self.prometheusRequest.makeRequest('disk_read')
-        self.subGradeCalculation(diskReadUsageValues, self.calculateDiskGrade, self.diskReadGrades, "Disk Read Grade: ")
+        self.subGradeCalculation(diskReadUsageValues, self.calculateDiskGrade, self.diskReadGrades,
+                                 "Disk Read Grade: ")
 
         diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write')
-        self.subGradeCalculation(diskWriteUsageValues, self.calculateDiskGrade, self.diskWriteGrades, "Disk Write Grade: ")
+        self.subGradeCalculation(diskWriteUsageValues, self.calculateDiskGrade, self.diskWriteGrades,
+                                 "Disk Write Grade: ")
 
         cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota')
         self.calculateCpuUsageGrade(cpuUsageValues)
 
     def initialCalculation(self):
         responseTimeValues = self.prometheusRequest.makeRequest('response_time_history')
-        self.subGradeCalculation(responseTimeValues, self.calculateResponseTimeGrade, self.responseTimeGrades, "Response Time Grade: ")
+        self.subGradeCalculation(responseTimeValues, self.calculateResponseTimeGrade, self.responseTimeGrades,
+                                 "Response Time Grade: ")
 
         memoryUsageValues = self.prometheusRequest.makeRequest('memory_usage_history')
-        self.subGradeCalculation(memoryUsageValues, self.calculateMemoryUsageGrade, self.memoryUsageGrades, "Memory Usage Grade: ")
+        self.subGradeCalculation(memoryUsageValues, self.calculateMemoryUsageGrade, self.memoryUsageGrades,
+                                 "Memory Usage Grade: ")
 
         diskReadUsageValues = self.prometheusRequest.makeRequest('disk_read_history')
-        self.subGradeCalculation(diskReadUsageValues, self.calculateDiskGrade, self.diskReadGrades, "Disk Read Grade: ")
+        self.subGradeCalculation(diskReadUsageValues, self.calculateDiskGrade, self.diskReadGrades,
+                                 "Disk Read Grade: ")
 
         diskWriteUsageValues = self.prometheusRequest.makeRequest('disk_write_history')
-        self.subGradeCalculation(diskWriteUsageValues, self.calculateDiskGrade, self.diskWriteGrades, "Disk Write Grade: ")
+        self.subGradeCalculation(diskWriteUsageValues, self.calculateDiskGrade, self.diskWriteGrades,
+                                 "Disk Write Grade: ")
 
         cpuUsageValues = self.prometheusRequest.makeRequest('container_spec_cpu_quota_history')
         self.calculateCpuUsageGrade(cpuUsageValues)

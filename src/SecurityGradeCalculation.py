@@ -17,7 +17,8 @@ class SecurityGradeCalculation:
         self.counter = 0
 
     def calculateGrade(self):
-        return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade + self.vulnerabilityScanWeight * self.vulnerabilityScanGrade
+        return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade \
+               + self.vulnerabilityScanWeight * self.vulnerabilityScanGrade
 
     def getAppArmorGrade(self):
         return self.apparmorGrade

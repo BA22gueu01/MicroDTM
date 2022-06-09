@@ -58,14 +58,16 @@ class PatchLevelCheck:
                 return 0
 
             try:
-                # Run the equivalent of apt-get update - fetch the latest list of available packages from the repositories
+                # Run the equivalent of apt-get update - fetch the latest list of available packages from the
+                # repositories
                 subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container", containerName,
                                          "--", packageManager, "update"], stderr=subprocess.DEVNULL)
 
                 # Check number of pending updates. -s = No action; perform a simulation of events that would occur based
                 # on the current system state but do not actually change the system
                 pendingUpdates = subprocess.check_output(["kubectl", "exec", "-n", "sock-shop", podName, "--container",
-                                                          containerName, "--", packageManager, "-s", "upgrade"], stderr=subprocess.DEVNULL)
+                                                          containerName, "--", packageManager, "-s", "upgrade"],
+                                                          stderr=subprocess.DEVNULL)
                 pendingUpdates = pendingUpdates.decode()
 
                 if 'ubuntu' in version.lower() or 'debian' in version.lower():
@@ -96,7 +98,6 @@ class PatchLevelCheck:
                         stderr=subprocess.DEVNULL)
                     lastUpdate = lastUpdate.decode()
 
-                    #for line in lastUpdate:
                     columns = lastUpdate.strip().split()
                     lastUpdate = columns[6] + " " + columns[7] + " " + columns[8]
                     print(lastUpdate)
@@ -104,12 +105,10 @@ class PatchLevelCheck:
                     lastUpdate = currentDate.date().strftime("%Y") + " " + lastUpdate
                     lastUpdate = datetime.strptime(lastUpdate, "%Y %b %d %H:%M")
 
-            except Exception as e:
+            except Exception:
                 print("Read-only filesystem or permission denied")
-                #print(e)
 
-        except Exception as e:
-            #print(e)
+        except Exception:
             currentVersion = False
             counterInst = 0
             counterSec = 0

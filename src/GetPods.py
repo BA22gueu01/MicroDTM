@@ -7,8 +7,8 @@ class GetPods:
 
         pods = []
         output = subprocess.Popen(["kubectl", "get", "pods", "-n", "sock-shop", "--no-headers",
-                                            "--field-selector=status.phase=Running", "-o",
-                                            "custom-columns=:metadata.name"], stdout=subprocess.PIPE)
+                                   "--field-selector=status.phase=Running", "-o",
+                                   "custom-columns=:metadata.name"], stdout=subprocess.PIPE)
         for line in output.stdout.readlines():
             line = line.decode().strip('\n')
             pods.append(line)
@@ -18,8 +18,9 @@ class GetPods:
     def getContainers(self, podName):
         containers = []
 
-        output = subprocess.check_output(["kubectl", "get", "pods", podName, "-o", "jsonpath=\"{.spec.containers[*].name}\"",
-                                   "-n", "sock-shop"])
+        output = subprocess.check_output(
+            ["kubectl", "get", "pods", podName, "-o", "jsonpath=\"{.spec.containers[*].name}\"",
+             "-n", "sock-shop"])
 
         for line in output.decode().split():
             if "istio" not in line.lower():
