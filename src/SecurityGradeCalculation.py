@@ -7,17 +7,18 @@ class SecurityGradeCalculation:
 
     def __init__(self, EXTERN_URL):
         self.apparmorGrade = 0
-        self.apparmorWeight = 0.4
+        self.apparmorWeight = 0.2
         self.certificateGrade = 0
-        self.certificateWeight = 0.6
+        self.certificateWeight = 0.3
         self.vulnerabilityScanGrade = 0
-        self.vulnerabilityScanWeight = 0
+        self.vulnerabilityScanWeight = 0.5
         self.vulnerabilityScan = VulnerabilityScanCheck.VulnerabilityScan()
         self.externUrl = EXTERN_URL
         self.counter = 0
 
     def calculateGrade(self):
-        return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade + self.vulnerabilityScanWeight * self.vulnerabilityScanGrade
+        return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade \
+               + self.vulnerabilityScanWeight * self.vulnerabilityScanGrade
 
     def getAppArmorGrade(self):
         return self.apparmorGrade

@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trust-calc
+spec:
+  replicas: {{ .Values.trustcalc.replicas }}
+  selector:
+    matchLabels:
+      name: trust-calc
+  template:
+    metadata:
+      labels:
+        name: trust-calc
+      {{- if .Values.istio.enabled }}
+      annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+      {{- end }}
+    spec:
+      containers:
+      - name: trust-calc
+        image: {{if .Values.global.registry}}{{ .Values.global.registry }}/{{end}}{{ .Values.trustcalc.image.repo }}:{{ .Values.trustcalc.image.tag }}
+        resources:
+{{ toYaml .Values.trustcalc.resources | indent 10 }}
+        ports:
+        - containerPort: 9999

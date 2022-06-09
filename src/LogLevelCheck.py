@@ -1,6 +1,7 @@
 import subprocess
 import GetPods
 
+
 class LogLevelCheck:
 
     def getLogLevelCount(self):
@@ -18,7 +19,7 @@ class LogLevelCheck:
                 podErrors = podErrors + self.checkLoglevel(pod, container)
                 countContainers = countContainers + 1
 
-            errorCount = errorCount + podErrors/countContainers
+            errorCount = errorCount + podErrors / countContainers
             countPods = countPods + 1
 
         if countPods == 0:
@@ -26,7 +27,7 @@ class LogLevelCheck:
             return 0
 
         else:
-            return errorCount/countPods
+            return errorCount / countPods
 
     def checkLoglevel(self, podName, containerName):
 
@@ -45,4 +46,3 @@ class LogLevelCheck:
             counter = 25
             print(e)
         return counter
-
