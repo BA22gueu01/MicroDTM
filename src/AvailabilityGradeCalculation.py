@@ -25,9 +25,9 @@ class AvailabilityGradeCalculation:
         if uptime >= 99.9:
             grade = 5
         elif uptime >= 95:
-            grade = 4
+            grade = 4 + ((uptime - 95) / (99.9 - 95))
         elif uptime >= 90:
-            grade = 3
+            grade = 3 + ((uptime - 90) / (95 - 90))
         elif uptime >= 75:
             grade = 0 + ((uptime - 75) / (90 - 75)) * 3
         elif uptime <= 50:
