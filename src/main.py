@@ -126,7 +126,7 @@ def trustCalculation():
     callCorrectnessGradeList.append(correctnessGradeCalculation.getCallCorrectnessGrade())
     appArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
     certificateGradeList.append(securityGradeCalculation.getCertificateGrade())
-    #vulnerabilityGradeList.append(securityGradeCalculation.getVulnerabilityScanGrade())
+    vulnerabilityGradeList.append(securityGradeCalculation.getVulnerabilityScanGrade())
 
     subParameterScoreDict = [{
             "Timestamp": date,
@@ -142,7 +142,7 @@ def trustCalculation():
             "callCorrectnessGrade": callCorrectnessGradeList,
             "AppArmorGrade": appArmorGradeList,
             "CertificateGrade": certificateGradeList,
-            #"VulnerabilityGrade": vulnerabilityGradeList
+            "VulnerabilityGrade": vulnerabilityGradeList
         }]
 
     with open('subparameterscore.json', 'w') as fp:
@@ -160,9 +160,9 @@ def trustCalculation():
     singleCallCorrectnessGradeList.append(correctnessGradeCalculation.getSingleCallCorrectnessGrade())
     singleAppArmorGradeList.append(securityGradeCalculation.getAppArmorGrade())
     singleCertificateGradeList.append(securityGradeCalculation.getCertificateGrade())
-    #singleNiktoCheckGradeList.append(securityGradeCalculation.getNiktoCheckGrade())
-    #singleSsllabsCheckGradeList.append(securityGradeCalculation.getSsllabsCheckGrade())
-    #singleHttpobsCheckGradeList.append(securityGradeCalculation.getHttpobsCheckGrade())
+    singleNiktoCheckGradeList.append(securityGradeCalculation.getNiktoCheckGrade())
+    singleSsllabsCheckGradeList.append(securityGradeCalculation.getSsllabsCheckGrade())
+    singleHttpobsCheckGradeList.append(securityGradeCalculation.getHttpobsCheckGrade())
 
     singleSubParameterScoreDict = [{
             "Timestamp": date,
@@ -178,9 +178,9 @@ def trustCalculation():
             "callCorrectnessGrade": singleCallCorrectnessGradeList,
             "AppArmorGrade": singleAppArmorGradeList,
             "CertificateGrade": singleCertificateGradeList,
-            #"NiktoCheckGrade": singleNiktoCheckGradeList,
-            #"SsllabsCheckGrade": singleSsllabsCheckGradeList,
-            #"HttpobsCheckGrade": singleHttpobsCheckGradeList,
+            "NiktoCheckGrade": singleNiktoCheckGradeList,
+            "SsllabsCheckGrade": singleSsllabsCheckGradeList,
+            "HttpobsCheckGrade": singleHttpobsCheckGradeList,
 
         }]
 

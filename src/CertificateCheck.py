@@ -37,7 +37,7 @@ class CertificateCheck:
         context = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_2_METHOD)
         print('Connecting to {0} to get certificate...'.format(host))
         conn = OpenSSL.SSL.Connection(context, s)
-        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '\\'
+        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cert')) + '\\'
         certs = []
 
         try:
@@ -75,7 +75,7 @@ class CertificateCheck:
 
     # https://github.com/wbond/certvalidator/blob/master/docs/usage.md
     def validateEndEntitiyCertificate(self):
-        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '\\_0.crt', 'rb') as f:
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), 'cert')) + '\\_0.crt', 'rb') as f:
             end_entity_cert = f.read()
 
         try:
@@ -94,7 +94,7 @@ class CertificateCheck:
         # find and validate intermediate certificate
         # directory iteration:
         # https://stackoverflow.com/questions/10377998/how-can-i-iterate-over-files-in-a-given-directory
-        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '/'
+        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cert')) + '/'
         fsdirectory = os.fsencode(directory)
         counter = 0
 
