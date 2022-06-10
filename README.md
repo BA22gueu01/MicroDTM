@@ -16,10 +16,10 @@ Although the topic of Network Function Virtualization (NFV) and containerized se
 
 # How to start
 If needed the project can be used by following these steps:\
-• Clone Repository \
-• change global parameters in main \
-• make Dockerimage with dockerfile \
-• deploy with helm in a Kubernetes cluster \
-    use helm folder for that \
+* Clone Repository \
+* change global parameters in main \
+* make Dockerimage with dockerfile \
+* deploy with helm in a Kubernetes cluster \
+   use helm folder for that \
 \
 Unfortunately the automatic deployed dockerfile can't be used at the moment, because it has parameters in it, which only work for our test environmnent
