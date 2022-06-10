@@ -45,7 +45,7 @@ RUN cd /var/TrustCalculation/ \
 && cd /var/TrustCalculation/ssllabs-scan/ \
 && go build ssllabs-scan-v3.go
 
-RUN pip install -r requirements.txt
+RUN pip install -r ./docker/requirements.txt
 
 RUN ["chmod", "+x", "/var/TrustCalculation/docker_entrypoint.sh"]
 
