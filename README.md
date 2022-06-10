@@ -11,7 +11,7 @@ Although the topic of Network Function Virtualization (NFV) and containerized se
 *	helm			  Files for deployment with helm \
 *	src			    Code Files \
 *	thesis			Files about our thesis \
-  *	results		Our test results in Excel Files
+    *	results		Our test results in Excel Files
 
 
 # How to start
