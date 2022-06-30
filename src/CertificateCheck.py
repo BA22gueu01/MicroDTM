@@ -149,22 +149,23 @@ class CertificateCheck:
 
         print('Check certificate for: ' + hostname + ":" + port)
 
-        context = ssl.create_default_context()
-
-        # https://github.com/echovue/Operations/blob/master/PythonScripts/TLSValidator.py
-        with socket.create_connection((hostname, port)) as sock:
-            with context.wrap_socket(sock, server_hostname=hostname) as ssock:
-                certificate = ssock.getpeercert()
-
-        certExpires = datetime.datetime.strptime(certificate['notAfter'], '%b %d %H:%M:%S %Y %Z')
-        daysToExpiration = (certExpires - datetime.datetime.now()).days
-
         http = "http://"
         https = "https://"
         try:
             if self.checkURLConnection(http):
                 try:
                     if self.checkURLConnection(https):
+
+                        context = ssl.create_default_context()
+
+                        # https://github.com/echovue/Operations/blob/master/PythonScripts/TLSValidator.py
+                        with socket.create_connection((hostname, port)) as sock:
+                            with context.wrap_socket(sock, server_hostname=hostname) as ssock:
+                                certificate = ssock.getpeercert()
+
+                        certExpires = datetime.datetime.strptime(certificate['notAfter'], '%b %d %H:%M:%S %Y %Z')
+                        daysToExpiration = (certExpires - datetime.datetime.now()).days
+
                         try:
                             session = tls.TLSSession(manual_validation=True)
                             connection = tls.TLSSocket(hostname, int(port), session=session)
