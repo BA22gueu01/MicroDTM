@@ -5,7 +5,7 @@ import VulnerabilityScanCheck
 
 class SecurityGradeCalculation:
 
-    def __init__(self, EXTERN_URL):
+    def __init__(self, EXTERN_URL, CERTIFICATE_URL):
         self.apparmorGrade = 0
         self.apparmorWeight = 0.2
         self.certificateGrade = 0
@@ -14,6 +14,7 @@ class SecurityGradeCalculation:
         self.vulnerabilityScanWeight = 0.5
         self.vulnerabilityScan = VulnerabilityScanCheck.VulnerabilityScan()
         self.externUrl = EXTERN_URL
+        self.certificateUrl = CERTIFICATE_URL
         self.counter = 0
 
     def calculateGrade(self):
@@ -48,7 +49,7 @@ class SecurityGradeCalculation:
         print("ApparmorGrade: ", self.apparmorGrade)
 
     def calculateCertificateGrade(self):
-        certificateCheck = CertificateCheck.CertificateCheck("zhaw.ch", "443")
+        certificateCheck = CertificateCheck.CertificateCheck(self.certificateUrl, "443")
         self.certificateGrade = certificateCheck.checkCertificate()
         print("CertificateGrade: ", self.certificateGrade)
 

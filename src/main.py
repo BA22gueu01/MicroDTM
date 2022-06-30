@@ -13,6 +13,7 @@ PROMETHEUS = 'http://10.161.2.161:31090/'
 SOCKSHOP = 'http://10.161.2.161:30001/'
 UPDATE_INTERVAL = 5
 HISTORIC_DATA = 24
+CERTIFICATE_URL = "ba.ypsomed.com"
 EXTERN_URL = ["zhaw.ch"]
 
 trustScore = []
