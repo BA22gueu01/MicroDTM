@@ -190,11 +190,11 @@ class CertificateCheck:
                             return -5
                     else:
                         return -5
-                except Exception as e:
+                except ConnectionRefusedError as e:
                     print(e)
                     return -5
             else:
                 return 0
-        except Exception as e:
+        except ConnectionRefusedError as e:
             print(e)
             return 0
