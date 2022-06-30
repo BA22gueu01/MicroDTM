@@ -20,7 +20,7 @@ class CertificateCheck:
         self.port = port
 
     def checkURLConnection(self, protocol):
-        url = protocol + self.hostname + ":" + self.port
+        url = protocol + self.hostname
         # https://stackoverflow.com/questions/65955022/python-check-if-webpage-is-http-or-https
         url = urlparse(url)
         conn = http.client.HTTPConnection(url.netloc)
