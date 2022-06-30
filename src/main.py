@@ -217,6 +217,10 @@ def update():
         correctnessGradeCalculation.update()
     except Exception as e:
         print(e)
+    try:
+        securityGradeCalculation.dailyUpdate()
+    except Exception as e:
+        print(e)
 
     trustCalculation()
 
