@@ -59,7 +59,7 @@ availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCal
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation(SOCKSHOP, UPDATE_INTERVAL, HISTORIC_DATA)
-securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation(EXTERN_URL)
+securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation(EXTERN_URL, CERTIFICATE_URL)
 
 
 def trustCalculation():
