@@ -161,32 +161,40 @@ class CertificateCheck:
 
         http = "http://"
         https = "https://"
-        if self.checkURLConnection(http):
-            if self.checkURLConnection(https):
+        try:
+            if self.checkURLConnection(http):
                 try:
-                    session = tls.TLSSession(manual_validation=True)
-                    connection = tls.TLSSocket(hostname, int(port), session=session)
-                    try:
-                        validator = CertificateValidator(connection.certificate, connection.intermediates)
-                        validator.validate_tls(connection.hostname)
-                        self.downloadCertificateChain(hostname, port)
-                        end_entity_cert_validation = self.validateEndEntitiyCertificate()
-                        intermediate_cert_validation = self.validateIntermediateCertificate()
-                    except errors.PathValidationError:
-                        end_entity_cert_validation = False
-                        intermediate_cert_validation = False
-                        print("The certificate did not match the hostname, or could not be otherwise validated")
-                except OpenSSL.SSL.Error as e:
-                    print('Error: {0}'.format(str(e)))
-                    exit(1)
+                    if self.checkURLConnection(https):
+                        try:
+                            session = tls.TLSSession(manual_validation=True)
+                            connection = tls.TLSSocket(hostname, int(port), session=session)
+                            try:
+                                validator = CertificateValidator(connection.certificate, connection.intermediates)
+                                validator.validate_tls(connection.hostname)
+                                self.downloadCertificateChain(hostname, port)
+                                end_entity_cert_validation = self.validateEndEntitiyCertificate()
+                                intermediate_cert_validation = self.validateIntermediateCertificate()
+                            except errors.PathValidationError:
+                                end_entity_cert_validation = False
+                                intermediate_cert_validation = False
+                                print("The certificate did not match the hostname, or could not be otherwise validated")
+                        except OpenSSL.SSL.Error as e:
+                            print('Error: {0}'.format(str(e)))
+                            exit(1)
 
-                if daysToExpiration < 0 and intermediate_cert_validation and end_entity_cert_validation:
-                    return 0
-                elif daysToExpiration > 0 and intermediate_cert_validation and end_entity_cert_validation:
-                    return 5
-                else:
+                        if daysToExpiration < 0 and intermediate_cert_validation and end_entity_cert_validation:
+                            return 0
+                        elif daysToExpiration > 0 and intermediate_cert_validation and end_entity_cert_validation:
+                            return 5
+                        else:
+                            return -5
+                    else:
+                        return -5
+                except Exception as e:
+                    print(e)
                     return -5
             else:
-                return -5
-        else:
+                return 0
+        except Exception as e:
+            print(e)
             return 0
