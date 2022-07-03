@@ -11,9 +11,8 @@ from datetime import datetime
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 SOCKSHOP = 'http://10.161.2.161:30001/'
-UPDATE_INTERVAL = 5
+UPDATE_INTERVAL = 2
 HISTORIC_DATA = 24
-CERTIFICATE_URL = "ba.ypsomed.com"
 EXTERN_URL = ["ba.ypsomed.com"]
 
 trustScore = []
@@ -59,7 +58,7 @@ availabilityGradeCalculation = AvailabilityGradeCalculation.AvailabilityGradeCal
 reliabilityGradeCalculation = ReliabilityGradeCalculation.ReliabilityGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 performanceGradeCalculation = PerformanceGradeCalculation.PerformanceGradeCalculation(PROMETHEUS, UPDATE_INTERVAL, HISTORIC_DATA)
 correctnessGradeCalculation = CorrectnessGradeCalculation.CorrectnessGradeCalculation(SOCKSHOP, UPDATE_INTERVAL, HISTORIC_DATA)
-securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation(EXTERN_URL, CERTIFICATE_URL)
+securityGradeCalculation = SecurityGradeCalculation.SecurityGradeCalculation(EXTERN_URL)
 
 
 def trustCalculation():
