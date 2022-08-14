@@ -48,4 +48,3 @@ RUN pip install -r ./docker/requirements.txt
 RUN ["chmod", "+x", "/var/TrustCalculation/docker/docker_entrypoint.sh"]
 
 ENTRYPOINT [ "bash", "-c", "./docker/docker_entrypoint.sh"]
-#ENTRYPOINT python -u /var/TrustCalculation/src/main.py
