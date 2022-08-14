@@ -23,3 +23,6 @@ If needed the project can be used by following these steps:
    * use helm folder for that \
 \
 Unfortunately the automatic deployed dockerfile can't be used at the moment, because it has parameters in it, which only work for our test environmnent
+
+### Certificates
+Depending on the certificates used for the security calculation the CA Root and Intermediate certificates must to be installed in the Docker container for correct execution. The corresponding URL should be added in the Dockerfile. As an example for the domains used in our work, the download URLs for the Let's Encrypt certificates are already included in the Dockerfile.
