@@ -9,8 +9,6 @@ COPY .. /var/TrustCalculation
 # Install kubectl from Docker Hub.
 COPY --from=lachlanevenson/k8s-kubectl:v1.10.3 /usr/local/bin/kubectl /usr/local/bin/kubectl
 
-COPY --from=aquasec/trivy:latest /usr/local/bin/trivy /usr/local/bin/trivy
-
 # https://stackoverflow.com/questions/60382570/adding-lets-encrypt-certificates-to-debian9-docker-image
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
