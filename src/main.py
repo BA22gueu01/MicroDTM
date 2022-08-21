@@ -11,10 +11,9 @@ from datetime import datetime
 
 PROMETHEUS = 'http://10.161.2.161:31090/'
 SOCKSHOP = 'http://10.161.2.161:30001/'
-UPDATE_INTERVAL = 5
+UPDATE_INTERVAL = 2
 HISTORIC_DATA = 24
-CERTIFICATE_URL = "ba.ypsomed.com"
-EXTERN_URL = ["zhaw.ch"]
+EXTERN_URL = ["ba.ypsomed.com"]
 
 trustScore = []
 date = []
@@ -215,6 +214,10 @@ def update():
         print(e)
     try:
         correctnessGradeCalculation.update()
+    except Exception as e:
+        print(e)
+    try:
+        securityGradeCalculation.dailyUpdate()
     except Exception as e:
         print(e)
 

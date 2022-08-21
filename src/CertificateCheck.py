@@ -20,7 +20,7 @@ class CertificateCheck:
         self.port = port
 
     def checkURLConnection(self, protocol):
-        url = protocol + self.hostname + ":" + self.port
+        url = protocol + self.hostname
         # https://stackoverflow.com/questions/65955022/python-check-if-webpage-is-http-or-https
         url = urlparse(url)
         conn = http.client.HTTPConnection(url.netloc)
@@ -149,44 +149,53 @@ class CertificateCheck:
 
         print('Check certificate for: ' + hostname + ":" + port)
 
-        context = ssl.create_default_context()
-
-        # https://github.com/echovue/Operations/blob/master/PythonScripts/TLSValidator.py
-        with socket.create_connection((hostname, port)) as sock:
-            with context.wrap_socket(sock, server_hostname=hostname) as ssock:
-                certificate = ssock.getpeercert()
-
-        certExpires = datetime.datetime.strptime(certificate['notAfter'], '%b %d %H:%M:%S %Y %Z')
-        daysToExpiration = (certExpires - datetime.datetime.now()).days
-
         http = "http://"
         https = "https://"
-        if self.checkURLConnection(http):
-            if self.checkURLConnection(https):
+        try:
+            if self.checkURLConnection(http):
                 try:
-                    session = tls.TLSSession(manual_validation=True)
-                    connection = tls.TLSSocket(hostname, int(port), session=session)
-                    try:
-                        validator = CertificateValidator(connection.certificate, connection.intermediates)
-                        validator.validate_tls(connection.hostname)
-                        self.downloadCertificateChain(hostname, port)
-                        end_entity_cert_validation = self.validateEndEntitiyCertificate()
-                        intermediate_cert_validation = self.validateIntermediateCertificate()
-                    except errors.PathValidationError:
-                        end_entity_cert_validation = False
-                        intermediate_cert_validation = False
-                        print("The certificate did not match the hostname, or could not be otherwise validated")
-                except OpenSSL.SSL.Error as e:
-                    print('Error: {0}'.format(str(e)))
-                    exit(1)
+                    if self.checkURLConnection(https):
 
-                if daysToExpiration < 0 and intermediate_cert_validation and end_entity_cert_validation:
-                    return 0
-                elif daysToExpiration > 0 and intermediate_cert_validation and end_entity_cert_validation:
-                    return 5
-                else:
+                        context = ssl.create_default_context()
+
+                        # https://github.com/echovue/Operations/blob/master/PythonScripts/TLSValidator.py
+                        with socket.create_connection((hostname, port)) as sock:
+                            with context.wrap_socket(sock, server_hostname=hostname) as ssock:
+                                certificate = ssock.getpeercert()
+
+                        certExpires = datetime.datetime.strptime(certificate['notAfter'], '%b %d %H:%M:%S %Y %Z')
+                        daysToExpiration = (certExpires - datetime.datetime.now()).days
+
+                        try:
+                            session = tls.TLSSession(manual_validation=True)
+                            connection = tls.TLSSocket(hostname, int(port), session=session)
+                            try:
+                                validator = CertificateValidator(connection.certificate, connection.intermediates)
+                                validator.validate_tls(connection.hostname)
+                                self.downloadCertificateChain(hostname, port)
+                                end_entity_cert_validation = self.validateEndEntitiyCertificate()
+                                intermediate_cert_validation = self.validateIntermediateCertificate()
+                            except errors.PathValidationError:
+                                end_entity_cert_validation = False
+                                intermediate_cert_validation = False
+                                print("The certificate did not match the hostname, or could not be otherwise validated")
+                        except OpenSSL.SSL.Error as e:
+                            print('Error: {0}'.format(str(e)))
+                            exit(1)
+
+                        if daysToExpiration < 0 and intermediate_cert_validation and end_entity_cert_validation:
+                            return 0
+                        elif daysToExpiration > 0 and intermediate_cert_validation and end_entity_cert_validation:
+                            return 5
+                        else:
+                            return -5
+                    else:
+                        return -5
+                except ConnectionRefusedError as e:
+                    print(e)
                     return -5
             else:
-                return -5
-        else:
+                return 0
+        except ConnectionRefusedError as e:
+            print(e)
             return 0
