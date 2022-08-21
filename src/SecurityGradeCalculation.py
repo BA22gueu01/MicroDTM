@@ -14,7 +14,6 @@ class SecurityGradeCalculation:
         self.vulnerabilityScanWeight = 0.5
         self.vulnerabilityScan = VulnerabilityScanCheck.VulnerabilityScan()
         self.externUrl = EXTERN_URL
-        self.counter = 0
 
     def calculateGrade(self):
         return self.apparmorWeight * self.apparmorGrade + self.certificateWeight * self.certificateGrade \
@@ -39,7 +38,7 @@ class SecurityGradeCalculation:
         return self.vulnerabilityScan.getHttpobsCheckGrade()
 
     def calculateVulnerabilityScanGrade(self):
-        self.vulnerabilityScanGrade = self.vulnerabilityScan.getVulnerabilityScanGrade(self.externUrl[self.counter])
+        self.vulnerabilityScanGrade = self.vulnerabilityScan.getVulnerabilityScanGrade(self.externUrl)
         print("VulnerabilityScanGrade: ", self.vulnerabilityScanGrade)
 
     def calculateApparmorGrade(self):
@@ -48,7 +47,7 @@ class SecurityGradeCalculation:
         print("ApparmorGrade: ", self.apparmorGrade)
 
     def calculateCertificateGrade(self):
-        certificateCheck = CertificateCheck.CertificateCheck(self.externUrl[self.counter], "443")
+        certificateCheck = CertificateCheck.CertificateCheck(self.externUrl, "443")
         self.certificateGrade = certificateCheck.checkCertificate()
         print("CertificateGrade: ", self.certificateGrade)
 
@@ -56,10 +55,8 @@ class SecurityGradeCalculation:
         self.calculateCertificateGrade()
         self.calculateApparmorGrade()
         self.calculateVulnerabilityScanGrade()
-        self.counter = (self.counter + 1) % len(self.externUrl)
 
     def initialCalculation(self):
         self.calculateCertificateGrade()
         self.calculateApparmorGrade()
         self.calculateVulnerabilityScanGrade()
-        self.counter = (self.counter + 1) % len(self.externUrl)
